@@ -1,96 +1,50 @@
-angular.module('starter.services', [])
-
-.factory('Categories', function() {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
-  var categories = [{
-    id: 0,
-    name: 'Sport',
-    lastText: 'You on your way?',
-    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-  }, {
-    id: 1,
-    name: 'Outside',
-    lastText: 'Hey, it\'s me',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-  },{
-    id: 2,
-    name: 'Diner',
-    lastText: 'I should buy a boat',
-    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
-  }, {
-    id: 3,
-    name: 'Drink',
-    lastText: 'Look at my mukluks!',
-    face: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
-  }, {
-    id: 4,
-    name: 'Game',
-    lastText: 'This is wicked good ice cream.',
-    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
-  }];
-
-  return {
-    all: function() {
-      return categories;
-    },
-    get: function(catId) {
-      for (var i = 0; i < categories.length; i++) {
-        if (categories[i].id === parseInt(catId)) {
-          return categories[i];
+var tastypieDataTransformer = function ($http) {
+    return $http.defaults.transformResponse.concat([
+        function (data, headersGetter) {
+            return data.objects;
         }
-      }
-      return null;
-    }
-  };
+    ])
+};
+
+var domain = "http://geoevent.herokuapp.com/api/v1/"
+// var domain = "http://127.0.0.1:8000/api/v1/"
+var api_key = "51a3dffafa923c080532d4fe8d1e670262941fbf"
+var username = '33667045021'
+
+angular.module('starter.services', ['ngResource'])
+
+.factory('Categories', function($resource, $http) {
+    return $resource(
+        domain + 'category/:id',
+        {'username':username, 'api_key':api_key},
+        {query: {
+            method: 'GET',
+            isArray: true,
+            transformResponse: tastypieDataTransformer($http)
+        }}
+    );
 })
 
-.factory('Events', function() {
-  // Might use a resource here that returns a JSON array
+.factory('Types', function($resource, $http) {
+    return $resource(
+        domain + 'event_type/:id',
+        {'username':username, 'api_key':api_key},
+        {query: {
+            method: 'GET',
+            isArray: true,
+            transformResponse: tastypieDataTransformer($http)
+        }}
+    );
+})
 
-  // Some fake testing data
-  var events = [{
-    id: 0,
-    name: 'Sport',
-    lastText: 'You on your way?',
-    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-  }, {
-    id: 1,
-    name: 'Outside',
-    lastText: 'Hey, it\'s me',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-  },{
-    id: 2,
-    name: 'Diner',
-    lastText: 'I should buy a boat',
-    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
-  }, {
-    id: 3,
-    name: 'Drink',
-    lastText: 'Look at my mukluks!',
-    face: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
-  }, {
-    id: 4,
-    name: 'Game',
-    lastText: 'This is wicked good ice cream.',
-    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
-  }];
-
-  return {
-    all: function() {
-      return events;
-    },
-    get: function(eventId) {
-      for (var i = 0; i < events.length; i++) {
-        if (events[i].id === parseInt(eventId)) {
-          return events[i];
-        }
-      }
-      return null;
-    },
-    friends: function() {
-        return
-    }
-  };
+.factory('Events', function($resource, $http) {
+    return $resource(
+        domain + 'event/:id/',
+        {'username':username, 'api_key':api_key},
+        {query: {
+            method: 'GET',
+            isArray: true,
+            transformResponse: tastypieDataTransformer($http)
+        }}
+    );
 });
