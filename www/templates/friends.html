@@ -1,0 +1,13 @@
+<ion-view view-title="Friends">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends.page.objects" type="item-text-wrap" href="#/friend/{{friend.id}}">
+                <img ng-src="{{friend.image}}">
+                <h2>{{friend.name}}</h2>
+                <h3>{{friend.user.username}}</h3>
+                <h3>{{friend.user.email}}</h3>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

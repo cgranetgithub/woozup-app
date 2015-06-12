@@ -1,6 +1,14 @@
-<ion-view view-title="Home">
-  <ion-content>
-    <form ng-submit="doLogin()">
-      <button class="button button-block button-positive" type="submit">Log in</button>
-    </form>
-  </ion-content>
+<ion-nav-bar class="bar-positive">
+    <ion-nav-buttons side="right">
+        <button class="button" ng-click="goToFriends()">
+            <i class="icon ion-ios-people"></i>
+        </button>
+        <button class="button" ng-click="goToAgenda()">
+            <i class="icon ion-ios-calendar"></i>
+        </button>
+        <button class="button" ng-click="goToAccount()">
+            <i class="icon ion-person"></i>
+        </button>
+    </ion-nav-buttons>
+</ion-nav-bar>
+<ion-nav-view name="new"></ion-nav-view>

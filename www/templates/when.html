@@ -1,13 +1,7 @@
 <ion-view view-title="When">
   <ion-content>
-    <button class="button button-block button-positive" ng-click="showDatePicker()">{{date.toLocaleDateString()}}</button>
-    <button class="button button-block button-positive" ng-click="showTimePicker()">{{date.toLocaleTimeString()}}</button>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="event in events" type="item-text-wrap" href="#/event/{{event.id}}">
-        <img ng-src="{{event.image}}">
-        <h2>{{event.name}}</h2>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-      </ion-item>
-    </ion-list>
+    <button class="button button-block button-outline button-balanced" ng-click="showDatePicker()">{{date.toLocaleDateString()}}</button>
+    <button class="button button-block button-outline button-balanced" ng-click="showTimePicker()">{{date.toLocaleTimeString()}}</button>
+    <button class="button button-block button-energized" ng-click="next()">Choose location</button>
   </ion-content>
 </ion-view>
