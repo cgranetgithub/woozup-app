@@ -18,7 +18,44 @@
 //     })
 // };
 // 
-// angular.module('starter.services', ['ionic', 'ngResource'])
+angular.module('starter.services', [])
+.config(function($provide, $tastypieProvider) {
+    var apiUrl = 'http://geoevent.herokuapp.com/api/v1/'
+//     var apiUrl = 'http://127.0.0.1:8000/api/v1/'
+    var authName = '+33667045021'
+    var authKey = '51a3dffafa923c080532d4fe8d1e670262941fbf'
+    $provide.value('apiUrl', apiUrl);
+    $provide.value('authName', authName);
+    $provide.value('authKey', authKey);
+    $tastypieProvider.setResourceUrl(apiUrl);
+    $tastypieProvider.setAuth(authName, authKey);
+})
+.factory('invite', ['$http', 'apiUrl', 'authName', 'authKey',
+                    function($http, apiUrl, authName, authKey) {
+    return function(userId) {
+        auth = {'username':authName, 'api_key':authKey};
+        $http.defaults.headers.common['Authorization'] = 'ApiKey '.concat(authName, ':', authKey);
+        $http.post(apiUrl + 'user/invite/' + userId + '/');
+    };
+}])
+.factory('accept', ['$http', 'apiUrl', 'authName', 'authKey',
+                    function($http, apiUrl, authName, authKey) {
+    return function(userId) {
+        auth = {'username':authName, 'api_key':authKey};
+        $http.defaults.headers.common['Authorization'] = 'ApiKey '.concat(authName, ':', authKey);
+        $http.post(apiUrl + 'user/accept/' + userId + '/');
+    };
+}])
+.factory('reject', ['$http', 'apiUrl', 'authName', 'authKey',
+                    function($http, apiUrl, authName, authKey) {
+    return function(userId) {
+        auth = {'username':authName, 'api_key':authKey};
+        $http.defaults.headers.common['Authorization'] = 'ApiKey '.concat(authName, ':', authKey);
+        $http.post(apiUrl + 'user/reject/' + userId + '/');
+    };
+}])
+
+// .factory('invite', ['tre', function(tre) { return tre; }])
 // 
 // .factory('Categories', function($resource, $http) {
 //     return $resource(

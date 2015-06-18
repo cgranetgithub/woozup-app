@@ -1,1 +1,25 @@
 /* Empty. Add your own CSS if you like */
+.item-tile {
+    color: white;
+    background: #33CD5F;
+    display: inline-block;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: -5px;
+    padding: 0px;
+    text-align: center;
+/*     max-width: 32%; */
+    min-height: 100px;
+    max-height: 150px;
+    min-width: 100px;
+    max-width: 150px;
+}
+.category-title {
+    color: white;
+    margin: -24px;
+}       
+.category {
+/*     display: block; */
+    max-height: 100%;
+    max-width: 100%; 
+}

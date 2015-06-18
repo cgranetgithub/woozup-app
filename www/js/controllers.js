@@ -1,4 +1,5 @@
-angular.module('starter.controllers', ['ionic', 'ngCordova', 'ngResourceTastypie'])
+angular.module('starter.controllers',
+               ['ionic', 'ngCordova', 'ngResourceTastypie', 'starter.services'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
@@ -22,15 +23,6 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ngResourceTastypie
 // }])
 
 .controller('HomeCtrl', function($scope, $state, $http) {
-    $scope.goToFriends = function() {
-        $state.go('friends');
-    };
-    $scope.goToAgenda = function() {
-        $state.go('events');
-    };
-    $scope.goToAccount = function() {
-        $state.go('new.where');
-    };
 })
 
 .controller('WhatCtrl', ['$scope', '$state', '$tastypieResource', function($scope, $state, $tastypieResource) {
@@ -38,6 +30,9 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ngResourceTastypie
     $scope.types.objects.$find();
     $scope.next = function() {
         $state.go('new.when');
+    };
+    $scope.goToAgenda = function() {
+        $state.go('events');
     };
 }])
 
@@ -72,6 +67,9 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ngResourceTastypie
 }])
 
 .controller('EventsCtrl', ['$scope', '$state', '$tastypieResource', function($scope, $state, $tastypieResource) {
+    $scope.goToHome = function() {
+        $state.go('new.what');
+    };
     $scope.events = new $tastypieResource('event');
     $scope.events.objects.$find();
 }])
@@ -89,10 +87,34 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ngResourceTastypie
     );
 }])
 .controller('FriendsCtrl', ['$scope', '$state', '$tastypieResource', function($scope, $state, $tastypieResource) {
-    $scope.friends = new $tastypieResource('friend');
-    $scope.friends.objects.$find();
 }])
-.controller('PendingCtrl', ['$scope', '$state', '$tastypieResource', function($scope, $state, $tastypieResource) {
-    $scope.friends = new $tastypieResource('pending');
+.controller('NewFriendsCtrl',
+            ['$scope', '$tastypieResource', 'invite', function($scope, $tastypieResource, invite) {
+    $scope.friends = new $tastypieResource('friends/new');
     $scope.friends.objects.$find();
+    $scope.title = "Inviter mes amis";
+    $scope.buttonTitle = "Inviter";
+    $scope.buttonAction = function(userId) {
+        invite(userId);
+    };
+}])
+.controller('MyFriendsCtrl',
+            ['$scope', '$tastypieResource', function($scope, $tastypieResource) {
+    $scope.friends = new $tastypieResource('friends/my');
+    $scope.friends.objects.$find();
+    $scope.title = "Mes amis"
+    $scope.buttonTitle = "Voir";
+//     $scope.buttonAction = function(userId) {
+//         invite(userId);
+//     };
+}])
+.controller('PendingFriendsCtrl',
+            ['$scope', '$tastypieResource', 'accept', function($scope, $tastypieResource, accept) {
+    $scope.friends = new $tastypieResource('friends/pending');
+    $scope.friends.objects.$find();
+    $scope.title = "Invitations en attente"
+    $scope.buttonTitle = "Accepter";
+    $scope.buttonAction = function(userId) {
+        accept(userId);
+    };
 }]);

@@ -1,14 +1,15 @@
-<ion-view view-title="Events">
+<ion-view view-title="L'agenda" hide-back-button=true>
+    <ion-nav-buttons side="left">
+        <button class="button" ui-sref="new.what" nav-transition="none">
+            <i class="icon ion-home"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content>
         <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="event in events.page.objects" type="item-text-wrap" href="#/event/{{event.id}}">
-                <img ng-src="{{event.event_type.image}}">
-                <h2>{{event.event_type.name}}</h2>
-                <h2>{{event.name}}</h2>
+            <ion-item class="item item-avatar-left" ng-repeat="event in events.page.objects" href="#/event/{{event.id}}">
                 <img ng-src="{{event.owner.image}}">
-                <h2>{{event.owner.name}}</h2>
-                <h2>{{event.start}}</h2>
-                <i class="icon ion-chevron-right icon-accessory"></i>
+                <h2>{{event.name}}, {{event.event_type.name}}</h2>
+                <p>le {{event.start}} avec {{event.owner.name}}</p>
             </ion-item>
         </ion-list>
     </ion-content>

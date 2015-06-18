@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -21,11 +21,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     });
 })
 
-.config(function($stateProvider, $urlRouterProvider, $tastypieProvider) {
-    $tastypieProvider.setResourceUrl('http://geoevent.herokuapp.com/api/v1/');
-//     $tastypieProvider.setResourceUrl('http://127.0.0.1:8000/api/v1/');
-    $tastypieProvider.setAuth('33667045021','51a3dffafa923c080532d4fe8d1e670262941fbf');
-    
+.config(function($stateProvider, $urlRouterProvider) {
+  
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
     // Set up the various states which the app can be in.
@@ -44,36 +41,28 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             'new': {
                 templateUrl: "templates/what.html",
                 controller: 'WhatCtrl'
-            }
-        }
-    })
+    }}})
     .state('new.when', {
         url: '/when',
         views: {
             'new': {
                 templateUrl: 'templates/when.html',
                 controller: 'WhenCtrl'
-            }
-        }
-    })
+    }}})
     .state('new.where', {
         url: '/where',
         views: {
             'new': {
                 templateUrl: 'templates/where.html',
                 controller: 'WhereCtrl'
-            }
-        }
-    })
+    }}})
     .state('new.done', {
         url: '/done',
         views: {
             'new': {
                 templateUrl: 'templates/done.html',
                 controller: 'DoneCtrl'
-            }
-        }
-    })
+    }}})
     .state('events', {
         url: '/events',
         templateUrl: 'templates/events.html',
@@ -86,14 +75,31 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     })
     .state('friends', {
         url: '/friends',
+        abstract: true,
         templateUrl: 'templates/friends.html',
         controller: 'FriendsCtrl'
     })
-    .state('pending', {
+    .state('friends.new', {
+        url: '/new',
+        views: {
+            'friends': {
+                templateUrl: 'templates/people.html',
+                controller: 'NewFriendsCtrl'
+    }}})
+    .state('friends.my', {
+        url: '/my',
+        views: {
+            'friends': {
+                templateUrl: 'templates/people.html',
+                controller: 'MyFriendsCtrl'
+    }}})
+    .state('friends.pending', {
         url: '/pending',
-        templateUrl: 'templates/pending.html',
-        controller: 'PendingCtrl'
-    });
+        views: {
+            'friends': {
+                templateUrl: 'templates/people.html',
+                controller: 'PendingFriendsCtrl'
+    }}});
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/new/what');

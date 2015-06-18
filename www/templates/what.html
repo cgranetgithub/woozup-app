@@ -1,11 +1,13 @@
-<ion-view view-title="What">
+<ion-view view-title="Partant pour..." hide-back-button=true>
     <ion-content>
         <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="type in types.page.objects" type="item-text-wrap"  ng-click="next()">
-                <img ng-src="{{type.image}}">
-                <h2>{{type.name}}</h2>
-                <i class="icon ion-chevron-right icon-accessory"></i>
+            <ion-item class="item item-tile" ng-repeat="type in types.page.objects" type="item-text-wrap"  ng-click="next()">
+                <img class="category" ng-src="{{type.image}}">
+                <h2 class="category-title">{{type.name}}</h2>
             </ion-item>
         </ion-list>
     </ion-content>
+    <ion-footer-bar class="bar-balanced" ui-sref="events" nav-transition="none">
+        <h1 class="title">Voir ce que mes amis ont prévu</h1>
+    </ion-footer-bar>
 </ion-view>

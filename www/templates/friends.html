@@ -1,13 +1,19 @@
-<ion-view view-title="Friends">
-    <ion-content>
-        <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends.page.objects" type="item-text-wrap" href="#/friend/{{friend.id}}">
-                <img ng-src="{{friend.image}}">
-                <h2>{{friend.name}}</h2>
-                <h3>{{friend.user.username}}</h3>
-                <h3>{{friend.user.email}}</h3>
-                <i class="icon ion-chevron-right icon-accessory"></i>
-            </ion-item>
-        </ion-list>
-    </ion-content>
-</ion-view>
+<ion-nav-bar class="bar-positive">
+    <ion-nav-buttons side="left">
+        <button class="button" ui-sref="new.what" nav-transition="none">
+            <i class="icon ion-home"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button" ui-sref="friends.new" nav-transition="none">
+            <i class="icon ion-person-add"></i>
+        </button>
+        <button class="button" ui-sref="friends.pending" nav-transition="none">
+            <i class="icon ion-person-stalker"></i>
+        </button>
+        <button class="button" ui-sref="friends.my" nav-transition="none">
+            <i class="icon ion-ios-people"></i>
+        </button>
+    </ion-nav-buttons>
+</ion-nav-bar>
+<ion-nav-view name="friends"></ion-nav-view>
