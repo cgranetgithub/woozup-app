@@ -35,19 +35,30 @@ angular.module('starter.controllers',
         $state.go('events');
     };
 }])
+.directive('tileSize', function() {
+    return function(scope, element, attr) {
+
+      // Get parent elmenets width and subtract fixed width
+      element.css({ 
+        width: element.parent()[0].offsetWidth /4 + 'px' 
+      });
+
+    };
+})
 
 .controller('WhenCtrl', ['$scope', '$state', '$tastypieResource', '$cordovaDatePicker', function($scope, $state, $tastypieResource, $cordovaDatePicker) {
     $scope.date = new Date();
+    $scope.time = $scope.date;
     $scope.showDatePicker = function() {
         var options = {mode: 'date', date: $scope.date, minDate: $scope.date}
         $cordovaDatePicker.show(options).then(function(date){
-            alert(date);
+            $scope.date = date;
         });
     };
     $scope.showTimePicker = function() {
-        var options = {mode: 'time', date: $scope.date, minuteInterval: 15}
+        var options = {mode: 'time', date: $scope.time, minuteInterval: 15}
         $cordovaDatePicker.show(options).then(function(time){
-            alert(time);
+            $scope.time = time;
         });
     };
     $scope.next = function() {
@@ -78,7 +89,6 @@ angular.module('starter.controllers',
     event = new $tastypieResource('event');
     event.objects.$get({id:parseInt($stateParams['params']['eventId'])}).then(
         function(result){
-            console.log(result);
             $scope.event = result;
         },
         function(error){

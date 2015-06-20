@@ -1,7 +1,7 @@
-<ion-view view-title="Partant pour..." hide-back-button=true>
+<ion-view view-title="Meet Me !" hide-back-button=true>
     <ion-content>
         <ion-list>
-            <ion-item class="item item-tile" ng-repeat="type in types.page.objects" type="item-text-wrap"  ng-click="next()">
+            <ion-item tileSize class="item item-tile" ng-repeat="type in types.page.objects" type="item-text-wrap"  ng-click="next()">
                 <img class="category" ng-src="{{type.image}}">
                 <h2 class="category-title">{{type.name}}</h2>
             </ion-item>

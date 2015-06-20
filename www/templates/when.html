@@ -1,7 +1,7 @@
 <ion-view view-title="Quand ?">
   <ion-content>
-    <button class="button button-block button-outline button-balanced" ng-click="showDatePicker()">{{date.toLocaleDateString()}}</button>
-    <button class="button button-block button-outline button-balanced" ng-click="showTimePicker()">{{date.toLocaleTimeString()}}</button>
+    <button class="button button-date button-outline button-balanced" ng-click="showDatePicker()">{{date | date : 'fullDate'}}</button>
+    <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'shortTime'}}</button>
     <button class="button button-block button-energized" ng-click="next()">Choose location</button>
   </ion-content>
 </ion-view>

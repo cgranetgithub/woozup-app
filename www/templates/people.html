@@ -5,7 +5,8 @@
                       ng-repeat="friend in friends.page.objects">
                 <img ng-src="{{friend.image}}">
                 <h2>{{friend.name}}</h2>
-                <p>{{friend.user.username}} | {{friend.user.email}}</p>
+                <p>{{friend.user.username}}</p>
+                <p>{{friend.user.email}}</p>
                 <button class="button button-outline button-positive"
                         ng-click="buttonAction(friend.user.id)">
                     {{buttonTitle}}
