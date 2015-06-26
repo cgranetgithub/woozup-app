@@ -1,0 +1,12 @@
+<ion-view view-title={{title}} hide-back-button=true>
+    <ion-content>
+        <ion-list>
+            <ion-item class="item item-avatar-left" ng-repeat="event in events.page.objects" href="#/event/{{event.id}}">
+                <img ng-src="{{event.owner.image}}">
+                <h2>{{event.name}} ({{event.event_type.name}})</h2>
+                <p>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+                <p>avec {{event.owner.name}}</p>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

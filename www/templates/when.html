@@ -1,7 +1,7 @@
 <ion-view view-title="Quand ?">
   <ion-content>
     <button class="button button-date button-outline button-balanced" ng-click="showDatePicker()">{{date | date : 'fullDate'}}</button>
-    <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'shortTime'}}</button>
-    <button class="button button-block button-energized" ng-click="next()">Choose location</button>
+    <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'H : mm'}}</button>
+    <button class="button button-block button-energized" ng-click="next(date, time)">Choisir le lieu</button>
   </ion-content>
 </ion-view>

@@ -54,6 +54,16 @@ angular.module('starter.services', [])
         $http.post(apiUrl + 'user/reject/' + userId + '/');
     };
 }])
+.factory('eventData', function() {
+    var eventData = {};
+    eventData.setWhen = function(datetime){
+        eventData.when = datetime;
+    };
+    eventData.setWhat = function(id){
+        eventData.what = id;
+    };
+    return eventData;
+})
 
 // .factory('invite', ['tre', function(tre) { return tre; }])
 // 

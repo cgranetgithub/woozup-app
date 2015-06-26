@@ -41,21 +41,36 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             'new': {
                 templateUrl: "templates/what.html",
                 controller: 'WhatCtrl'
-    }}})
+        }}
+//         resolve: {
+//             what: function(starter.services) {
+//             return starter.services.getWhat()
+//         }}
+    })
     .state('new.when', {
         url: '/when',
         views: {
             'new': {
                 templateUrl: 'templates/when.html',
                 controller: 'WhenCtrl'
-    }}})
+        }}
+//         resolve: {
+//             when: function(starter.services) {
+//             return starter.services.getWhen()
+//         }}
+    })
     .state('new.where', {
         url: '/where',
         views: {
             'new': {
                 templateUrl: 'templates/where.html',
                 controller: 'WhereCtrl'
-    }}})
+        }}
+//         resolve: {
+//             where: function(starter.services) {
+//             return starter.services.getWhere()
+//         }}
+    })
     .state('new.done', {
         url: '/done',
         views: {
@@ -65,9 +80,31 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }}})
     .state('events', {
         url: '/events',
+        abstract: true,
         templateUrl: 'templates/events.html',
         controller: 'EventsCtrl'
     })
+    .state('events.mine', {
+        url: '/mine',
+        views: {
+            'myevents': {
+                templateUrl: 'templates/eventlist.html',
+                controller: 'MyEventsCtrl'
+    }}})
+    .state('events.friends', {
+        url: '/friends',
+        views: {
+            'friendsevents': {
+                templateUrl: 'templates/eventlist.html',
+                controller: 'FriendsEventsCtrl'
+    }}})
+    .state('events.all', {
+        url: '/all',
+        views: {
+            'allevents': {
+                templateUrl: 'templates/eventlist.html',
+                controller: 'AllEventsCtrl'
+    }}})
     .state('event', {
         url: '/event/:eventId',
         templateUrl: 'templates/event.html',

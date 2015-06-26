@@ -1,16 +1,18 @@
-<ion-view view-title="L'agenda" hide-back-button=true>
+<ion-nav-bar class="bar-dark">
     <ion-nav-buttons side="left">
         <button class="button" ui-sref="new.what" nav-transition="none">
             <i class="icon ion-home"></i>
         </button>
     </ion-nav-buttons>
-    <ion-content>
-        <ion-list>
-            <ion-item class="item item-avatar-left" ng-repeat="event in events.page.objects" href="#/event/{{event.id}}">
-                <img ng-src="{{event.owner.image}}">
-                <h2>{{event.name}} ({{event.event_type.name}})</h2>
-                <p>{{ event.start | date : 'medium'}} avec {{event.owner.name}}</p>
-            </ion-item>
-        </ion-list>
-    </ion-content>
-</ion-view>
+</ion-nav-bar>
+<ion-tabs class="tabs-icon-top tabs-positive">
+    <ion-tab title="Sorties des amis"  href="#/events/friends" icon="ion-person-stalker">
+        <ion-nav-view name="friendsevents"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="Mes sorties" href="#/events/mine" icon-on="ion-ios-person" icon-off="ion-ios-person-outline">
+        <ion-nav-view name="myevents"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="Tout" href="#/events/all" icon-on="ion-ios-people" icon-off="ion-ios-people-outline">
+        <ion-nav-view name="allevents"></ion-nav-view>
+    </ion-tab>
+</ion-tabs>

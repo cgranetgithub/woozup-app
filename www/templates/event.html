@@ -1,21 +1,25 @@
-<ion-view view-title="Event">
-    <ion-content>
-        <div class="list">
-            <a class="item item-thumbnail-right">
+<ion-view view-title={{event.event_type.name}}>
+    <ion-content scroll='false'>
+        <ion-list>
+            <ion-item class="item item-thumbnail-right event-grey-background">
                 <img src="{{event.event_type.image}}">
-                <h2>{{event.name}} ({{event.event_type.name}})</h2>
-                <p>{{ event.start | date : 'medium'}}</p>
-            </a>
-            <a class="item item-avatar">
+                <h1>{{event.name}}</h1>
+                <h2>{{event.start | date : 'EEEE d MMMM à H:mm'}}</h2>
+            </ion-item>
+            <button class="button button-large button-energized button-block">
+                {{button}}
+            </button>
+            <h3 class="event-participant-title">avec</h3>
+            <ion-item class="item item-avatar">
                 <img src="{{event.owner.image}}">
                 <h2>{{event.owner.name}}</h2>
-            </a>
-        </div>    
-        <ion-list>
-            <ion-item class="item item-avatar-left" ng-repeat="participant in event.participants">
-                <img ng-src="{{participant.image}}">
-                <h3>{{participant.name}}</h3>
             </ion-item>
+            <ion-list>
+                <ion-item class="item item-avatar-left" ng-repeat="participant in event.participants">
+                    <img ng-src="{{participant.image}}">
+                    <h3>{{participant.name}}</h3>
+                </ion-item>
+            </ion-list>
         </ion-list>
     </ion-content>
 </ion-view>

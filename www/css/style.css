@@ -9,23 +9,14 @@
     padding: 5px;
     padding-top: 10px;
     text-align: center;
-/*     width: 32%; */
     height: 90px;
     min-width: 90px;
-/*     white-space: normal; */
 }
-/*.item-tile h2 {
-    white-space: normal;
-}*/
 .category-title {
     color: white;
-/*     margin: -24px; */
 }       
 .category {
-/*     display: block; */
     height: 50px;
-/*     margin: 10px; */
-/*     width: 50px;  */
 }
 .button-date {
     width: 66%;
@@ -33,3 +24,24 @@
     margin: auto;
     margin-top: 20px;
 }
+.event-grey-background {
+    background-color: #DDD;
+}
+.event-grey-background h1 {
+    color: #FFF;
+}
+.event-grey-background h2 {
+    color: #555;
+}
+.event-grey-background img {
+    bottom: 15px;
+}
+.event-participant-title {
+    margin-top: 0px;
+    color: #999;
+    text-align: center;
+}
+.centered {
+    text-align: center;
+}
+    

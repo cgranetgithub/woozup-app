@@ -1,13 +1,13 @@
 <ion-view view-title="Meet Me !" hide-back-button=true>
     <ion-content>
         <ion-list>
-            <ion-item tileSize class="item item-tile" ng-repeat="type in types.page.objects" type="item-text-wrap"  ng-click="next()">
+            <ion-item tileSize class="item item-tile" ng-repeat="type in types.page.objects" type="item-text-wrap"  ng-click="next(type.id)">
                 <img class="category" ng-src="{{type.image}}">
                 <h2 class="category-title">{{type.name}}</h2>
             </ion-item>
         </ion-list>
     </ion-content>
-    <ion-footer-bar class="bar-balanced" ui-sref="events" nav-transition="none">
+    <ion-footer-bar class="bar-balanced" ui-sref="events.friends" nav-transition="none">
         <h1 class="title">Voir ce que mes amis ont prévu</h1>
     </ion-footer-bar>
 </ion-view>
