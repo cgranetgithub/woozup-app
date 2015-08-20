@@ -1,5 +1,9 @@
 <ion-view view-title="Où">
-    <ion-content>
-        <button class="button button-block button-energized" ng-click="next()">C'est parti !</button>
+    <ion-content ng-controller="WhereCtrl" ng-init="initialize()">
+        <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+        <div id="map" data-tap-disabled="true"></div>
     </ion-content>
+    <ion-footer-bar class="bar-energized" ng-click="next()">
+        <h1 class="title">C'est parti !</h1>
+    </ion-footer-bar>
 </ion-view>

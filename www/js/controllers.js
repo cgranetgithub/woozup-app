@@ -1,5 +1,6 @@
 angular.module('starter.controllers',
-               ['ionic', 'ngCordova', 'ngResourceTastypie', 'starter.services'])
+               ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
+               'starter.services'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
@@ -52,6 +53,10 @@ angular.module('starter.controllers',
 .controller('WhenCtrl',
             ['$scope', '$state', '$cordovaDatePicker', 'eventData', '$tastypieResource',
             function($scope, $state, $cordovaDatePicker, eventData, $tastypieResource) {
+
+    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
+  
     $scope.date = new Date();
     $scope.time = $scope.date;
     $scope.showDatePicker = function() {
@@ -80,19 +85,80 @@ angular.module('starter.controllers',
 }])
 
 .controller('WhereCtrl',
-            ['$scope', '$state', 'eventData', '$tastypieResource', 
-            function($scope, $state, eventData, $tastypieResource) {
+            ['$scope', '$state', 'eventData', '$cordovaGeolocation', '$tastypieResource', 
+            function($scope, $state, eventData, $cordovaGeolocation, $tastypieResource) {
     var typeResource = null;
     eventType = new $tastypieResource('event_type');
     eventType.objects.$get({id:parseInt(eventData.what)}).then(
         function(result){
-            console.log(result['resource_uri']);
             typeResource = result['resource_uri'];
         },
         function(error){
             console.log(error);
         }
     )
+    $scope.initialize = function() {
+        var whereiam = new google.maps.LatLng(48.8567, 2.3508);
+        var mapOptions = {
+            center: whereiam,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            zoomControl: false,
+            mapTypeControl: false,
+            panControl: false,
+            streetViewControl: false,
+        };
+        var map = new google.maps.Map(document.getElementById("map"),
+            mapOptions);
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+                var whereiam = new google.maps.LatLng(position.coords.latitude,
+                                                    position.coords.longitude);
+                $scope.map.setCenter(whereiam);
+            }, function(err) {
+                alert('Unable to get location: ' + err.message);
+            });
+        var input = document.getElementById('pac-input');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({map: map});
+//         marker.addListener('click', function() {
+//             infowindow.open(map, marker);
+//         });
+        autocomplete.addListener('place_changed', function() {
+            infowindow.close();
+            var place = autocomplete.getPlace();
+            if (!place.geometry) { return; }
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(18);
+            }
+            // Set the position of the marker using the place ID and location.
+            marker.setPlace({
+                placeId: place.place_id,
+                location: place.geometry.location
+            });
+            marker.setVisible(true);
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                'Place ID: ' + place.place_id + '<br>' +
+                place.formatted_address);
+            infowindow.open(map, marker);
+        });
+        map.addListener('click', function(e) {
+            place = e.latLng;
+            marker.setPosition(place);
+            infowindow.open(map, marker);
+        });
+        $scope.map = map;        
+    }
+        
     $scope.next = function(where) {
         var where = '{ "type": "Point", "coordinates": [1.1, 1.1] }';
         console.log(typeResource, eventData.when, where);
