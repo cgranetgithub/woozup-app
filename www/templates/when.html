@@ -2,12 +2,8 @@
   <ion-content>
 <!--    <button class="button button-date button-outline button-balanced" ng-click="showDatePicker()">{{date | date : 'fullDate'}}</button>
     <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'H : mm'}}</button>-->
-
-    
-    <div class="calendar">
-      <datepicker ng-model="dt" show-weeks="false" starting-day="1"></datepicker>
-    </div>            
-    <timepicker ng-model="mytime" ng-change="changed()" minute-step="15" show-meridian="false"></timepicker>
+    <datepicker id="dtpick" ng-model="dt" show-weeks="false" starting-day="1"></datepicker>
+    <timepicker id="tmpick" ng-model="mytime" ng-change="changed()" minute-step="15" show-meridian="false"></timepicker>
     <button class="button button-block button-energized" ng-click="next(date, time)">Choisir le lieu</button>
   </ion-content>
 </ion-view>

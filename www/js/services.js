@@ -20,10 +20,10 @@
 // 
 angular.module('starter.services', [])
 .config(function($provide, $tastypieProvider) {
-    var apiUrl = 'http://geoevent.herokuapp.com/api/v1/'
+    var apiUrl = 'http://geoevent.herokuapp.com/api/v1/';
 //     var apiUrl = 'http://127.0.0.1:8000/api/v1/'
-    var authName = '+33667045021'
-    var authKey = '51a3dffafa923c080532d4fe8d1e670262941fbf'
+    var authName = '+33667045021';
+    var authKey = '51a3dffafa923c080532d4fe8d1e670262941fbf';
     $provide.value('apiUrl', apiUrl);
     $provide.value('authName', authName);
     $provide.value('authKey', authKey);

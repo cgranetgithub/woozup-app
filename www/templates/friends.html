@@ -4,7 +4,7 @@
             <i class="icon ion-home"></i>
         </button>
     </ion-nav-buttons>
-    <ion-nav-buttons side="right">
+<!--    <ion-nav-buttons side="right">
         <button class="button" ui-sref="friends.new" nav-transition="none">
             <i class="icon ion-person-add"></i>
         </button>
@@ -14,6 +14,17 @@
         <button class="button" ui-sref="friends.my" nav-transition="none">
             <i class="icon ion-ios-people"></i>
         </button>
-    </ion-nav-buttons>
+    </ion-nav-buttons>-->
 </ion-nav-bar>
-<ion-nav-view name="friends"></ion-nav-view>
+<ion-tabs class="tabs-icon-top tabs-dark">
+    <ion-tab title="Nouveaux amis"  href="#/friends/new" icon="ion-person-add">
+        <ion-nav-view name="newfriends"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="Invitations en attente" href="#/friends/pending" icon="ion-person-stalker">
+        <ion-nav-view name="pendingfriends"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="Mes amis" href="#/friends/my" icon="ion-ios-people">
+        <ion-nav-view name="myfriends"></ion-nav-view>
+    </ion-tab>
+</ion-tabs>
+<!-- <ion-nav-view name="friends"></ion-nav-view> -->

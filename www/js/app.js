@@ -119,21 +119,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('friends.new', {
         url: '/new',
         views: {
-            'friends': {
+            'newfriends': {
                 templateUrl: 'templates/people.html',
                 controller: 'NewFriendsCtrl'
     }}})
     .state('friends.my', {
         url: '/my',
         views: {
-            'friends': {
+            'myfriends': {
                 templateUrl: 'templates/people.html',
                 controller: 'MyFriendsCtrl'
     }}})
     .state('friends.pending', {
         url: '/pending',
         views: {
-            'friends': {
+            'pendingfriends': {
                 templateUrl: 'templates/people.html',
                 controller: 'PendingFriendsCtrl'
     }}});

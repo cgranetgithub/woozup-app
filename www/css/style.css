@@ -1,15 +1,21 @@
+.gallery {
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+/*     margin: 3px; */
+}
 .item-tile {
     color: white;
     background: #AB9BFF;
     display: inline-block;
-    margin-left: 2px;
-    margin-top: 2px;
-    margin-bottom: -7px;
-    padding: 5px;
+/*     margin-left: 2px; */
+/*     margin-top: 2px; */
+/*     margin-bottom: -7px; */
+    margin: 1px 0 0 1px;
+/*     padding: 15px 0 5px 0; */
     padding-top: 10px;
     text-align: center;
-    height: 90px;
-    min-width: 90px;
+/*     height: 120px; */
+    min-width: 33%;
 }
 .category-title {
     color: white;
@@ -46,14 +52,23 @@
 .scroll {
     height: 100%;
 }
- 
+#dtpick {
+    padding: 2px;
+}
+#dtpick table {
+    min-width: 90%;
+    margin: auto;
+}
+#dtpick table tr, th, td {
+    padding: 1px;
+    vertical-align: middle;
+}
+#tmpick {
+    margin: 0 auto -5px auto;
+}
 #map {
     width: 100%;
     height: 100%;
-}
-.calendar {
-    display:inline-block;
-    min-height:290px;
 }
 .full button span {
     background-color: limegreen;

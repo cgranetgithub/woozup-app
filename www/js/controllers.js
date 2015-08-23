@@ -97,6 +97,7 @@ angular.module('starter.controllers',
             console.log(error);
         }
     )
+    position = new google.maps.LatLng(48.8567, 2.3508);
     $scope.initialize = function() {
         var whereiam = new google.maps.LatLng(48.8567, 2.3508);
         var mapOptions = {
@@ -113,9 +114,9 @@ angular.module('starter.controllers',
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
-            .then(function (position) {
-                var whereiam = new google.maps.LatLng(position.coords.latitude,
-                                                    position.coords.longitude);
+            .then(function (loc) {
+                var whereiam = new google.maps.LatLng(loc.coords.latitude,
+                                                      loc.coords.longitude);
                 $scope.map.setCenter(whereiam);
             }, function(err) {
                 alert('Unable to get location: ' + err.message);
@@ -152,17 +153,19 @@ angular.module('starter.controllers',
             infowindow.open(map, marker);
         });
         map.addListener('click', function(e) {
-            place = e.latLng;
-            marker.setPosition(place);
+            position = e.latLng;
+            marker.setPosition(position);
             infowindow.open(map, marker);
         });
         $scope.map = map;        
     }
         
     $scope.next = function(where) {
-        var where = '{ "type": "Point", "coordinates": [1.1, 1.1] }';
+//         var where = '{ "type": "Point", "coordinates": [1.1, 1.1] }';
+        var where = '{ "type": "Point", "coordinates": ['
+                    + position.lat() + ', ' + position.lng() + '] }';
         console.log(typeResource, eventData.when, where);
-        event = new $tastypieResource('event');
+        event = new $tastypieResource('myevent');
         event.objects.$create({
             start: eventData.when,
             event_type: typeResource,
