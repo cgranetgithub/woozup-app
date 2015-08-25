@@ -195,6 +195,9 @@ angular.module('starter.controllers',
             ['$scope', '$state', '$tastypieResource',
             function ($scope, $state, $tastypieResource) {
                 "use strict";
+                $scope.friends_title = "Les sorties de mes amis";
+                $scope.mine_title = "Mes sorties";
+                $scope.all_title = "Toutes les sorties";
             }])
     .controller('MyEventsCtrl',
             ['$scope', '$state', '$tastypieResource',
@@ -225,7 +228,8 @@ angular.module('starter.controllers',
             ['$scope', '$state', '$tastypieResource',
             function ($scope, $stateParams, $tastypieResource) {
                 "use strict";
-                event = new $tastypieResource('event');
+                var event = new $tastypieResource('event');
+                $scope.button = "Je participe"
                 event.objects.$get({id:parseInt($stateParams['params']['eventId'])}).then(
                     function (result) {
                         $scope.event = result;
@@ -239,6 +243,9 @@ angular.module('starter.controllers',
             ['$scope', '$state', '$tastypieResource',
             function ($scope, $state, $tastypieResource) {
                 "use strict";
+                $scope.new_title = "Ajouter des amis";
+                $scope.my_title = "Mes amis";
+                $scope.pending_title = "Invitations en attente";
             }])
     .controller('NewFriendsCtrl',
             ['$scope', '$tastypieResource', 'invite',
@@ -246,7 +253,7 @@ angular.module('starter.controllers',
                 "use strict";
                 $scope.friends = new $tastypieResource('friends/new');
                 $scope.friends.objects.$find();
-                $scope.title = "Inviter mes amis";
+                $scope.title = "Ajouter des amis";
                 $scope.buttonTitle = "Inviter";
                 $scope.buttonAction = function (userId) {
                     invite(userId);

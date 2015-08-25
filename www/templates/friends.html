@@ -17,13 +17,13 @@
     </ion-nav-buttons>-->
 </ion-nav-bar>
 <ion-tabs class="tabs-icon-top tabs-dark">
-    <ion-tab title="Nouveaux amis"  href="#/friends/new" icon="ion-person-add">
+    <ion-tab title={{new_title}} ui-sref="friends.new" icon="ion-person-add">
         <ion-nav-view name="newfriends"></ion-nav-view>
     </ion-tab>
-    <ion-tab title="Invitations en attente" href="#/friends/pending" icon="ion-person-stalker">
+    <ion-tab title={{pending_title}} ui-sref="friends.pending" icon="ion-person-stalker">
         <ion-nav-view name="pendingfriends"></ion-nav-view>
     </ion-tab>
-    <ion-tab title="Mes amis" href="#/friends/my" icon="ion-ios-people">
+    <ion-tab title={{my_title}} ui-sref="friends.my" icon="ion-ios-people">
         <ion-nav-view name="myfriends"></ion-nav-view>
     </ion-tab>
 </ion-tabs>
