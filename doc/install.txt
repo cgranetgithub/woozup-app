@@ -1,0 +1,20 @@
+# install ionic and dependencies
+
+
+# Note : ionic/cordova now require nodejs 0.12
+# it will remove npm package but don't panic, it is now
+# included in nodejs package
+
+# Note the new setup script name for Node.js v0.12
+curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash -
+
+# Then install with:
+sudo apt-get install -y nodejs
+
+# install ionic and cordova
+sudo npm -g install js-beautify jslint cordova ionic
+
+# in ionic-app, do
+# use reset to download dependencies from package.json
+$ ionic state reset
+
