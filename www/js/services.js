@@ -1,3 +1,6 @@
+/*jslint browser: true*/
+/*global angular, cordova, StatusBar*/
+
 // var tastypieDataTransformer = function ($http) {
 //     return $http.defaults.transformResponse.concat([
 //         function (data, headersGetter) {
@@ -34,7 +37,7 @@ angular.module('starter.services', [])
                     function($http, apiUrl, authName, authKey) {
     return function(userId) {
         auth = {'username':authName, 'api_key':authKey};
-        $http.defaults.headers.common['Authorization'] = 'ApiKey '.concat(authName, ':', authKey);
+        $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
         $http.post(apiUrl + 'user/invite/' + userId + '/');
     };
 }])
@@ -42,7 +45,7 @@ angular.module('starter.services', [])
                     function($http, apiUrl, authName, authKey) {
     return function(userId) {
         auth = {'username':authName, 'api_key':authKey};
-        $http.defaults.headers.common['Authorization'] = 'ApiKey '.concat(authName, ':', authKey);
+        $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
         $http.post(apiUrl + 'user/accept/' + userId + '/');
     };
 }])
@@ -50,7 +53,7 @@ angular.module('starter.services', [])
                     function($http, apiUrl, authName, authKey) {
     return function(userId) {
         auth = {'username':authName, 'api_key':authKey};
-        $http.defaults.headers.common['Authorization'] = 'ApiKey '.concat(authName, ':', authKey);
+        $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
         $http.post(apiUrl + 'user/reject/' + userId + '/');
     };
 }])
@@ -63,7 +66,7 @@ angular.module('starter.services', [])
         eventData.what = id;
     };
     return eventData;
-})
+});
 
 // .factory('invite', ['tre', function(tre) { return tre; }])
 // 

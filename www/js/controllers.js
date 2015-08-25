@@ -1,3 +1,6 @@
+/*jslint browser: true, devel: true*/
+/*global angular, cordova, StatusBar*/
+
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
                'starter.services'])
@@ -92,9 +95,9 @@ angular.module('starter.controllers',
                 /*global google: false */
                 var typeResource = null,
                     eventType = new $tastypieResource('event_type');
-                eventType.objects.$get({id: parseInt(eventData.what)}).then(
+                eventType.objects.$get({id: parseInt(eventData.what, 10)}).then(
                     function (result) {
-                        typeResource = result['resource_uri'];
+                        typeResource = result.resource_uri;
                     },
                     function (error) {
                         console.log(error);
@@ -229,8 +232,8 @@ angular.module('starter.controllers',
             function ($scope, $stateParams, $tastypieResource) {
                 "use strict";
                 var event = new $tastypieResource('event');
-                $scope.button = "Je participe"
-                event.objects.$get({id:parseInt($stateParams['params']['eventId'])}).then(
+                $scope.button = "Je participe";
+                event.objects.$get({id:parseInt($stateParams.params.eventId, 10)}).then(
                     function (result) {
                         $scope.event = result;
                     },
@@ -265,7 +268,7 @@ angular.module('starter.controllers',
                 "use strict";
                 $scope.friends = new $tastypieResource('friends/my');
                 $scope.friends.objects.$find();
-                $scope.title = "Mes amis"
+                $scope.title = "Mes amis";
                 $scope.buttonTitle = "Voir";
             //     $scope.buttonAction = function (userId) {
             //         invite(userId);
@@ -277,7 +280,7 @@ angular.module('starter.controllers',
                 "use strict";
                 $scope.friends = new $tastypieResource('friends/pending');
                 $scope.friends.objects.$find();
-                $scope.title = "Invitations en attente"
+                $scope.title = "Invitations en attente";
                 $scope.buttonTitle = "Accepter";
                 $scope.buttonAction = function (userId) {
                     accept(userId);
