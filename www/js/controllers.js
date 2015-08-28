@@ -40,9 +40,6 @@ angular.module('starter.controllers',
                     eventData.setWhat(typeId);
                     $state.go('new.when');
                 };
-                $scope.goToAgenda = function () {
-                    $state.go('events');
-                };
             }])
 //     .directive('tileSize', function () {
 //         return function (scope, element, attr) {
@@ -55,31 +52,12 @@ angular.module('starter.controllers',
 //     })
 
     .controller('WhenCtrl',
-            ['$scope', '$state', '$cordovaDatePicker', 'eventData',
-            function ($scope, $state, $cordovaDatePicker, eventData) {
+            ['$scope', '$state', 'eventData',
+            function ($scope, $state, eventData) {
                 "use strict";
-                $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-                $scope.format = $scope.formats[0];
                 $scope.date = new Date();
-                $scope.time = $scope.date;
-                $scope.showDatePicker = function () {
-                    var options = {mode: 'date', date: $scope.date, minDate: $scope.date};
-                    $cordovaDatePicker.show(options).then(function (date) {
-                        $scope.date = date;
-                    });
-                };
-                $scope.showTimePicker = function () {
-                    var options = {mode: 'time', date: $scope.time, minuteInterval: 15, is24Hour: true};
-                    $cordovaDatePicker.show(options).then(function (time) {
-                        if (time !== 'undefined') {
-                            $scope.time = time;
-                        }
-                    });
-                };
-                $scope.next = function (date, time) {
-                    var d = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-                                    time.getUTCHours(), time.getUTCMinutes());
-                    eventData.setWhen(d);
+                $scope.next = function (date) {
+                    eventData.setWhen(date);
                     $state.go('new.where');
                 };
 //                 $scope.events = new $tastypieResource('event');
@@ -92,17 +70,14 @@ angular.module('starter.controllers',
                 "use strict";
                 /*global document: false */
                 /*global google: false */
-                var typeResource = null,
-                    eventType = new $tastypieResource('event_type'),
-                    position = new google.maps.LatLng(48.8567, 2.3508);
-                eventType.objects.$get({id: parseInt(eventData.what, 10)}).then(
-                    function (result) {
-                        typeResource = result.resource_uri;
-                    },
-                    function (error) {
-                        console.log(error);
-                    }
-                );
+                var setpos = function (position) {
+                    console.log(position);
+            //         var where = '{ "type": "Point", "coordinates": [1.1, 1.1] }';
+                    var where = '{ "type": "Point", "coordinates": ['
+                                + position.lat() + ', ' + position.lng() + '] }';
+                    console.log(where);
+                    eventData.setWhere(where);
+                };
                 $scope.initialize = function () {
                     var initpos = new google.maps.LatLng(48.8567, 2.3508),
                         mapOptions = {
@@ -158,26 +133,51 @@ angular.module('starter.controllers',
                         infowindow.open(map, marker);
                     });
                     map.addListener('click', function (e) {
-                        position = e.latLng;
+                        var position = e.latLng;
+                        console.log(position);
+//                         $scope.position = e.latLng;
                         marker.setPosition(position);
                         infowindow.open(map, marker);
+                        setpos(position);
                     });
                     $scope.map = map;
                 };
-                $scope.next = function (where) {
-            //         var where = '{ "type": "Point", "coordinates": [1.1, 1.1] }';
-                    where = '{ "type": "Point", "coordinates": ['
-                                + position.lat() + ', ' + position.lng() + '] }';
-                    console.log(typeResource, eventData.when, where);
+                $scope.next = function () {
+                    $state.go('new.done');
+                };
+            }])
+
+    .controller('DoneCtrl',
+            ['$scope', '$state', 'eventData', '$tastypieResource',
+            function ($scope, $state, eventData, $tastypieResource) {
+                "use strict";
+                var eventTypeResource = new $tastypieResource('event_type');
+                $scope.event = {};
+                $scope.event.title = "";
+                $scope.event.start = eventData.when;
+                $scope.event.start.setHours(eventData.when.getHours()+1);
+                $scope.event.start.setMinutes(0);
+                $scope.event.where = eventData.where;
+                eventTypeResource.objects.$get({id: parseInt(eventData.what, 10)}).then(
+                    function (result) {
+                        $scope.event.type = result;
+                        $scope.event.title = result.name;
+                    },
+                    function (error) {
+                        console.log(error);
+                    }
+                );
+                $scope.next = function () {
                     var event = new $tastypieResource('myevents');
                     event.objects.$create({
-                        start: eventData.when,
-                        event_type: typeResource,
-                        position: where,
+                        name: $scope.event.title,
+                        start: $scope.event.start,
+                        event_type: $scope.event.type.resource_uri,
+                        position: eventData.where,
                     }).$save().then(
                         function (result) {
                             console.log(result);
-                            $state.go('new.done');
+                            $state.go('events.mine');
                         },
                         function (error) {
                             console.log(error);
@@ -185,12 +185,6 @@ angular.module('starter.controllers',
                         }
                     );
                 };
-            }])
-
-    .controller('DoneCtrl',
-            ['$scope', '$state',
-            function ($scope, $state) {
-                "use strict";
             }])
 
     .controller('EventsCtrl',
@@ -244,7 +238,7 @@ angular.module('starter.controllers',
                 event.objects.$get({id: parseInt($stateParams.params.eventId, 10)}).then(
                     function (result) {
                         $scope.event = result;
-                        var my_id = 489,
+                        var my_id = 5,
                             index,
                             participants = result.participants,
                             found = false;

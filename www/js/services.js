@@ -88,6 +88,9 @@ angular.module('starter.services', [])
         eventData.setWhat = function (id) {
             eventData.what = id;
         };
+        eventData.setWhere = function (position) {
+            eventData.where = position;
+        };
         return eventData;
     });
 

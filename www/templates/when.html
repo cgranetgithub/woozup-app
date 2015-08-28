@@ -3,7 +3,6 @@
 <!--    <button class="button button-date button-outline button-balanced" ng-click="showDatePicker()">{{date | date : 'fullDate'}}</button>
     <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'H : mm'}}</button>-->
     <datepicker id="dtpick" ng-model="date" show-weeks="false" starting-day="1"></datepicker>
-    <timepicker id="tmpick" ng-model="time" ng-change="changed()" minute-step="15" show-meridian="false"></timepicker>
-    <button class="button button-block button-energized" ng-click="next(date, time)">Choisir le lieu</button>
+    <button class="button button-block button-energized" ng-click="next(date)">Valider</button>
   </ion-content>
 </ion-view>

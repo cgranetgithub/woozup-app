@@ -1,7 +1,22 @@
-<ion-view view-title="Done!">
-  <ion-content>
-    <h1>Created!</h1>
-    <h2>Created!</h2>
-    <h3>Created!</h3>
-  </ion-content>
+<ion-view view-title={{event.event_type.name}}>
+    <ion-content>
+        <ion-list>
+            <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
+                <img ng-src="{{event.type.image}}">
+                <h1>{{event.type.name}}</h1>
+                <h2>{{event.start | date : 'EEEE d MMMM'}}</h2>
+                <h2>{{event.where}}</h2>
+            </ion-item>
+            <timepicker id="tmpick" ng-model="event.start" minute-step="15" show-meridian="false"></timepicker>
+            <form name="myform">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Titre</span>
+                    <input ng-model="event.title" type="text" placeholder="Titre">
+                </label>
+            </form>
+        </ion-list>
+    </ion-content>
+    <ion-footer-bar class="bar-energized" ng-click="next()">
+        <h1 class="title">C'est parti !</h1>
+    </ion-footer-bar>
 </ion-view>
