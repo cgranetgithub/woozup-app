@@ -26,19 +26,29 @@ angular.module('starter.controllers',
 //     }
 // }])
 
-    .controller('HomeCtrl', function () {
+    .controller('HomeCtrl', ['$scope', '$state', function ($scope, $state) {
         "use strict";
-    })
+        $scope.next = function () {
+            $state.go('new.what', {}, { reload: true });
+        };
+    }])
 
     .controller('WhatCtrl',
-            ['$scope', '$state', 'eventData', '$tastypieResource',
-            function ($scope, $state, eventData, $tastypieResource) {
+            ['$tastypieResource', '$scope', '$state', 'EventData', 
+            function ($tastypieResource, $scope, $state, EventData) {
                 "use strict";
                 $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
                 $scope.types.objects.$find();
                 $scope.next = function (typeId) {
-                    eventData.setWhat(typeId);
-                    $state.go('new.when');
+                    $scope.types.objects.$get({id: typeId}).then(
+                        function (result) {
+                            EventData.setWhat(result);
+                            $state.go('new.when', {}, { reload: true });
+                        },
+                        function (error) {
+                            console.log(error);
+                        }
+                    );
                 };
             }])
 //     .directive('tileSize', function () {
@@ -52,21 +62,28 @@ angular.module('starter.controllers',
 //     })
 
     .controller('WhenCtrl',
-            ['$scope', '$state', 'eventData',
-            function ($scope, $state, eventData) {
+            ['$tastypieResource', '$scope', '$state', 'EventData',
+            function ($tastypieResource, $scope, $state, EventData) {
                 "use strict";
-                $scope.date = new Date();
-                $scope.next = function (date) {
-                    eventData.setWhen(date);
-                    $state.go('new.where');
+                $scope.when = {}
+                $scope.when.date = new Date();
+                $scope.title = EventData.getWhat().name;
+                $scope.next = function () {
+//                     console.log(date, $scope.date);
+                    EventData.setWhen($scope.when.date);
+                    $state.go('new.where', {}, { reload: true });
                 };
-//                 $scope.events = new $tastypieResource('event');
-//                 $scope.events.objects.$find();
+                $scope.$watch("when.date", function(newValue, oldValue) {
+                    newValue.setHours(0);
+                    newValue.setMinutes(0);
+                    $scope.events = new $tastypieResource('friendsevents', {order_by: 'start', start__gte: newValue});
+                    $scope.events.objects.$find();
+                });                
             }])
 
     .controller('WhereCtrl',
-            ['$scope', '$state', 'eventData', '$cordovaGeolocation', '$tastypieResource',
-            function ($scope, $state, eventData, $cordovaGeolocation, $tastypieResource) {
+            ['$cordovaGeolocation', '$scope', '$state', '$filter', 'EventData',
+            function ($cordovaGeolocation, $scope, $state, $filter, EventData) {
                 "use strict";
                 /*global document: false */
                 /*global google: false */
@@ -76,8 +93,9 @@ angular.module('starter.controllers',
                     var where = '{ "type": "Point", "coordinates": ['
                                 + position.lat() + ', ' + position.lng() + '] }';
                     console.log(where);
-                    eventData.setWhere(where);
+                    EventData.setWhere(where);
                 };
+                $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
                 $scope.initialize = function () {
                     var initpos = new google.maps.LatLng(48.8567, 2.3508),
                         mapOptions = {
@@ -143,45 +161,36 @@ angular.module('starter.controllers',
                     $scope.map = map;
                 };
                 $scope.next = function () {
-                    $state.go('new.done');
+                    $state.go('new.done', {}, { reload: true });
                 };
             }])
 
     .controller('DoneCtrl',
-            ['$scope', '$state', 'eventData', '$tastypieResource',
-            function ($scope, $state, eventData, $tastypieResource) {
+            ['$tastypieResource', '$scope', '$state', 'EventData',
+            function ($tastypieResource, $scope, $state, EventData) {
                 "use strict";
                 var eventTypeResource = new $tastypieResource('event_type');
                 $scope.event = {};
-                $scope.event.title = "";
-                $scope.event.start = eventData.when;
-                $scope.event.start.setHours(eventData.when.getHours()+1);
+                $scope.event.title = EventData.getWhat().name;
+                $scope.event.where = EventData.getWhere();
+                $scope.event.start = EventData.getWhen();
+                $scope.event.start.setHours(EventData.getWhen().getHours()+1);
                 $scope.event.start.setMinutes(0);
-                $scope.event.where = eventData.where;
-                eventTypeResource.objects.$get({id: parseInt(eventData.what, 10)}).then(
-                    function (result) {
-                        $scope.event.type = result;
-                        $scope.event.title = result.name;
-                    },
-                    function (error) {
-                        console.log(error);
-                    }
-                );
                 $scope.next = function () {
                     var event = new $tastypieResource('myevents');
                     event.objects.$create({
                         name: $scope.event.title,
                         start: $scope.event.start,
-                        event_type: $scope.event.type.resource_uri,
-                        position: eventData.where,
+                        event_type: EventData.getWhat().resource_uri,
+                        position: EventData.getWhere(),
                     }).$save().then(
                         function (result) {
                             console.log(result);
-                            $state.go('events.mine');
+                            $state.go('events.mine', {}, { reload: true });
                         },
                         function (error) {
                             console.log(error);
-                            $state.go('new.what');
+                            $state.go('new.what', {}, { reload: true });
                         }
                     );
                 };
@@ -247,7 +256,7 @@ angular.module('starter.controllers',
                             $scope.buttonAction = function (eventId) {
                                 var myevent = new $tastypieResource('myevents');
                                 myevent.objects.$delete({id: eventId});
-                                $state.go('events.mine');
+                                $state.go('events.mine', {}, { reload: true });
                             };
                         } else {
                             for (index = 0; index < participants.length; index++) {

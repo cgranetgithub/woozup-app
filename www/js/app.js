@@ -40,6 +40,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 controller: 'HomeCtrl'
             })
             .state('new.what', {
+                cache: false,
                 url: "/what",
                 views: {
                     'new': {
@@ -53,6 +54,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         //         }}
             })
             .state('new.when', {
+                cache: false,
                 url: '/when',
                 views: {
                     'new': {
@@ -66,6 +68,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         //         }}
             })
             .state('new.where', {
+                cache: false,
                 url: '/where',
                 views: {
                     'new': {
@@ -79,6 +82,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         //         }}
             })
             .state('new.done', {
+                cache: false,
                 url: '/done',
                 views: {
                     'new': {
@@ -88,12 +92,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             })
             .state('events', {
+                cache: false,
                 url: '/events',
                 abstract: true,
                 templateUrl: 'templates/events.html',
                 controller: 'EventsCtrl'
             })
             .state('events.mine', {
+                cache: false,
                 url: '/mine',
                 views: {
                     'myevents': {
@@ -103,6 +109,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             })
             .state('events.friends', {
+                cache: false,
                 url: '/friends',
                 views: {
                     'friendsevents': {
@@ -112,6 +119,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             })
             .state('events.all', {
+                cache: false,
                 url: '/all',
                 views: {
                     'allevents': {
@@ -121,6 +129,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             })
             .state('event', {
+                cache: false,
                 url: '/event/:eventId',
                 templateUrl: 'templates/event.html',
                 controller: 'EventCtrl'
@@ -132,6 +141,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 controller: 'FriendsCtrl'
             })
             .state('friends.new', {
+                cache: false,
                 url: '/new',
                 views: {
                     'newfriends': {
@@ -141,6 +151,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             })
             .state('friends.my', {
+                cache: false,
                 url: '/my',
                 views: {
                     'myfriends': {
@@ -150,6 +161,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             })
             .state('friends.pending', {
+                cache: false,
                 url: '/pending',
                 views: {
                     'pendingfriends': {

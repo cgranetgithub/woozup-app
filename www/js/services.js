@@ -25,7 +25,7 @@ angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
         var apiUrl = 'http://geoevent.herokuapp.com/api/v1/';
-    //     var apiUrl = 'http://127.0.0.1:8000/api/v1/'
+        var apiUrl = 'http://127.0.0.1:8000/api/v1/'
         var authName = '+33667045021';
         var authKey = '51a3dffafa923c080532d4fe8d1e670262941fbf';
         $provide.value('apiUrl', apiUrl);
@@ -79,19 +79,29 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'friendsevents/leave/' + eventId + '/');
             };
         }])
-    .factory('eventData', function () {
+    .factory('EventData', function () {
         "use strict";
-        var eventData = {};
-        eventData.setWhen = function (datetime) {
-            eventData.when = datetime;
+        var data = {};
+        return {
+            setWhat: function (id) {
+                data.what = id;
+            },
+            getWhat: function () {
+                return data.what;
+            },
+            setWhen: function (datetime) {
+                data.when = datetime;
+            },
+            getWhen: function () {
+                return data.when;
+            },
+            setWhere: function (position) {
+                data.where = position;
+            },
+            getWhere: function () {
+                return data.where;
+            },
         };
-        eventData.setWhat = function (id) {
-            eventData.what = id;
-        };
-        eventData.setWhere = function (position) {
-            eventData.where = position;
-        };
-        return eventData;
     });
 
     // .factory('invite', ['tre', function (tre) { return tre; }])

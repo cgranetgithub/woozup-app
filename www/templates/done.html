@@ -1,7 +1,7 @@
 <ion-view view-title={{event.event_type.name}}>
     <ion-content>
         <ion-list>
-            <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
+            <ion-item class="item item-thumbnail-right event-descr item-text-wrap" ng-style={{event.type.style}}>
                 <img ng-src="{{event.type.image}}">
                 <h1>{{event.type.name}}</h1>
                 <h2>{{event.start | date : 'EEEE d MMMM'}}</h2>
