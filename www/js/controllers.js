@@ -65,7 +65,7 @@ angular.module('starter.controllers',
             ['$tastypieResource', '$scope', '$state', 'EventData',
             function ($tastypieResource, $scope, $state, EventData) {
                 "use strict";
-                $scope.when = {}
+                $scope.when = {};
                 $scope.when.date = new Date();
                 $scope.title = EventData.getWhat().name;
                 $scope.next = function () {
@@ -73,7 +73,7 @@ angular.module('starter.controllers',
                     EventData.setWhen($scope.when.date);
                     $state.go('new.where', {}, { reload: true });
                 };
-                $scope.$watch("when.date", function(newValue, oldValue) {
+                $scope.$watch("when.date", function (newValue, oldValue) {
                     newValue.setHours(0);
                     newValue.setMinutes(0);
                     $scope.events = new $tastypieResource('friendsevents', {order_by: 'start', start__gte: newValue});
@@ -96,6 +96,7 @@ angular.module('starter.controllers',
                     EventData.setWhere(where);
                 };
                 $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
+                $scope.buttonTitle = "Valider";
                 $scope.initialize = function () {
                     var initpos = new google.maps.LatLng(48.8567, 2.3508),
                         mapOptions = {
@@ -169,12 +170,12 @@ angular.module('starter.controllers',
             ['$tastypieResource', '$scope', '$state', 'EventData',
             function ($tastypieResource, $scope, $state, EventData) {
                 "use strict";
-                var eventTypeResource = new $tastypieResource('event_type');
                 $scope.event = {};
+                $scope.event.type = EventData.getWhat();
                 $scope.event.title = EventData.getWhat().name;
                 $scope.event.where = EventData.getWhere();
                 $scope.event.start = EventData.getWhen();
-                $scope.event.start.setHours(EventData.getWhen().getHours()+1);
+                $scope.event.start.setHours(EventData.getWhen().getHours() + 1);
                 $scope.event.start.setMinutes(0);
                 $scope.next = function () {
                     var event = new $tastypieResource('myevents');
@@ -186,7 +187,7 @@ angular.module('starter.controllers',
                     }).$save().then(
                         function (result) {
                             console.log(result);
-                            $state.go('events.mine', {}, { reload: true });
+                            $state.go('events.agenda', {}, { reload: true });
                         },
                         function (error) {
                             console.log(error);
@@ -197,27 +198,27 @@ angular.module('starter.controllers',
             }])
 
     .controller('EventsCtrl',
-            ['$scope', '$state', '$tastypieResource',
-            function ($scope, $state, $tastypieResource) {
+            ['$scope', '$tastypieResource',
+            function ($scope, $tastypieResource) {
                 "use strict";
                 $scope.friends_title = "Ce que mes amis ont prévu";
-                $scope.mine_title = "Mes sorties";
-                $scope.all_title = "Mon agenda";
+//                 $scope.mine_title = "Mes sorties";
+                $scope.agendaTitle = "Mon agenda";
             }])
-    .controller('MyEventsCtrl',
-            ['$scope', '$state', '$tastypieResource',
-            function ($scope, $state, $tastypieResource) {
-                "use strict";
-                $scope.title = "Mes sorties";
-                var today = new Date();
-                today.setHours(0);
-                today.setMinutes(0);
-                $scope.events = new $tastypieResource('myevents', {order_by: 'start', start__gte: today});
-                $scope.events.objects.$find();
-            }])
+//     .controller('MyEventsCtrl',
+//             ['$scope', '$tastypieResource',
+//             function ($scope, $tastypieResource) {
+//                 "use strict";
+//                 $scope.title = "Mes sorties";
+//                 var today = new Date();
+//                 today.setHours(0);
+//                 today.setMinutes(0);
+//                 $scope.events = new $tastypieResource('myevents', {order_by: 'start', start__gte: today});
+//                 $scope.events.objects.$find();
+//             }])
     .controller('FriendsEventsCtrl',
-            ['$scope', '$state', '$tastypieResource',
-            function ($scope, $state, $tastypieResource) {
+            ['$scope', '$tastypieResource',
+            function ($scope, $tastypieResource) {
                 "use strict";
                 $scope.title = "Ce que mes amis ont prévu";
                 var today = new Date();
@@ -226,9 +227,9 @@ angular.module('starter.controllers',
                 $scope.events = new $tastypieResource('friendsevents', {order_by: 'start', start__gte: today});
                 $scope.events.objects.$find();
             }])
-    .controller('AllEventsCtrl',
-            ['$scope', '$state', '$tastypieResource',
-            function ($scope, $state, $tastypieResource) {
+    .controller('AgendaEventsCtrl',
+            ['$scope', '$tastypieResource',
+            function ($scope, $tastypieResource) {
                 "use strict";
                 $scope.title = "Mon agenda";
                 var today = new Date();
@@ -247,7 +248,7 @@ angular.module('starter.controllers',
                 event.objects.$get({id: parseInt($stateParams.params.eventId, 10)}).then(
                     function (result) {
                         $scope.event = result;
-                        var my_id = 5,
+                        var my_id = 3,
                             index,
                             participants = result.participants,
                             found = false;
@@ -256,7 +257,7 @@ angular.module('starter.controllers',
                             $scope.buttonAction = function (eventId) {
                                 var myevent = new $tastypieResource('myevents');
                                 myevent.objects.$delete({id: eventId});
-                                $state.go('events.mine', {}, { reload: true });
+                                $state.go('events.agenda', {}, { reload: true });
                             };
                         } else {
                             for (index = 0; index < participants.length; index++) {
@@ -287,12 +288,27 @@ angular.module('starter.controllers',
                 );
             }])
     .controller('FriendsCtrl',
-            ['$scope', '$state', '$tastypieResource',
-            function ($scope, $state, $tastypieResource) {
+            ['$scope', '$tastypieResource',
+            function ($scope, $tastypieResource) {
                 "use strict";
-                $scope.new_title = "Ajouter des amis";
-                $scope.my_title = "Mes amis";
-                $scope.pending_title = "Invitations en attente";
+                var newFriends = new $tastypieResource('friends/new'),
+                    pendingFriends = new $tastypieResource('friends/pending');
+                newFriends.objects.$find().then(
+                    function (result) {
+                        console.log(result);
+                        $scope.new.badge = result.meta.total_count;
+                    }
+                );
+                pendingFriends.objects.$find().then(
+                    function (result) {
+                        $scope.pending.badge = result.meta.total_count;
+                    }
+                );
+                $scope.my = {title: "Mes amis"};
+                $scope.new = {title: "Ajouter des amis",
+                              badge: 1};
+                $scope.pending = {title: "Invitations en attente",
+                                  badge: 0};
             }])
     .controller('NewFriendsCtrl',
             ['$scope', '$tastypieResource', 'invite',
@@ -313,7 +329,7 @@ angular.module('starter.controllers',
                 $scope.friends = new $tastypieResource('friends/my');
                 $scope.friends.objects.$find();
                 $scope.title = "Mes amis";
-                $scope.buttonTitle = "Voir";
+                $scope.buttonTitle = "Retirer";
             //     $scope.buttonAction = function (userId) {
             //         invite(userId);
             //     };

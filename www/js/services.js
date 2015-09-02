@@ -25,7 +25,7 @@ angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
         var apiUrl = 'http://geoevent.herokuapp.com/api/v1/';
-        var apiUrl = 'http://127.0.0.1:8000/api/v1/'
+//         var apiUrl = 'http://127.0.0.1:8000/api/v1/'
         var authName = '+33667045021';
         var authKey = '51a3dffafa923c080532d4fe8d1e670262941fbf';
         $provide.value('apiUrl', apiUrl);
@@ -38,7 +38,6 @@ angular.module('starter.services', [])
         function ($http, apiUrl, authName, authKey) {
             "use strict";
             return function (userId) {
-                auth = {'username': authName, 'api_key': authKey};
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
                 $http.post(apiUrl + 'user/invite/' + userId + '/');
             };
@@ -47,7 +46,6 @@ angular.module('starter.services', [])
         function ($http, apiUrl, authName, authKey) {
             "use strict";
             return function (userId) {
-                auth = {'username': authName, 'api_key': authKey};
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
                 $http.post(apiUrl + 'user/accept/' + userId + '/');
             };
@@ -56,7 +54,6 @@ angular.module('starter.services', [])
         function ($http, apiUrl, authName, authKey) {
             "use strict";
             return function (userId) {
-                auth = {'username': authName, 'api_key': authKey};
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
                 $http.post(apiUrl + 'user/reject/' + userId + '/');
             };
@@ -65,7 +62,6 @@ angular.module('starter.services', [])
         function ($http, apiUrl, authName, authKey) {
             "use strict";
             return function (eventId) {
-                auth = {'username': authName, 'api_key': authKey};
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
                 $http.post(apiUrl + 'friendsevents/join/' + eventId + '/');
             };
@@ -74,7 +70,6 @@ angular.module('starter.services', [])
         function ($http, apiUrl, authName, authKey) {
             "use strict";
             return function (eventId) {
-                auth = {'username': authName, 'api_key': authKey};
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
                 $http.post(apiUrl + 'friendsevents/leave/' + eventId + '/');
             };

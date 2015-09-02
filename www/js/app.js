@@ -98,16 +98,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/events.html',
                 controller: 'EventsCtrl'
             })
-            .state('events.mine', {
-                cache: false,
-                url: '/mine',
-                views: {
-                    'myevents': {
-                        templateUrl: 'templates/eventlist.html',
-                        controller: 'MyEventsCtrl'
-                    }
-                }
-            })
+//             .state('events.mine', {
+//                 cache: false,
+//                 url: '/mine',
+//                 views: {
+//                     'myevents': {
+//                         templateUrl: 'templates/eventlist.html',
+//                         controller: 'MyEventsCtrl'
+//                     }
+//                 }
+//             })
             .state('events.friends', {
                 cache: false,
                 url: '/friends',
@@ -118,13 +118,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                     }
                 }
             })
-            .state('events.all', {
+            .state('events.agenda', {
                 cache: false,
-                url: '/all',
+                url: '/agenda',
                 views: {
-                    'allevents': {
+                    'agendaevents': {
                         templateUrl: 'templates/eventlist.html',
-                        controller: 'AllEventsCtrl'
+                        controller: 'AgendaEventsCtrl'
                     }
                 }
             })
