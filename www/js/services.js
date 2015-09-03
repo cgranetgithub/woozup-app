@@ -34,6 +34,16 @@ angular.module('starter.services', [])
         $tastypieProvider.setResourceUrl(apiUrl);
         $tastypieProvider.setAuth(authName, authKey);
     })
+    .factory('setlast', ['$http', 'apiUrl', 'authName', 'authKey',
+        function ($http, apiUrl, authName, authKey) {
+            "use strict";
+            return function (position) {
+                var where = '{ "type": "Point", "coordinates": ['
+                            + position.coords.latitude + ', ' + position.coords.longitude + '] }';
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.post(apiUrl + 'userposition/setlast/', {'last': where});
+            };
+        }])
     .factory('invite', ['$http', 'apiUrl', 'authName', 'authKey',
         function ($http, apiUrl, authName, authKey) {
             "use strict";
@@ -96,7 +106,19 @@ angular.module('starter.services', [])
             getWhere: function () {
                 return data.where;
             },
-        };
+        }
+    })
+    .factory('UserData', function () {
+        "use strict";
+        var data = {};
+        return {
+            setWhere: function (position) {
+                data.where = position;
+            },
+            getWhere: function () {
+                return data.where;
+            },
+        }
     });
 
     // .factory('invite', ['tre', function (tre) { return tre; }])

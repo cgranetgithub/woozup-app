@@ -34,9 +34,31 @@ angular.module('starter.controllers',
     }])
 
     .controller('WhatCtrl',
-            ['$tastypieResource', '$scope', '$state', 'EventData', 
-            function ($tastypieResource, $scope, $state, EventData) {
+            ['$tastypieResource', '$cordovaGeolocation', '$scope', '$state', 'setlast', 'EventData', 'UserData', 
+            function ($tastypieResource, $cordovaGeolocation, $scope, $state, setlast, EventData, UserData) {
                 "use strict";
+                var posOptions = {timeout: 5000, enableHighAccuracy: false};
+                $cordovaGeolocation
+                    .getCurrentPosition(posOptions)
+                    .then(function (loc) {
+                        console.log(loc);
+                        setlast(loc);
+                        UserData.setWhere(loc.coords);
+                    }, function (err) {
+                        console.log(err);
+                        var userId = 3;
+                        $scope.userposition = new $tastypieResource('userposition', {});
+                        $scope.userposition.objects.$get({id: userId}).then(
+                            function (result) {
+                                console.log(result.last);
+                                UserData.setWhere(result.last);
+                            },
+                            function (error) {
+                                console.log(error);
+                            }
+                        );
+                        alert("Je n'arrive pas à vous localiser. Merci d'activer le GPS et le wifi.");
+                    });
                 $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
                 $scope.types.objects.$find();
                 $scope.next = function (typeId) {
@@ -82,14 +104,13 @@ angular.module('starter.controllers',
             }])
 
     .controller('WhereCtrl',
-            ['$cordovaGeolocation', '$scope', '$state', '$filter', 'EventData',
-            function ($cordovaGeolocation, $scope, $state, $filter, EventData) {
+            ['$cordovaGeolocation', '$scope', '$state', '$filter', 'EventData', 'UserData',
+            function ($cordovaGeolocation, $scope, $state, $filter, EventData, UserData) {
                 "use strict";
                 /*global document: false */
                 /*global google: false */
                 var setpos = function (position) {
                     console.log(position);
-            //         var where = '{ "type": "Point", "coordinates": [1.1, 1.1] }';
                     var where = '{ "type": "Point", "coordinates": ['
                                 + position.lat() + ', ' + position.lng() + '] }';
                     console.log(where);
@@ -98,7 +119,16 @@ angular.module('starter.controllers',
                 $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
                 $scope.buttonTitle = "Valider";
                 $scope.initialize = function () {
-                    var initpos = new google.maps.LatLng(48.8567, 2.3508),
+                    console.log(UserData.getWhere());
+                    var lat, long;
+                    if ( UserData.getWhere() ) {
+                        lat = UserData.getWhere().latitude;
+                        long = UserData.getWhere().longitude;
+                    } else {
+                        lat = 48.8567;
+                        long = 2.3508;
+                    } 
+                    var initpos = new google.maps.LatLng(lat, long),
                         mapOptions = {
                             center: initpos,
                             zoom: 15,
@@ -118,15 +148,6 @@ angular.module('starter.controllers',
             //         marker.addListener('click', function () {
             //             infowindow.open(map, marker);
             //         });
-                    $cordovaGeolocation
-                        .getCurrentPosition(posOptions)
-                        .then(function (loc) {
-                            var mypos = new google.maps.LatLng(loc.coords.latitude,
-                                                                loc.coords.longitude);
-                            $scope.map.setCenter(mypos);
-                        }, function (err) {
-                            alert('Unable to get location: ' + err.message);
-                        });
                     autocomplete.bindTo('bounds', map);
                     map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
                     autocomplete.addListener('place_changed', function () {
@@ -306,7 +327,7 @@ angular.module('starter.controllers',
                 );
                 $scope.my = {title: "Mes amis"};
                 $scope.new = {title: "Ajouter des amis",
-                              badge: 1};
+                              badge: 0};
                 $scope.pending = {title: "Invitations en attente",
                                   badge: 0};
             }])

@@ -6,9 +6,9 @@
 /*     border-radius: 50% 200% 75% 0; */
     border-radius: 0 80% 0 0;
     position: absolute;
-    top: 1px;
+    bottom: 1px;
     left: 1px;
-    height: 99%;
+    height: 90%;
     padding: 20px 10px 20px 5px;
     z-index: -1;
     opacity: 0.2;
@@ -17,8 +17,10 @@
     border-radius: 50%;
     position: absolute;
     top: 1px;
+    bottom: 1px;
     right: 1px;
-    height: 99%;
+    height: 85%;
+    margin: auto;
 /*     padding: 20px 10px 20px 5px; */
     z-index: -1;
 }
@@ -57,13 +59,14 @@
 .event-descr {
     background-color: #DDD;
     border-radius: 0 0 70% 30%;
+    color: white;
     padding-bottom: 40px;
 }
 .event-descr h1 {
-    color: #FFF;
+    color: #EEE;
 }
 .event-descr h2 {
-    color: #555;
+    color: #FFF;
 }
 .event-descr img {
     bottom: 15px;
