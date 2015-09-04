@@ -33,6 +33,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         // Each state's controller can be found in controllers.js
         $stateProvider
 
+            .state('checkauth', {
+                cache: false,
+                url: '/checkauth',
+                templateUrl: 'templates/checkauth.html',
+                controller: 'CheckauthCtrl'
+            })
+            .state('login', {
+                cache: false,
+                url: '/login',
+                templateUrl: 'templates/login.html',
+                controller: 'LoginCtrl'
+            })
             .state('new', {
                 url: "/new",
                 abstract: true,
@@ -171,5 +183,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 }
             });
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/new/what');
+        $urlRouterProvider.otherwise('/checkauth');
     });

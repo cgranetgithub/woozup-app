@@ -26,61 +26,61 @@ angular.module('starter.services', [])
         "use strict";
         var apiUrl = 'http://geoevent.herokuapp.com/api/v1/';
 //         var apiUrl = 'http://127.0.0.1:8000/api/v1/'
-        var authName = '+33667045021';
-        var authKey = '51a3dffafa923c080532d4fe8d1e670262941fbf';
+//         var authName = null;
+//         var authKey = null;
         $provide.value('apiUrl', apiUrl);
-        $provide.value('authName', authName);
-        $provide.value('authKey', authKey);
+//         $provide.value('authName', authName);
+//         $provide.value('authKey', authKey);
         $tastypieProvider.setResourceUrl(apiUrl);
-        $tastypieProvider.setAuth(authName, authKey);
+//         $tastypieProvider.setAuth(authName, authKey);
     })
-    .factory('setlast', ['$http', 'apiUrl', 'authName', 'authKey',
-        function ($http, apiUrl, authName, authKey) {
+    .factory('setlast', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (position) {
                 var where = '{ "type": "Point", "coordinates": ['
                             + position.coords.latitude + ', ' + position.coords.longitude + '] }';
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'userposition/setlast/', {'last': where});
             };
         }])
-    .factory('invite', ['$http', 'apiUrl', 'authName', 'authKey',
-        function ($http, apiUrl, authName, authKey) {
+    .factory('invite', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/invite/' + userId + '/');
             };
         }])
-    .factory('accept', ['$http', 'apiUrl', 'authName', 'authKey',
-        function ($http, apiUrl, authName, authKey) {
+    .factory('accept', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/accept/' + userId + '/');
             };
         }])
-    .factory('reject', ['$http', 'apiUrl', 'authName', 'authKey',
-        function ($http, apiUrl, authName, authKey) {
+    .factory('reject', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/reject/' + userId + '/');
             };
         }])
-    .factory('join', ['$http', 'apiUrl', 'authName', 'authKey',
-        function ($http, apiUrl, authName, authKey) {
+    .factory('join', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (eventId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'friendsevents/join/' + eventId + '/');
             };
         }])
-    .factory('leave', ['$http', 'apiUrl', 'authName', 'authKey',
-        function ($http, apiUrl, authName, authKey) {
+    .factory('leave', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (eventId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(authName, ':', authKey);
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'friendsevents/leave/' + eventId + '/');
             };
         }])
@@ -105,8 +105,8 @@ angular.module('starter.services', [])
             },
             getWhere: function () {
                 return data.where;
-            },
-        }
+            }
+        };
     })
     .factory('UserData', function () {
         "use strict";
@@ -118,48 +118,109 @@ angular.module('starter.services', [])
             getWhere: function () {
                 return data.where;
             },
-        }
-    });
-
-    // .factory('invite', ['tre', function (tre) { return tre; }])
-    // 
-    // .factory('Categories', function ($resource, $http) {
-    //     return $resource(
-    //         domain + 'category/:id',
-    //         {'username':username, 'api_key':api_key},
-    //         {query: {
-    //             method: 'GET',
-    //             isArray: true,
-    //             transformResponse: tastypieDataTransformer($http)
-    //         }}
-    //     );
-    // })
-    // 
-    // .factory('Types', function ($resource, $http) {
-    //     return $resource(
-    //         domain + 'event_type/:id',
-    //         {'username':username, 'api_key':api_key},
-    //         {query: {
-    //             method: 'GET',
-    //             isArray: true,
-    //             transformResponse: tastypieDataTransformer($http)
-    //         }}
-    //     );
-    // })
-    // 
-    // .factory('Events', function ($resource, $http) {
-    //     return $resource(
-    //         domain + 'event/:id/',
-    //         {'username':username, 'api_key':api_key},
-    //         {query: {
-    //             method: 'GET',
-    //             isArray: true,
-    //             transformResponse: tastypieDataTransformer($http)
-    //         },
-    //         get: {
-    //             method: 'GET',
-    //             isArray: false,
-    //             transformResponse: tastypieDataTransformer($http)
-    //         }}
-    //     );
-    // });
+            setUserId: function (userId) {
+                data.userId = userId;
+            },
+            getUserId: function () {
+                return data.userId;
+            },
+            setUserName: function (userName) {
+                data.userName = userName;
+            },
+            getUserName: function () {
+                return data.userName;
+            },
+            setApiKey: function (apiKey) {
+                data.apiKey = apiKey;
+            },
+            getApiKey: function () {
+                return data.apiKey;
+            }
+        };
+    })
+    .factory('$localstorage', ['$window', function ($window) {
+        "use strict";
+        return {
+            set: function (key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function (key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function (key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function (key) {
+                return JSON.parse($window.localStorage[key] || '{}');
+            }
+        };
+    }])
+    .service('CheckauthService',
+             function ($q, $http, $localstorage, apiUrl, UserData) {
+            "use strict";
+            return {
+                checkUserAuth: function () {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        userId   = $localstorage.get('userid'),
+                        userName = $localstorage.get('username'),
+                        apiKey   = $localstorage.get('apikey');
+                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+                    $http.get(apiUrl + 'user/check_auth/')
+                        .then(function () {
+                            UserData.setUserName(userName);
+                            UserData.setApiKey(apiKey);
+                            UserData.setUserId(userId);
+                            deferred.resolve('Authenticated');
+                        }, function (error) {
+                            console.log(error);
+                            deferred.reject('Not Authenticated!');
+                        });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                }
+            };
+        })
+    .service('LoginService',
+             function ($q, $http, apiUrl, $localstorage, UserData) {
+            "use strict";
+            return {
+                loginUser: function (authData, social) {
+                    var deferred = $q.defer(),
+                        promise = deferred.promise,
+                        command = 'auth/login/';
+                    if (social) {
+                        command = 'register_by_access_token/';
+                    }
+                    $http.post(apiUrl + command, authData
+                        ).then(function (response) {
+                        $localstorage.set('userid', response.data.userid);
+                        $localstorage.set('username', response.data.username);
+                        $localstorage.set('apikey', response.data.api_key);
+                        UserData.setUserName(response.data.username);
+                        UserData.setApiKey(response.data.api_key);
+                        UserData.setUserId(response.data.userid);
+                        deferred.resolve('Welcome!');
+                    }, function (error) {
+                        console.log(error);
+                        deferred.reject('Wrong credentials!');
+                    });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    }
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    }
+                    return promise;
+                }
+            }
+        });
