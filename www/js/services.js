@@ -223,4 +223,37 @@ angular.module('starter.services', [])
                     return promise;
                 }
             }
+        })
+        .service('RegisterService',
+             function ($q, $http, apiUrl, $localstorage, UserData) {
+            "use strict";
+            return {
+                registerUser: function (authData, social) {
+                    var deferred = $q.defer(),
+                        promise = deferred.promise,
+                        command = 'auth/register/';
+                    $http.post(apiUrl + command, authData
+                        ).then(function (response) {
+                        $localstorage.set('userid', response.data.userid);
+                        $localstorage.set('username', response.data.username);
+                        $localstorage.set('apikey', response.data.api_key);
+                        UserData.setUserName(response.data.username);
+                        UserData.setApiKey(response.data.api_key);
+                        UserData.setUserId(response.data.userid);
+                        deferred.resolve('Welcome!');
+                    }, function (error) {
+                        console.log(error);
+                        deferred.reject('Account creation failed!');
+                    });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    }
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    }
+                    return promise;
+                }
+            }
         });

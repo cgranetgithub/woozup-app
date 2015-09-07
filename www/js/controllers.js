@@ -34,8 +34,34 @@ angular.module('starter.controllers',
                     $state.go('new.what');
                 })
                 .error(function () {
-                    $state.go('login');
+                    $state.go('connect');
                 });
+        })
+
+    .controller('ConnectCtrl',
+                function ($tastypie, $state, UserData, CheckauthService) {
+            "use strict";
+        })
+
+    .controller('RegisterCtrl',
+                function ($tastypie, $scope, RegisterService, $ionicPopup, $state, UserData) {
+            "use strict";
+            $scope.data = {};
+            $scope.register = function () {
+                var authData = {'username': $scope.data.username,
+                                'password': $scope.data.password,
+                                'name': $scope.data.firstname};
+                RegisterService.registerUser(authData, false)
+                    .success(function () {
+                        $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                        $state.go('new.what');
+                    }).error(function () {
+                        var alertPopup = $ionicPopup.alert({
+                            title: "Problème lors de la création du compte",
+                            template: "Veuillez réssayer"
+                        });
+                    });
+            };
         })
 
     .controller('LoginCtrl',

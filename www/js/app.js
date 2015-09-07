@@ -39,11 +39,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/checkauth.html',
                 controller: 'CheckauthCtrl'
             })
+            .state('connect', {
+                cache: false,
+                url: '/connect',
+                templateUrl: 'templates/connect.html',
+                controller: 'ConnectCtrl'
+            })
             .state('login', {
                 cache: false,
                 url: '/login',
                 templateUrl: 'templates/login.html',
                 controller: 'LoginCtrl'
+            })
+            .state('register', {
+                cache: false,
+                url: '/register',
+                templateUrl: 'templates/register.html',
+                controller: 'RegisterCtrl'
             })
             .state('new', {
                 url: "/new",
