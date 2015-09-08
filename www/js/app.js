@@ -197,3 +197,34 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/checkauth');
     });
+
+/* DEBUG STUFF : */
+function fb_init() {
+    'use strict';
+    if (window.cordova === undefined) {
+        /* browser stuff: we must wait that FB is properly set before trying using Facebook API */
+        setTimeout(fb_init, 500);
+        return;
+    }
+    if (window.cordova.platformId === "browser") {
+        if ( typeof(FB) !== "undefined" ) {
+            console.log("FB init");
+            window.facebookConnectPlugin.browserInit("948253448566545");
+        } else {
+            setTimeout(fb_init, 500);
+            return;
+        }
+    }
+    facebookConnectPlugin.getLoginStatus(
+        function (obj) {
+            console.log('Connected');
+        },
+        function (obj) {
+        }
+    );
+}
+
+(function() {
+    'use strict';
+    setTimeout(fb_init, 1000);
+})();

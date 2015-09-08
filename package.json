@@ -19,13 +19,24 @@
     "com.ionic.keyboard",
     "cordova-plugin-whitelist",
     "cordova-plugin-geolocation",
-    "cordova-plugin-console"
+    "cordova-plugin-console",
+    "com.phonegap.plugins.facebookconnect"
   ],
   "cordovaPlatforms": [
     {
       "platform": "android",
+      "locator": "browser"
+    },
+    "ios",
+    {
+      "platform": "browser",
       "version": "",
-      "locator": "android"
+      "locator": "browser"
+    },
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
     }
   ]
 }
