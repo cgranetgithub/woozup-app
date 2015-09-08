@@ -39,8 +39,33 @@ angular.module('starter.controllers',
         })
 
     .controller('ConnectCtrl',
-                function ($tastypie, $state, UserData, CheckauthService) {
-            "use strict";
+            function ($tastypie, $scope, $state, UserData, CheckauthService, LoginService) {
+                "use strict";
+
+                $scope.fbLogin = function() {
+                    facebookConnectPlugin.login([],
+                        function (obj) {
+                            var authData = {
+                                "provider": "facebook",
+                                "access_token": obj.authResponse.accessToken
+                            };
+                            console.log(obj);
+                            /* we have to call registerbyToken from service LoginService */
+                            LoginService.loginUser(authData, "facebook")
+                                .success(function () {
+                                    $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                    $state.go('new.what');
+                                }).error(function () {
+                                    var alertPopup = $ionicPopup.alert({
+                                        title: "Problème lors de la création du compte",
+                                        template: "Veuillez réssayer"
+                                    });
+                                });
+                        },
+                        function (obj) {
+                        }
+                    );
+                };
         })
 
     .controller('RegisterCtrl',
