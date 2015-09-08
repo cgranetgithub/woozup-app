@@ -16,16 +16,14 @@
   },
   "cordovaPlugins": [
     "cordova-plugin-device",
-    "com.ionic.keyboard",
+    "cordova-plugin-console",
     "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen",
+    "com.ionic.keyboard",
     "cordova-plugin-geolocation",
-    "cordova-plugin-console"
+    "cordova-plugin-contacts"
   ],
   "cordovaPlatforms": [
-    {
-      "platform": "android",
-      "version": "",
-      "locator": "android"
-    }
+    "android"
   ]
 }
