@@ -1,4 +1,9 @@
 <ion-view view-title={{event.event_type.name}}>
+    <ion-nav-buttons side="primary">
+        <button class="button" ui-sref="new.what" nav-transition="none">
+            <i class="icon ion-home"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content>
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap" ng-style={{event.type.style}}>

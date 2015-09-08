@@ -16,9 +16,12 @@
   },
   "cordovaPlugins": [
     "cordova-plugin-device",
-    "com.ionic.keyboard",
+    "cordova-plugin-console",
     "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen",
+    "com.ionic.keyboard",
     "cordova-plugin-geolocation",
+    "cordova-plugin-contacts",
     "cordova-plugin-console",
     "com.phonegap.plugins.facebookconnect"
   ],
