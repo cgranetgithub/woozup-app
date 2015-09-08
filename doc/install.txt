@@ -18,3 +18,14 @@ sudo npm -g install js-beautify jslint cordova ionic
 # use reset to download dependencies from package.json
 $ ionic state reset
 
+
+# install Facebook plugin
+# checkout FB plugin (outside of ionic plugin) : it is a requirement for iOS because of symlink
+$ git clone https://github.com/Wizcorp/phonegap-facebook-plugin.git
+ 
+# install plugin in cordova with APP_ID and APP_NAME
+$ cordova -d plugin add /path/to/cloned/phonegap-facebook-plugin --variable APP_ID="123456789" --variable APP_NAME="myApplication"
+
+# For Android: don't forget to fill FB Account with your key hash
+$ keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
+Q6Tcst8iqeloTBRmsyrA5Njtt0c=
