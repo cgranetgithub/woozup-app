@@ -1,4 +1,11 @@
 {
   "name": "Meet",
-  "app_id": "98d0a156"
+  "app_id": "98d0a156",
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
+  ]
 }

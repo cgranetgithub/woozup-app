@@ -24,15 +24,12 @@
 angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
-        var apiUrl = 'http://geoevent.herokuapp.com/api/v1/';
-//         var apiUrl = 'http://127.0.0.1:8000/api/v1/'
-//         var authName = null;
-//         var authKey = null;
+        var hostname = 'http://geoevent.herokuapp.com/';
+//         var hostname = 'http://localhost:8000/'
+        var apiUrl = hostname + 'api/v1/';
         $provide.value('apiUrl', apiUrl);
-//         $provide.value('authName', authName);
-//         $provide.value('authKey', authKey);
+        $provide.value('hostname', hostname);
         $tastypieProvider.setResourceUrl(apiUrl);
-//         $tastypieProvider.setAuth(authName, authKey);
     })
     .factory('setlast', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
@@ -82,6 +79,14 @@ angular.module('starter.services', [])
             return function (eventId) {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'friendsevents/leave/' + eventId + '/');
+            };
+        }])
+    .factory('sortContacts', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (contacts) {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'contact/sort/', contacts);
             };
         }])
     .factory('EventData', function () {
@@ -189,17 +194,17 @@ angular.module('starter.services', [])
             };
         })
     .service('LoginService',
-             function ($q, $http, apiUrl, $localstorage, UserData) {
+             function ($q, $http, apiUrl, hostname, $localstorage, UserData) {
             "use strict";
             return {
                 loginUser: function (authData, social) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
-                        command = 'auth/login/';
+                        command = apiUrl + 'auth/login/';
                     if (social) {
-                        command = 'register_by_access_token/';
+                        command = hostname + 'register_by_access_token/';
                     }
-                    $http.post(apiUrl + command, authData
+                    $http.post(command, authData
                         ).then(function (response) {
                         $localstorage.set('userid', response.data.userid);
                         $localstorage.set('username', response.data.username);

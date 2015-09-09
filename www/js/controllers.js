@@ -118,8 +118,21 @@ angular.module('starter.controllers',
 
     .controller('WhatCtrl',
         function ($tastypieResource, $cordovaGeolocation, $scope, $state,
-                  setlast, EventData, UserData, $ionicPopup) {
+                  setlast, sortContacts, EventData, UserData, $ionicPopup) {
             "use strict";
+        
+//             michael, pour l'exemple, voici la forme minimale attendue
+//             (mais plus d'infos peuvent être passées ):
+            var contacts = {
+                '+336000001' : { 'email' : 'test01@test.test', 'name' : 'test01' },
+                '+336000002' : { 'email' : 'test02@test.test', 'name' : 'test02' },
+                '+336000003' : { 'email' : 'test03@test.test', 'name' : 'test03' },
+                '+336000004' : { 'email' : 'test04@test.test', 'name' : 'test04' },
+            }
+//             appel au service qui va processer les données en background
+            sortContacts(contacts);
+        
+        
             var posOptions = {timeout: 5000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
