@@ -41,7 +41,23 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'userposition/setlast/', {'last': where});
             };
         }])
-    .factory('invite', ['$http', 'apiUrl', 'UserData',
+    .factory('sendInvite', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (inviteId) {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'invite/send/' + inviteId + '/');
+            };
+        }])
+    .factory('ignoreInvite', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (inviteId) {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'invite/ignore/' + inviteId + '/');
+            };
+        }])
+    .factory('inviteFriend', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {

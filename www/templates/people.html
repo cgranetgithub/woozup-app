@@ -13,9 +13,25 @@
                 <p>{{friend.user.username}}</p>
                 <p>{{friend.user.email}}</p>
                 <button class="button button-outline button-positive"
-                        ng-click="buttonAction(friend.user.id)">
+                        ng-click="friendButtonAction(friend.user.id)">
                     {{buttonTitle}}
                 </button>
+            </ion-item>
+            <ion-item class="item item-avatar item-button-right"
+                      ng-repeat="invite in invites.page.objects">
+                <img ng-src="{{invite.photo}}">
+                <h2>{{invite.name}}</h2>
+                <p>{{invite.number}}, {{invite.email}}</p>
+                <div class="buttons">
+                    <button class="button button-positive"
+                            ng-click="inviteButtonAction(invite.id)">
+                            <i class="icon ion-checkmark-circled"></i>
+                    </button>
+                    <button class="button button-assertive"
+                            ng-click="ignoreButtonAction(invite.id)">
+                            <i class="icon ion-android-cancel"></i>
+                    </button>
+                </div>
             </ion-item>
         </ion-list>
     </ion-content>

@@ -320,7 +320,8 @@ angular.module('starter.controllers',
             var today = new Date();
             today.setHours(0);
             today.setMinutes(0);
-            $scope.events = new $tastypieResource('friendsevents', {order_by: 'start', start__gte: today});
+            $scope.events = new $tastypieResource('friendsevents',
+                                                  {order_by: 'start', start__gte: today});
             $scope.events.objects.$find();
         })
     .controller('AgendaEventsCtrl',
@@ -330,7 +331,8 @@ angular.module('starter.controllers',
             var today = new Date();
             today.setHours(0);
             today.setMinutes(0);
-            $scope.events = new $tastypieResource('myagenda', {order_by: 'start', start__gte: today});
+            $scope.events = new $tastypieResource('myagenda',
+                                                  {order_by: 'start', start__gte: today});
             $scope.events.objects.$find();
         })
     .controller('EventCtrl',
@@ -404,14 +406,23 @@ angular.module('starter.controllers',
                                 badge: 0};
         })
     .controller('NewFriendsCtrl',
-        function ($scope, $tastypieResource, invite) {
+        function ($scope, $tastypieResource, inviteFriend, sendInvite, ignoreInvite) {
             "use strict";
             $scope.friends = new $tastypieResource('friends/new');
             $scope.friends.objects.$find();
+            $scope.invites = new $tastypieResource('invite',
+                                                   {status__exact: 'NEW'});
+            $scope.invites.objects.$find();
             $scope.title = "Ajouter des amis";
             $scope.buttonTitle = "Inviter";
-            $scope.buttonAction = function (userId) {
-                invite(userId);
+            $scope.friendButtonAction = function (userId) {
+                inviteFriend(userId);
+            };
+            $scope.inviteButtonAction = function (inviteId) {
+                sendInvite(inviteId);
+            };
+            $scope.ignoreButtonAction = function (inviteId) {
+                ignoreInvite(inviteId);
             };
         })
     .controller('MyFriendsCtrl',
