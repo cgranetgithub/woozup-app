@@ -414,6 +414,30 @@ angular.module('starter.controllers',
                                                    {status__exact: 'NEW'});
             $scope.invites.objects.$find();
             $scope.title = "Ajouter des amis";
+
+            $scope.contacts = [ "plop", "plip"];
+            
+            var options = new ContactFindOptions();
+            options.filter = "";
+            options.multiple = true;
+            var filter = ["displayName", "name"];
+            navigator.contacts.find(filter, 
+                function(contacts) {
+                    if (contacts === null) {
+                        console.log("No contact retrieved");
+                        return;
+                    }
+
+                    contacts.forEach( function (entry) {
+                        console.log(entry.id + " " + entry.name.formatted);
+                    });
+                    $scope.contacts = contacts;
+
+                },
+                function() {
+                    console.log("Error");
+                }, options);
+
             $scope.buttonTitle = "Inviter";
             $scope.friendButtonAction = function (userId) {
                 inviteFriend(userId);
