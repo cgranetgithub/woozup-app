@@ -1,5 +1,5 @@
 /*jslint browser: true, devel: true*/
-/*global angular, cordova, StatusBar, ContactFindOptions*/
+/*global angular, cordova, StatusBar, ContactFindOptions, facebookConnectPlugin*/
 
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie',
@@ -30,11 +30,12 @@ angular.module('starter.controllers',
             "use strict";
             CheckauthService.checkUserAuth()
                 .success(function () {
+                    var options,
+                        filter = ["displayName", "name"];
+
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $state.go('new.what');
 
-                    var options = null;
-                    var filter = ["displayName", "name"];
                     if (!navigator.contacts) {
                         return;
                     }
@@ -44,15 +45,15 @@ angular.module('starter.controllers',
 
                     navigator.contacts.find(filter,
                         function (contacts) {
+                            var stuff = {};
+
                             if (contacts === null) {
                                 console.log("No contact retrieved");
                                 return;
                             }
 
-                            var stuff = {};
-
                             contacts.forEach(function (entry) {
-                                var thumb = undefined;
+                                var thumb;
 
                                 if (!entry.phoneNumbers ||  !entry.phoneNumbers.length
                                         || !entry.emails || !entry.emails.length) {
@@ -88,37 +89,36 @@ angular.module('starter.controllers',
         })
 
     .controller('ConnectCtrl',
-            function ($tastypie, $scope, $state, UserData, CheckauthService, LoginService) {
-                "use strict";
+        function ($tastypie, $scope, $state, UserData, CheckauthService, LoginService, $ionicPopup) {
+            "use strict";
 
-                $scope.fbLogin = function() {
-                    facebookConnectPlugin.login([],
-                        function (obj) {
-                            var authData = {
-                                "provider": "facebook",
-                                "access_token": obj.authResponse.accessToken
-                            };
-                            console.log(obj);
-                            /* we have to call registerbyToken from service LoginService */
-                            LoginService.loginUser(authData, "facebook")
-                                .success(function () {
-                                    $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                                    $state.go('new.what');
-                                }).error(function () {
-                                    var alertPopup = $ionicPopup.alert({
-                                        title: "Problème lors de la création du compte",
-                                        template: "Veuillez réssayer"
-                                    });
+            $scope.fbLogin = function () {
+                facebookConnectPlugin.login([],
+                    function (obj) {
+                        var authData = {
+                            "provider": "facebook",
+                            "access_token": obj.authResponse.accessToken
+                        };
+                        /* we have to call registerbyToken from service LoginService */
+                        LoginService.loginUser(authData, "facebook")
+                            .success(function () {
+                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                $state.go('new.what');
+                            }).error(function () {
+                                $ionicPopup.alert({
+                                    title: "Problème lors de la création du compte",
+                                    template: "Veuillez réssayer"
                                 });
-                        },
-                        function (obj) {
-                        }
-                    );
-                };
+                            });
+                    },
+                    function (obj) {
+                    }
+                );
+            };
         })
 
     .controller('RegisterCtrl',
-                function ($tastypie, $scope, RegisterService, $ionicPopup, $state, UserData) {
+        function ($tastypie, $scope, RegisterService, $ionicPopup, $state, UserData) {
             "use strict";
             $scope.data = {};
             $scope.register = function () {
@@ -130,7 +130,7 @@ angular.module('starter.controllers',
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         $state.go('new.what');
                     }).error(function () {
-                        var alertPopup = $ionicPopup.alert({
+                        $ionicPopup.alert({
                             title: "Problème lors de la création du compte",
                             template: "Veuillez réssayer"
                         });
@@ -139,7 +139,7 @@ angular.module('starter.controllers',
         })
 
     .controller('LoginCtrl',
-                function ($tastypie, $scope, LoginService, $ionicPopup, $state, UserData) {
+        function ($tastypie, $scope, LoginService, $ionicPopup, $state, UserData) {
             "use strict";
             $scope.data = {};
             $scope.login = function () {
@@ -167,7 +167,7 @@ angular.module('starter.controllers',
 
     .controller('WhatCtrl',
         function ($tastypieResource, $cordovaGeolocation, $scope, $state,
-                  setlast, sortContacts, EventData, UserData, $ionicPopup) {
+                  setlast, EventData, UserData, $ionicPopup) {
             "use strict";
 
             var posOptions = {timeout: 5000, enableHighAccuracy: false};
@@ -395,7 +395,7 @@ angular.module('starter.controllers',
                             $state.go('events.agenda', {}, { reload: true });
                         };
                     } else {
-                        for (index = 0; index < participants.length; index++) {
+                        for (index = 0; index < participants.length; index += 1) {
                             if (my_id === participants[index].user.id) {
                                 found = true;
                             }

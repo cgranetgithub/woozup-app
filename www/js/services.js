@@ -236,14 +236,14 @@ angular.module('starter.services', [])
                     promise.success = function (fn) {
                         promise.then(fn);
                         return promise;
-                    }
+                    };
                     promise.error = function (fn) {
                         promise.then(null, fn);
                         return promise;
-                    }
+                    };
                     return promise;
                 }
-            }
+            };
         })
         .service('RegisterService',
              function ($q, $http, apiUrl, $localstorage, UserData) {
@@ -269,12 +269,12 @@ angular.module('starter.services', [])
                     promise.success = function (fn) {
                         promise.then(fn);
                         return promise;
-                    }
+                    };
                     promise.error = function (fn) {
                         promise.then(null, fn);
                         return promise;
-                    }
+                    };
                     return promise;
                 }
-            }
+            };
         });
