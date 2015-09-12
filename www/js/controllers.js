@@ -1,5 +1,5 @@
 /*jslint browser: true, devel: true*/
-/*global angular, cordova, StatusBar*/
+/*global angular, cordova, StatusBar, ContactFindOptions, facebookConnectPlugin*/
 
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie',
@@ -26,12 +26,62 @@ angular.module('starter.controllers',
 //     }
 // }])
     .controller('CheckauthCtrl',
-                function ($tastypie, $state, UserData, CheckauthService) {
+        function ($tastypie, $state, UserData, CheckauthService, sortContacts) {
             "use strict";
             CheckauthService.checkUserAuth()
                 .success(function () {
+                    var options,
+                        filter = ["displayName", "name"];
+
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $state.go('new.what');
+
+                    if (!navigator.contacts) {
+                        return;
+                    }
+                    options = new ContactFindOptions();
+                    options.filter = "";
+                    options.multiple = true;
+
+                    navigator.contacts.find(filter,
+                        function (contacts) {
+                            var stuff = {};
+
+                            if (contacts === null) {
+                                console.log("No contact retrieved");
+                                return;
+                            }
+
+                            contacts.forEach(function (entry) {
+                                var thumb;
+
+                                if (!entry.phoneNumbers ||  !entry.phoneNumbers.length
+                                        || !entry.emails || !entry.emails.length) {
+                                    return;
+                                }
+
+                                if (entry.photos && entry.photos.length) {
+                                    thumb = entry.photos[0].value;
+                                }
+
+                                entry.phoneNumbers.forEach(function (phone) {
+                                    entry.emails.forEach(function (email) {
+                                        stuff[phone.value] = {
+                                            'email': email.value,
+                                            'name': entry.name.formatted,
+                                            'photo': thumb
+                                        };
+                                    });
+                                });
+
+                            });
+
+                            sortContacts(stuff);
+                        },
+                        function () {
+                            console.log("Error");
+                        }, options);
+
                 })
                 .error(function () {
                     $state.go('connect');
@@ -39,37 +89,36 @@ angular.module('starter.controllers',
         })
 
     .controller('ConnectCtrl',
-            function ($tastypie, $scope, $state, UserData, CheckauthService, LoginService) {
-                "use strict";
+        function ($tastypie, $scope, $state, UserData, CheckauthService, LoginService, $ionicPopup) {
+            "use strict";
 
-                $scope.fbLogin = function() {
-                    facebookConnectPlugin.login([],
-                        function (obj) {
-                            var authData = {
-                                "provider": "facebook",
-                                "access_token": obj.authResponse.accessToken
-                            };
-                            console.log(obj);
-                            /* we have to call registerbyToken from service LoginService */
-                            LoginService.loginUser(authData, "facebook")
-                                .success(function () {
-                                    $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                                    $state.go('new.what');
-                                }).error(function () {
-                                    var alertPopup = $ionicPopup.alert({
-                                        title: "Problème lors de la création du compte",
-                                        template: "Veuillez réssayer"
-                                    });
+            $scope.fbLogin = function () {
+                facebookConnectPlugin.login([],
+                    function (obj) {
+                        var authData = {
+                            "provider": "facebook",
+                            "access_token": obj.authResponse.accessToken
+                        };
+                        /* we have to call registerbyToken from service LoginService */
+                        LoginService.loginUser(authData, "facebook")
+                            .success(function () {
+                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                $state.go('new.what');
+                            }).error(function () {
+                                $ionicPopup.alert({
+                                    title: "Problème lors de la création du compte",
+                                    template: "Veuillez réssayer"
                                 });
-                        },
-                        function (obj) {
-                        }
-                    );
-                };
+                            });
+                    },
+                    function (obj) {
+                    }
+                );
+            };
         })
 
     .controller('RegisterCtrl',
-                function ($tastypie, $scope, RegisterService, $ionicPopup, $state, UserData) {
+        function ($tastypie, $scope, RegisterService, $ionicPopup, $state, UserData) {
             "use strict";
             $scope.data = {};
             $scope.register = function () {
@@ -81,7 +130,7 @@ angular.module('starter.controllers',
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         $state.go('new.what');
                     }).error(function () {
-                        var alertPopup = $ionicPopup.alert({
+                        $ionicPopup.alert({
                             title: "Problème lors de la création du compte",
                             template: "Veuillez réssayer"
                         });
@@ -90,7 +139,7 @@ angular.module('starter.controllers',
         })
 
     .controller('LoginCtrl',
-                function ($tastypie, $scope, LoginService, $ionicPopup, $state, UserData) {
+        function ($tastypie, $scope, LoginService, $ionicPopup, $state, UserData) {
             "use strict";
             $scope.data = {};
             $scope.login = function () {
@@ -118,21 +167,9 @@ angular.module('starter.controllers',
 
     .controller('WhatCtrl',
         function ($tastypieResource, $cordovaGeolocation, $scope, $state,
-                  setlast, sortContacts, EventData, UserData, $ionicPopup) {
+                  setlast, EventData, UserData, $ionicPopup) {
             "use strict";
-        
-//             michael, pour l'exemple, voici la forme minimale attendue
-//             (mais plus d'infos peuvent être passées ):
-            var contacts = {
-                '+336000001' : { 'email' : 'test01@test.test', 'name' : 'test01' },
-                '+336000002' : { 'email' : 'test02@test.test', 'name' : 'test02' },
-                '+336000003' : { 'email' : 'test03@test.test', 'name' : 'test03' },
-                '+336000004' : { 'email' : 'test04@test.test', 'name' : 'test04' },
-            }
-//             appel au service qui va processer les données en background
-            sortContacts(contacts);
-        
-        
+
             var posOptions = {timeout: 5000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
@@ -358,7 +395,7 @@ angular.module('starter.controllers',
                             $state.go('events.agenda', {}, { reload: true });
                         };
                     } else {
-                        for (index = 0; index < participants.length; index++) {
+                        for (index = 0; index < participants.length; index += 1) {
                             if (my_id === participants[index].user.id) {
                                 found = true;
                             }
@@ -422,30 +459,6 @@ angular.module('starter.controllers',
                                                    {status__exact: 'NEW'});
             $scope.invites.objects.$find();
             $scope.title = "Ajouter des amis";
-
-            $scope.contacts = [ "plop", "plip"];
-            
-            var options = new ContactFindOptions();
-            options.filter = "";
-            options.multiple = true;
-            var filter = ["displayName", "name"];
-            navigator.contacts.find(filter, 
-                function(contacts) {
-                    if (contacts === null) {
-                        console.log("No contact retrieved");
-                        return;
-                    }
-
-                    contacts.forEach( function (entry) {
-                        console.log(entry.id + " " + entry.name.formatted);
-                    });
-                    $scope.contacts = contacts;
-
-                },
-                function() {
-                    console.log("Error");
-                }, options);
-
             $scope.acceptFriendButton = function (userId) {
                 inviteFriend(userId);
             };
