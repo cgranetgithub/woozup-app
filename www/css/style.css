@@ -131,3 +131,9 @@
 .controls:focus {
     border-color: #4d90fe;
 }
+
+.roundbutton {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}

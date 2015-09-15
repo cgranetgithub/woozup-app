@@ -160,6 +160,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 controller: 'EventCtrl'
             })
             .state('friends', {
+                cache: false,
                 url: '/friends',
                 abstract: true,
                 templateUrl: 'templates/friends.html',

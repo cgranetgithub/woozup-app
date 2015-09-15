@@ -12,24 +12,31 @@
                 <h2>{{friend.name}}</h2>
                 <p>{{friend.user.username}}</p>
                 <p>{{friend.user.email}}</p>
-                <button class="button button-outline button-positive"
-                        ng-click="friendButtonAction(friend.user.id)">
-                    {{buttonTitle}}
-                </button>
+                <div class="buttons">
+                    <button class="button button-outline roundbutton"
+                            ng-click="ignoreFriendButton(friend.user.id)">
+                            <i class="icon ion-android-cancel"></i>
+                    </button>
+                    <button class="button button-outline button-calm roundbutton"
+                            ng-click="inviteFriendButton(friend.user.id)">
+                            <i class="icon ion-person-add"></i>
+                    </button>
+                </div>
             </ion-item>
             <ion-item class="item item-avatar item-button-right"
                       ng-repeat="invite in invites.page.objects">
                 <img ng-src="{{invite.photo}}">
                 <h2>{{invite.name}}</h2>
-                <p>{{invite.number}}, {{invite.email}}</p>
+                <p>{{invite.number}}</p>
+                <p>{{invite.email}}</p>
                 <div class="buttons">
-                    <button class="button button-positive"
-                            ng-click="inviteButtonAction(invite.id)">
-                            <i class="icon ion-checkmark-circled"></i>
-                    </button>
-                    <button class="button button-assertive"
-                            ng-click="ignoreButtonAction(invite.id)">
+                    <button class="button button-outline roundbutton"
+                            ng-click="ignoreInviteButton(invite.id)">
                             <i class="icon ion-android-cancel"></i>
+                    </button>
+                    <button class="button button-outline button-calm roundbutton"
+                            ng-click="sendInviteButton(invite.id)">
+                            <i class="icon ion-person-add"></i>
                     </button>
                 </div>
             </ion-item>

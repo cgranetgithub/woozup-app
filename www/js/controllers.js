@@ -30,13 +30,20 @@ angular.module('starter.controllers',
             "use strict";
             CheckauthService.checkUserAuth()
                 .success(function () {
+                    $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                    $state.go('new.what');
+
+                    var stuff = {'toto jack':{'emails':'erfr@rf.ere, sdf@sdf.Sdf',
+                                            'numbers':'4567890, 09876543'},
+                                'titi john':{'emails':'ehghr@rdff.eer, sfghf@sdff.Sdf',
+                                            'numbers':'9056890, 546789054'},
+                    };
+                    sortContacts(stuff);
+
                     var options,
                         filter = ["displayName", "name"],
                         lastCheck = window.localStorage.contact_sync,
                         curDate = new Date();
-
-                    $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                    $state.go('new.what');
 
                     if (!navigator.contacts) {
                         return;
@@ -83,15 +90,14 @@ angular.module('starter.controllers',
                                 });
 
                             });
-
                             sortContacts(stuff);
                         },
                         function () {
                             // an error has occured, try to resync next day
                             window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
                             console.log("Error");
-                        }, options);
-
+                        }, options
+                    );
                 })
                 .error(function () {
                     $state.go('connect');
@@ -132,9 +138,12 @@ angular.module('starter.controllers',
             "use strict";
             $scope.data = {};
             $scope.register = function () {
-                var authData = {'username': $scope.data.username,
+                var authData = {'email': $scope.data.email,
+                                'username': $scope.data.email,
                                 'password': $scope.data.password,
-                                'name': $scope.data.firstname};
+                                'name': $scope.data.firstname,
+                                'number': $scope.data.number
+                };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
@@ -435,10 +444,17 @@ angular.module('starter.controllers',
         function ($scope, $tastypieResource) {
             "use strict";
             var newFriends = new $tastypieResource('friends/new'),
-                pendingFriends = new $tastypieResource('friends/pending');
+                pendingFriends = new $tastypieResource('friends/pending'),
+                invites = new $tastypieResource('invite',
+                                                {status__exact: 'NEW'});
             newFriends.objects.$find().then(
                 function (result) {
-                    $scope.new.badge = result.meta.total_count;
+                    $scope.new.badge += result.meta.total_count;
+                }
+            );
+            invites.objects.$find().then(
+                function (result) {
+                    $scope.new.badge += result.meta.total_count;
                 }
             );
             pendingFriends.objects.$find().then(
@@ -453,7 +469,8 @@ angular.module('starter.controllers',
                                 badge: 0};
         })
     .controller('NewFriendsCtrl',
-        function ($scope, $tastypieResource, inviteFriend, sendInvite, ignoreInvite) {
+        function ($scope, $tastypieResource,
+                  inviteFriend, ignoreFriend, sendInvite, ignoreInvite) {
             "use strict";
             $scope.friends = new $tastypieResource('friends/new');
             $scope.friends.objects.$find();
@@ -461,14 +478,16 @@ angular.module('starter.controllers',
                                                    {status__exact: 'NEW'});
             $scope.invites.objects.$find();
             $scope.title = "Ajouter des amis";
-            $scope.buttonTitle = "Inviter";
-            $scope.friendButtonAction = function (userId) {
+            $scope.acceptFriendButton = function (userId) {
                 inviteFriend(userId);
             };
-            $scope.inviteButtonAction = function (inviteId) {
+            $scope.ignoreFriendButton = function (userId) {
+                ignoreFriend(userId);
+            };
+            $scope.sendInviteButton = function (inviteId) {
                 sendInvite(inviteId);
             };
-            $scope.ignoreButtonAction = function (inviteId) {
+            $scope.ignoreInviteButton = function (inviteId) {
                 ignoreInvite(inviteId);
             };
         })
@@ -484,13 +503,15 @@ angular.module('starter.controllers',
         //     };
         })
     .controller('PendingFriendsCtrl',
-        function ($scope, $tastypieResource, accept) {
+        function ($scope, $tastypieResource, acceptFriend, rejectFriend) {
             "use strict";
             $scope.friends = new $tastypieResource('friends/pending');
             $scope.friends.objects.$find();
             $scope.title = "Invitations en attente";
-            $scope.buttonTitle = "Accepter";
-            $scope.buttonAction = function (userId) {
-                accept(userId);
+            $scope.acceptFriendButton = function (userId) {
+                acceptFriend(userId);
+            };
+            $scope.ignoreFriendButton = function (userId) {
+                rejectFriend(userId);
             };
         });

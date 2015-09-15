@@ -65,7 +65,15 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'user/invite/' + userId + '/');
             };
         }])
-    .factory('accept', ['$http', 'apiUrl', 'UserData',
+    .factory('ignoreFriend', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (userId) {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'user/ignore/' + userId + '/');
+            };
+        }])
+    .factory('acceptFriend', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
@@ -73,7 +81,7 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'user/accept/' + userId + '/');
             };
         }])
-    .factory('reject', ['$http', 'apiUrl', 'UserData',
+    .factory('rejectFriend', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
