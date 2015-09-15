@@ -33,13 +33,6 @@ angular.module('starter.controllers',
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $state.go('new.what');
 
-                    var stuff = {'toto jack':{'emails':'erfr@rf.ere, sdf@sdf.Sdf',
-                                            'numbers':'4567890, 09876543'},
-                                'titi john':{'emails':'ehghr@rdff.eer, sfghf@sdff.Sdf',
-                                            'numbers':'9056890, 546789054'},
-                    };
-                    sortContacts(stuff);
-
                     var options,
                         filter = ["displayName", "name"],
                         lastCheck = window.localStorage.contact_sync,
@@ -58,7 +51,7 @@ angular.module('starter.controllers',
 
                     navigator.contacts.find(filter,
                         function (contacts) {
-                            var stuff = {};
+                            var stuff = [];
 
                             window.localStorage.contact_sync = curDate;
 
@@ -68,27 +61,17 @@ angular.module('starter.controllers',
                             }
 
                             contacts.forEach(function (entry) {
-                                var thumb;
-
                                 if (!entry.phoneNumbers ||  !entry.phoneNumbers.length
                                         || !entry.emails || !entry.emails.length) {
                                     return;
                                 }
 
-                                if (entry.photos && entry.photos.length) {
-                                    thumb = entry.photos[0].value;
-                                }
-
-                                entry.phoneNumbers.forEach(function (phone) {
-                                    entry.emails.forEach(function (email) {
-                                        stuff[phone.value] = {
-                                            'email': email.value,
-                                            'name': entry.name.formatted,
-                                            'photo': thumb
-                                        };
-                                    });
+                                stuff.push({
+                                    'name': entry.name.formatted,
+                                    'emails': entry.emails.join(', '),
+                                    'numbers': entry.phoneNumbers.join(', '),
+                                    'photo': entry.photos.join(', '),
                                 });
-
                             });
                             sortContacts(stuff);
                         },
