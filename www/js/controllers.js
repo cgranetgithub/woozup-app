@@ -31,7 +31,9 @@ angular.module('starter.controllers',
             CheckauthService.checkUserAuth()
                 .success(function () {
                     var options,
-                        filter = ["displayName", "name"];
+                        filter = ["displayName", "name"],
+                        lastCheck = window.localStorage.contact_sync,
+                        curDate = new Date();
 
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $state.go('new.what');
@@ -39,6 +41,10 @@ angular.module('starter.controllers',
                     if (!navigator.contacts) {
                         return;
                     }
+                    if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
+                        return;
+                    }
+
                     options = new ContactFindOptions();
                     options.filter = "";
                     options.multiple = true;
@@ -46,6 +52,8 @@ angular.module('starter.controllers',
                     navigator.contacts.find(filter,
                         function (contacts) {
                             var stuff = {};
+
+                            window.localStorage.contact_sync = curDate;
 
                             if (contacts === null) {
                                 console.log("No contact retrieved");
@@ -79,6 +87,8 @@ angular.module('starter.controllers',
                             sortContacts(stuff);
                         },
                         function () {
+                            // an error has occured, try to resync next day
+                            window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
                             console.log("Error");
                         }, options);
 
