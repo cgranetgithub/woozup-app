@@ -30,12 +30,18 @@ angular.module('starter.controllers',
             "use strict";
             CheckauthService.checkUserAuth()
                 .success(function () {
-                    var options,
-                        filter = ["displayName", "name"];
-
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $state.go('new.what');
 
+                    var stuff = {'toto jack':{'emails':'erfr@rf.ere, sdf@sdf.Sdf',
+                                            'numbers':'4567890, 09876543'},
+                                'titi john':{'emails':'ehghr@rdff.eer, sfghf@sdff.Sdf',
+                                            'numbers':'9056890, 546789054'},       
+                    };
+                    sortContacts(stuff);
+
+                    var options,
+                        filter = ["displayName", "name"];
                     if (!navigator.contacts) {
                         return;
                     }
@@ -75,13 +81,12 @@ angular.module('starter.controllers',
                                 });
 
                             });
-
                             sortContacts(stuff);
                         },
                         function () {
                             console.log("Error");
-                        }, options);
-
+                        }, options
+                    );
                 })
                 .error(function () {
                     $state.go('connect');
@@ -122,9 +127,12 @@ angular.module('starter.controllers',
             "use strict";
             $scope.data = {};
             $scope.register = function () {
-                var authData = {'username': $scope.data.username,
+                var authData = {'email': $scope.data.email,
+                                'username': $scope.data.email,
                                 'password': $scope.data.password,
-                                'name': $scope.data.firstname};
+                                'name': $scope.data.firstname,
+                                'number': $scope.data.number
+                };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
