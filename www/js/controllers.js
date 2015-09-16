@@ -12,19 +12,6 @@ angular.module('starter.controllers',
 //$scope.$on('$ionicView.enter', function (e) {
 //});
 
-//Access $tastypieProvider in the controller
-//Login sample:
-// .controller('LoginCtrl', ['$scope', '$tastypie', '$http', function ($scope, $tastypie, $http) {
-//     $scope.login = function () {
-//         var data = {
-//             userName: $scope.userName,
-//             password: $scope.password
-//         };
-//         $http.post('/loginUrl', data).success(response) {
-//             $tastypie.setAuth(response.username, response.api_key);
-//         }
-//     }
-// }])
     .controller('CheckauthCtrl',
         function ($tastypie, $state, UserData, CheckauthService, sortContacts) {
             "use strict";
@@ -41,9 +28,9 @@ angular.module('starter.controllers',
                     if (!navigator.contacts) {
                         return;
                     }
-                    if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
-                        return;
-                    }
+//                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
+//                         return;
+//                     }
 
                     options = new ContactFindOptions();
                     options.filter = "";
@@ -70,7 +57,7 @@ angular.module('starter.controllers',
                                     'name': entry.name.formatted,
                                     'emails': entry.emails.join(', '),
                                     'numbers': entry.phoneNumbers.join(', '),
-                                    'photo': entry.photos.join(', '),
+//                                     'photo': entry.photos.join(', '),
                                 });
                             });
                             sortContacts(stuff);
@@ -131,10 +118,18 @@ angular.module('starter.controllers',
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         $state.go('new.what');
-                    }).error(function () {
+                    }).error(function (err) {
+                        var message;
+                        switch(err) {
+                            case '200':
+                                message = "Cet utilisateur est déjà enregistré."
+                                break;
+                            default:
+                                message = "Entrez votre prénom, un email et un mot de passe, puis réessayez"
+                        } 
                         $ionicPopup.alert({
                             title: "Problème lors de la création du compte",
-                            template: "Veuillez réssayer"
+                            template: message
                         });
                     });
             };
@@ -165,6 +160,33 @@ angular.module('starter.controllers',
         $scope.next = function () {
             $state.go('checkauth', {}, { reload: true });
         };
+    })
+
+    .controller('PictureCtrl', function ($scope, $cordovaCamera) {
+        "use strict";
+        document.addEventListener("deviceready", function () {
+            var options = {
+            quality: 75,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: true,
+//             encodingType: Camera.EncodingType.JPEG,
+//             targetWidth: 400,
+//             targetHeight: 400,
+//             popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false,
+            correctOrientation: true
+            };
+
+            $cordovaCamera.getPicture(options).then(function (imageURI) {
+                var image = document.getElementById('myImage');
+                image.src = imageURI;
+                console.log(imageURI);
+            }, function(err) {
+                console.log(err);
+            });
+//             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
+        }, false);
     })
 
     .controller('WhatCtrl',

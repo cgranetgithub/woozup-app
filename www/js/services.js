@@ -25,7 +25,7 @@ angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
         var hostname = 'http://geoevent.herokuapp.com/';
-//         var hostname = 'http://localhost:8000/'
+//         var hostname = 'http://192.168.1.86:8000/'
         var apiUrl = hostname + 'api/v1/';
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -271,8 +271,8 @@ angular.module('starter.services', [])
                         UserData.setUserId(response.data.userid);
                         deferred.resolve('Welcome!');
                     }, function (error) {
-                        console.log(error);
-                        deferred.reject('Account creation failed!');
+                        console.log("server return error:", error.data.reason);
+                        deferred.reject(error.data.code);
                     });
                     promise.success = function (fn) {
                         promise.then(fn);

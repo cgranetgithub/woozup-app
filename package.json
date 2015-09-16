@@ -23,7 +23,8 @@
     "cordova-plugin-geolocation",
     "cordova-plugin-contacts",
     "cordova-plugin-console",
-    "com.phonegap.plugins.facebookconnect"
+    "com.phonegap.plugins.facebookconnect",
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     {

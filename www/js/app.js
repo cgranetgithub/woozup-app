@@ -58,6 +58,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/register.html',
                 controller: 'RegisterCtrl'
             })
+            .state('picture', {
+                cache: false,
+                url: '/picture',
+                templateUrl: 'templates/picture.html',
+                controller: 'PictureCtrl'
+            })
             .state('new', {
                 url: "/new",
                 abstract: true,
