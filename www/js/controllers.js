@@ -22,15 +22,15 @@ angular.module('starter.controllers',
 
                     var options,
                         filter = ["displayName", "name"],
-                        lastCheck = window.localStorage.contact_sync,
+                        lastCheck = undefined, //window.localStorage.contact_sync,
                         curDate = new Date();
 
                     if (!navigator.contacts) {
                         return;
                     }
-//                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
-//                         return;
-//                     }
+                    if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
+                        return;
+                    }
 
                     options = new ContactFindOptions();
                     options.filter = "";
@@ -47,17 +47,32 @@ angular.module('starter.controllers',
                                 return;
                             }
 
+                            var helper = function (tab, k) {
+                                var t = [];
+
+                                k = k || "value";
+                                if (!tab) {
+                                    return t;
+                                }
+
+                                for (var i=0; i<tab.length; i+=1) {
+                                    t.push(tab[i][k]);
+                                }
+                                return t;
+                            };
+
                             contacts.forEach(function (entry) {
-                                if (!entry.phoneNumbers ||  !entry.phoneNumbers.length
-                                        || !entry.emails || !entry.emails.length) {
+                                if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
+                                     && (!entry.emails || !entry.emails.length)) {
+                                    console.log("skipping " + entry.name.formatted);
                                     return;
                                 }
 
                                 stuff.push({
                                     'name': entry.name.formatted,
-                                    'emails': entry.emails.join(', '),
-                                    'numbers': entry.phoneNumbers.join(', '),
-//                                     'photo': entry.photos.join(', '),
+                                    'emails': helper(entry.emails).join(', '),
+                                    'numbers': helper(entry.phoneNumbers).join(', '),
+                                    'photo': helper(entry.photos).join(', '),
                                 });
                             });
                             sortContacts(stuff);
