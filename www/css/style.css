@@ -137,3 +137,28 @@
     height: 50px;
     width: 50px;
 }
+
+.cropArea {
+  background: #E4E4E4;
+  overflow: hidden;
+  margin: auto;
+  width:300px;
+  height:350px;
+}
+
+.bgim {
+ background: url(img/cloud.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.logocontainer {
+    text-align: center;
+    margin: 30px;
+}
+.logo {
+    width: 60%;
+    margin: 30px;
+}

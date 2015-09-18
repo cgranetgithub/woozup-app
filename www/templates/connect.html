@@ -1,31 +1,28 @@
-<ion-view view-title="Connexion" name="connect-view">
+<ion-view view-title="Connexion" name="connect-view" class="bgim" hide-nav-bar="true">
     <ion-content class="padding">
-        <div class="list list-inset">
-            <label class="item">
-                <button class="button button-block button-positive" ng-click="fbLogin()">
-                    <i class="icon ion-social-facebook"></i>
-                    Facebook
-                </button>
-            </label>
-            <label class="item">
-                <button class="button button-block button-calm" ng-click="twLogin()">
-                    <i class="icon ion-social-twitter"></i>
-                    Twitter
-                </button>
-            </label>
-            <label class="item">
-                <button class="button button-block button-assertive" ng-click="glLogin()">
-                    <i class="icon ion-social-google"></i>
-                    Google
-                </button>
-            </label>
+        <div class="logocontainer">
+            <img class="logo" src="../img/logo.png">
         </div>
-        <p class="centered">
-            <a nav-clear menu-close href="#/register">Créer un compte</a>
-        </p>
-        <p class="centered">
-            <a nav-clear menu-close href="#/login">J'ai déjà un compte</a>
-        </p>
-
+        <button class="button button-block button-positive" ng-click="fbLogin()">
+            Connexion avec
+            <i class="icon ion-social-facebook"></i>
+            Facebook
+        </button>
+        <button class="button button-block button-calm" ng-click="twLogin()">
+            Connexion avec
+            <i class="icon ion-social-twitter"></i>
+            Twitter
+        </button>
+        <button class="button button-block button-assertive" ng-click="glLogin()">
+            Connexion avec
+            <i class="icon ion-social-google"></i>
+            Google
+        </button>
+        <button class="button button-block button-clear button-balanced" ui-sref="register">
+            Créer un compte avec mon email
+        </button>
+        <button class="button button-block button-clear button-balanced" ui-sref="login">
+            J'ai déjà un compte
+        </button>
     </ion-content>
 </ion-view>

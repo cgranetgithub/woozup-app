@@ -3,7 +3,7 @@
 
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie',
-               'ui.bootstrap', 'starter.services'])
+               'ui.bootstrap', 'ngImgCrop', 'starter.services'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
@@ -132,7 +132,7 @@ angular.module('starter.controllers',
                 RegisterService.registerUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        $state.go('new.what');
+                        $state.go('picture');
                     }).error(function (err) {
                         var message;
                         switch(err) {
@@ -177,31 +177,77 @@ angular.module('starter.controllers',
         };
     })
 
-    .controller('PictureCtrl', function ($scope, $cordovaCamera) {
+    .controller('PictureCtrl',
+                function ($tastypieResource, $scope, $state, $cordovaCamera,
+                          UserData, setpicture) {
         "use strict";
-        document.addEventListener("deviceready", function () {
-            var options = {
-            quality: 75,
-            destinationType: Camera.DestinationType.FILE_URI,
-            sourceType: Camera.PictureSourceType.CAMERA,
-            allowEdit: true,
-//             encodingType: Camera.EncodingType.JPEG,
-//             targetWidth: 400,
-//             targetHeight: 400,
-//             popoverOptions: CameraPopoverOptions,
-            saveToPhotoAlbum: false,
-            correctOrientation: true
+        $scope.myImage='';
+        $scope.myCroppedImage='';
+        var handleFileSelect = function (evt) {
+            var file = evt.currentTarget.files[0];
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                $scope.$apply(function($scope){
+                    $scope.myImage = evt.target.result;
+                });
             };
-
+            reader.readAsDataURL(file);
+        };
+        $scope.userprofile = new $tastypieResource('userprofile', {});
+        $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
+            function (result) {
+                $scope.userprofile = result;
+            },
+            function (error) {
+                console.log(error);
+            })
+            
+        $scope.photoFromCamera = function () {
+            var options = {
+                quality: 75,
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: Camera.PictureSourceType.CAMERA,
+            //       allowEdit: true,
+                encodingType: Camera.EncodingType.JPEG, //important for orientation
+            //       targetWidth: 300,
+            //       targetHeight: 300,
+            //       popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: false,
+                correctOrientation:true
+            };
             $cordovaCamera.getPicture(options).then(function (imageURI) {
-                var image = document.getElementById('myImage');
-                image.src = imageURI;
-                console.log(imageURI);
+                $scope.myImage = imageURI;
             }, function(err) {
                 console.log(err);
             });
 //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
-        }, false);
+        };
+        $scope.photoFromGallery = function () {
+            var options = {
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                encodingType: Camera.EncodingType.PNG,
+                mediaType: Camera.MediaType.PICTURE
+            };
+            $cordovaCamera.getPicture(options).then(function (imageURI) {
+                $scope.myImage = imageURI;
+            }, function(err) {
+                console.log(err);
+            });
+        };
+        $scope.photoFromFB = function () {
+            $scope.myImage='http://localhost:8100/img/logo.png';
+        };
+        $scope.next = function (croppedImage) {
+            var b64 = croppedImage.split(',')[1];
+            var file_field = {
+                "name": "myfile.png",
+                "file": b64,
+//                 "content_type": "image/png"
+            }
+            setpicture(file_field);
+            $state.go('new.what');
+        };
     })
 
     .controller('WhatCtrl',

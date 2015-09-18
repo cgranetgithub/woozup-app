@@ -41,6 +41,14 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'userposition/setlast/', {'last': where});
             };
         }])
+    .factory('setpicture', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (b64file) {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'userprofile/setpicture/', b64file);
+            };
+        }])
     .factory('sendInvite', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -271,8 +279,16 @@ angular.module('starter.services', [])
                         UserData.setUserId(response.data.userid);
                         deferred.resolve('Welcome!');
                     }, function (error) {
-                        console.log("server return error:", error.data.reason);
-                        deferred.reject(error.data.code);
+                        console.log(error);
+                        if ( error.data ) {
+                            if ( error.data.reason ) {
+                                console.log("server return error:", error.data.reason);
+                            }
+                            if ( error.data.code ) {
+                                deferred.reject(error.data.code);
+                            }
+                        }
+                        deferred.reject(0);
                     });
                     promise.success = function (fn) {
                         promise.then(fn);
