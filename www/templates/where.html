@@ -5,13 +5,19 @@
         </button>
     </ion-nav-buttons>
     <ion-content ng-controller="WhereCtrl" ng-init="initialize()">
-        <input id="pac-input" class="controls" type="text" placeholder="Entrez une adresse ou un nom">
+<!--         <input id="pac-input" class="controls" type="text" placeholder="Entrez une adresse ou un nom"> -->
+        <form class="form">
+            <input class="form-control" g-places-autocomplete ng-model="place" ng-change="place_changed()"/>
+        </form>        
         <div id="map" data-tap-disabled="true"></div>
     </ion-content>
 <!--    <ion-footer-bar>
         <button class="button button-energized footer-button" ng-click="next()">{{buttonTitle}}</button>
     </ion-footer-bar>    -->
     <ion-footer-bar class="bar-energized" ng-click="next()">
-        <h1 class="title">{{buttonTitle}}</h1>
+        <h1 class="title">{{button.title}}</h1>
+        <button class="button">
+        {{testt}}
+        </button>
     </ion-footer-bar>
 </ion-view>

@@ -10,7 +10,7 @@
                 <img ng-src="{{event.type.image}}">
                 <h1>{{event.type.name}}</h1>
                 <h2>{{event.start | date : 'EEEE d MMMM'}}</h2>
-                <h2>{{event.where}}</h2>
+                <h2>{{event.where.address}}</h2>
             </ion-item>
             <timepicker id="tmpick" ng-model="event.start" minute-step="15" show-meridian="false"></timepicker>
             <form name="myform">

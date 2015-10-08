@@ -26,6 +26,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         });
     })
 
+    .config(function($ionicConfigProvider) {
+        $ionicConfigProvider.tabs.style('standard');
+        $ionicConfigProvider.tabs.position('bottom');
+        $ionicConfigProvider.views.transition('ios');
+        $ionicConfigProvider.navBar.alignTitle('center');
+        $ionicConfigProvider.navBar.positionPrimaryButtons('left');
+        $ionicConfigProvider.navBar.positionSecondaryButtons('right');
+    })
+
     .config(function ($stateProvider, $urlRouterProvider) {
         "use strict";
         // Ionic uses AngularUI Router which uses the concept of states
@@ -63,6 +72,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 url: '/picture',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
+            })
+            .state('profile', {
+                cache: false,
+                url: '/profile',
+                templateUrl: 'templates/profile.html',
+                controller: 'ProfileCtrl'
             })
             .state('new', {
                 url: "/new",

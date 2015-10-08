@@ -1,0 +1,30 @@
+<ion-view view-title="Profile">
+    <ion-nav-buttons side="primary">
+        <button class="button" ui-sref="new.what" nav-transition="none">
+            <i class="icon ion-home"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <img ng-src="{{profile.image}}">
+        <form name="myform">
+            <label class="item item-input">
+                <input type="text" ng-model="data.first_name" placeholder="Prénom">
+            </label>
+            <label class="item item-input">
+                <input type="text" ng-model="data.last_name" placeholder="Nom">
+            </label>
+            <label class="item item-input">
+                <input type="email" ng-model="data.email" placeholder="Email">
+            </label>
+            <label class="item item-input">
+                <input type="tel" ng-model="data.number" placeholder="Numéro de mobile">
+            </label>
+            <label class="item item-input">
+                <input type="text" ng-model="data.gender" placeholder="Sexe">
+            </label>
+        </form>
+    </ion-content>
+    <ion-footer-bar class="bar-energized" ng-click="save()">
+        <h1 class="title">Mettre à jour</h1>
+    </ion-footer-bar>
+</ion-view>

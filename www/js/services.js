@@ -25,7 +25,8 @@ angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
         var hostname = 'http://geoevent.herokuapp.com/';
-//         var hostname = 'http://192.168.1.86:8000/'
+//         var hostname = 'http://192.168.43.198:8000/';
+//         var hostname = 'http://localhost:8000/';
         var apiUrl = hostname + 'api/v1/';
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -137,11 +138,19 @@ angular.module('starter.services', [])
             getWhen: function () {
                 return data.when;
             },
-            setWhere: function (position) {
-                data.where = position;
+            setPlace: function (name, id) {
+                data.location_name = name;
+                data.location_id = id;
+            },
+            setAddress: function (address, coords) {
+                data.location_address = address;
+                data.location_coords = coords;
             },
             getWhere: function () {
-                return data.where;
+                return {'name' : data.location_name,
+                        'address': data.location_address,
+                        'id': data.location_id,
+                        'coords': data.location_coords};
             }
         };
     })
@@ -159,7 +168,7 @@ angular.module('starter.services', [])
                 data.userId = userId;
             },
             getUserId: function () {
-                return data.userId;
+                return parseInt(data.userId, 10);
             },
             setUserName: function (userName) {
                 data.userName = userName;
