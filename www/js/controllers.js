@@ -13,7 +13,7 @@ angular.module('starter.controllers',
 //});
 
     .controller('CheckauthCtrl',
-        function ($tastypie, $ionicLoading, CheckauthService, sortContacts, 
+        function ($tastypie, $ionicLoading, CheckauthService, sortContacts,
                   $state, UserData) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
@@ -25,7 +25,7 @@ angular.module('starter.controllers',
 
                     var options,
                         filter = ["displayName", "name"],
-                        lastCheck = undefined, //window.localStorage.contact_sync,
+                        lastCheck, //window.localStorage.contact_sync,
                         curDate = new Date();
                     if (!navigator.contacts) {
                         return;
@@ -38,53 +38,41 @@ angular.module('starter.controllers',
                     options.filter = "";
                     options.multiple = true;
 
-                    navigator.contacts.find(filter,
-                        function (contacts) {
-                            var stuff = [];
-
-                            window.localStorage.contact_sync = curDate;
-
-                            if (contacts === null) {
-                                console.log("No contact retrieved");
-                                return;
-                            }
-
-                            var helper = function (tab, k) {
-                                var t = [];
-
+                    navigator.contacts.find(filter, function (contacts) {
+                        if (contacts === null) {
+                            console.log("No contact retrieved");
+                            return;
+                        }
+                        var stuff = [],
+                            helper = function (tab, k) {
+                                var t = [], i;
                                 k = k || "value";
-                                if (!tab) {
-                                    return t;
-                                }
-
-                                for (var i=0; i<tab.length; i+=1) {
+                                if (!tab) { return t; }
+                                for (i = 0; i < tab.length; i += 1) {
                                     t.push(tab[i][k]);
                                 }
                                 return t;
                             };
+                        contacts.forEach(function (entry) {
+                            if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
+                                    && (!entry.emails || !entry.emails.length)) {
+                                console.log("skipping " + entry.name.formatted);
+                                return;
+                            }
 
-                            contacts.forEach(function (entry) {
-                                if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
-                                     && (!entry.emails || !entry.emails.length)) {
-                                    console.log("skipping " + entry.name.formatted);
-                                    return;
-                                }
-
-                                stuff.push({
-                                    'name': entry.name.formatted,
-                                    'emails': helper(entry.emails).join(', '),
-                                    'numbers': helper(entry.phoneNumbers).join(', '),
-                                    'photo': helper(entry.photos).join(', '),
-                                });
+                            stuff.push({
+                                'name': entry.name.formatted,
+                                'emails': helper(entry.emails).join(', '),
+                                'numbers': helper(entry.phoneNumbers).join(', '),
+                                'photo': helper(entry.photos).join(', '),
                             });
-                            sortContacts(stuff);
-                        },
-                        function () {
-                            // an error has occured, try to resync next day
-                            window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
-                            console.log("Error");
-                        }, options
-                    );
+                        });
+                        sortContacts(stuff);
+                    }, function () {
+                        // an error has occured, try to resync next day
+                        window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
+                        console.log("Error");
+                    }, options);
                 })
                 .error(function () {
                     $state.go('connect');
@@ -93,32 +81,30 @@ angular.module('starter.controllers',
         })
 
     .controller('ConnectCtrl',
-        function ($tastypie, $ionicPopup, CheckauthService, LoginService,
+        function ($tastypie, $ionicPopup, LoginService,
                   $scope, $state, UserData) {
             "use strict";
 
             $scope.fbLogin = function () {
-                facebookConnectPlugin.login([],
-                    function (obj) {
-                        var authData = {
-                            "provider": "facebook",
-                            "access_token": obj.authResponse.accessToken
-                        };
-                        /* we have to call registerbyToken from service LoginService */
-                        LoginService.loginUser(authData, "facebook")
-                            .success(function () {
-                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                                $state.go('new.what');
-                            }).error(function () {
-                                $ionicPopup.alert({
-                                    title: "Problème lors de la création du compte",
-                                    template: "Veuillez réssayer"
-                                });
+                facebookConnectPlugin.login([], function (obj) {
+                    var authData = {
+                        "provider": "facebook",
+                        "access_token": obj.authResponse.accessToken
+                    };
+                    /* we have to call registerbyToken from service LoginService */
+                    LoginService.loginUser(authData, "facebook")
+                        .success(function () {
+                            $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                            $state.go('new.what');
+                        }).error(function () {
+                            $ionicPopup.alert({
+                                title: "Problème lors de la création du compte",
+                                template: "Veuillez réssayer"
                             });
-                    },
-                    function (obj) {
-                    }
-                );
+                        });
+                }, function (obj) {
+                    console.log(obj);
+                });
             };
         })
 
@@ -134,7 +120,7 @@ angular.module('starter.controllers',
                                 'password': $scope.data.password,
                                 'name': $scope.data.firstname,
                                 'number': $scope.data.number
-                };
+                        };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
@@ -142,13 +128,13 @@ angular.module('starter.controllers',
                         $ionicLoading.hide();
                     }).error(function (err) {
                         var message;
-                        switch(err) {
-                            case '200':
-                                message = "Cet utilisateur est déjà enregistré."
-                                break;
-                            default:
-                                message = "Entrez votre prénom, un email et un mot de passe, puis réessayez"
-                        } 
+                        switch (err) {
+                        case '200':
+                            message = "Cet utilisateur est déjà enregistré.";
+                            break;
+                        default:
+                            message = "Entrez votre prénom, un email et un mot de passe, puis réessayez";
+                        }
                         $ionicPopup.alert({
                             title: "Problème lors de la création du compte",
                             template: message
@@ -190,108 +176,105 @@ angular.module('starter.controllers',
     })
 
     .controller('PictureCtrl',
-                function ($tastypieResource, $cordovaCamera, $ionicLoading, setpicture,
-                          $scope, $state, UserData) {
-        "use strict";
-        $ionicLoading.show({template: "Chargement"});
-        $scope.myImage='';
-        $scope.myCroppedImage='';
-        var handleFileSelect = function (evt) {
-            var file = evt.currentTarget.files[0];
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                $scope.$apply(function($scope){
-                    $scope.myImage = evt.target.result;
+        function ($tastypieResource, $cordovaCamera, $ionicLoading, setpicture,
+                    $scope, $state, UserData) {
+            "use strict";
+            $ionicLoading.show({template: "Chargement"});
+            $scope.myImage = '';
+            $scope.myCroppedImage = '';
+            var handleFileSelect = function (evt) {
+                var file = evt.currentTarget.files[0],
+                    reader = new FileReader();
+                reader.onload = function (evt) {
+                    $scope.$apply(function ($scope) {
+                        $scope.myImage = evt.target.result;
+                    });
+                };
+                reader.readAsDataURL(file);
+            };
+            $scope.userprofile = new $tastypieResource('userprofile', {});
+            $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
+                function (result) {
+                    $scope.userprofile = result;
+                    $ionicLoading.hide();
+                },
+                function (error) {
+                    console.log(error);
+                    $ionicLoading.hide();
+                }
+            );
+            $scope.photoFromCamera = function () {
+                var options = {
+                    quality: 75,
+                    destinationType: Camera.DestinationType.FILE_URI,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                //       allowEdit: true,
+                    encodingType: Camera.EncodingType.JPEG, //important for orientation
+                //       targetWidth: 300,
+                //       targetHeight: 300,
+                //       popoverOptions: CameraPopoverOptions,
+                    saveToPhotoAlbum: false,
+                    correctOrientation: true
+                };
+                $cordovaCamera.getPicture(options).then(function (imageURI) {
+                    $scope.myImage = imageURI;
+                }, function (err) {
+                    console.log(err);
+                });
+    //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
+            };
+            $scope.photoFromGallery = function () {
+                var options = {
+                    destinationType: Camera.DestinationType.FILE_URI,
+                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                    encodingType: Camera.EncodingType.PNG,
+                    mediaType: Camera.MediaType.PICTURE
+                };
+                $cordovaCamera.getPicture(options).then(function (imageURI) {
+                    $scope.myImage = imageURI;
+                }, function (err) {
+                    console.log(err);
                 });
             };
-            reader.readAsDataURL(file);
-        };
-        $scope.userprofile = new $tastypieResource('userprofile', {});
-        $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
-            function (result) {
-                $scope.userprofile = result;
-                $ionicLoading.hide();
-            },
-            function (error) {
-                console.log(error);
-                $ionicLoading.hide();
-            })
-            
-        $scope.photoFromCamera = function () {
-            var options = {
-                quality: 75,
-                destinationType: Camera.DestinationType.FILE_URI,
-                sourceType: Camera.PictureSourceType.CAMERA,
-            //       allowEdit: true,
-                encodingType: Camera.EncodingType.JPEG, //important for orientation
-            //       targetWidth: 300,
-            //       targetHeight: 300,
-            //       popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: false,
-                correctOrientation:true
+            $scope.photoFromFB = function () {
+                $scope.myImage = 'http://localhost:8100/img/logo.png';
             };
-            $cordovaCamera.getPicture(options).then(function (imageURI) {
-                $scope.myImage = imageURI;
-            }, function(err) {
-                console.log(err);
-            });
-//             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
-        };
-        $scope.photoFromGallery = function () {
-            var options = {
-                destinationType: Camera.DestinationType.FILE_URI,
-                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-                encodingType: Camera.EncodingType.PNG,
-                mediaType: Camera.MediaType.PICTURE
+            $scope.next = function (croppedImage) {
+                var b64 = croppedImage.split(',')[1],
+                    file_field = {
+                        "name": "myfile.png",
+                        "file": b64,
+                    };
+                setpicture(file_field);
+                $state.go('new.what');
             };
-            $cordovaCamera.getPicture(options).then(function (imageURI) {
-                $scope.myImage = imageURI;
-            }, function(err) {
-                console.log(err);
-            });
-        };
-        $scope.photoFromFB = function () {
-            $scope.myImage='http://localhost:8100/img/logo.png';
-        };
-        $scope.next = function (croppedImage) {
-            var b64 = croppedImage.split(',')[1];
-            var file_field = {
-                "name": "myfile.png",
-                "file": b64,
-//                 "content_type": "image/png"
-            }
-            setpicture(file_field);
-            $state.go('new.what');
-        };
-    })
+        })
 
     .controller('ProfileCtrl',
-                function ($tastypieResource, $cordovaCamera, $ionicLoading,
-                          $scope, $state, UserData, setpicture) {
-        "use strict";
-        $ionicLoading.show({template: "Chargement"});
-        $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
-                       'number' : '', 'gender' : ''};
-        $scope.userprofile = new $tastypieResource('userprofile', {});
-        $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
-            function (result) {
-                $scope.profile = result;
-                $scope.data.first_name = result.user.first_name;
-                $scope.data.last_name = result.user.last_name;
-                $scope.data.email = result.user.email;
-                $scope.data.number = result.number;
-                $scope.data.gender = result.gender;
-                $ionicLoading.hide();
-            },
-            function (error) {
-                console.log(error);
-                $ionicLoading.hide();
-            }
-        );
-        $scope.save = function () {
-            
-        }
-    })
+        function ($tastypieResource, $ionicLoading, $scope, UserData) {
+            "use strict";
+            $ionicLoading.show({template: "Chargement"});
+            $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
+                        'number' : '', 'gender' : ''};
+            $scope.userprofile = new $tastypieResource('userprofile', {});
+            $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
+                function (result) {
+                    $scope.profile = result;
+                    $scope.data.first_name = result.user.first_name;
+                    $scope.data.last_name = result.user.last_name;
+                    $scope.data.email = result.user.email;
+                    $scope.data.number = result.number;
+                    $scope.data.gender = result.gender;
+                    $ionicLoading.hide();
+                },
+                function (error) {
+                    console.log(error);
+                    $ionicLoading.hide();
+                }
+            );
+            $scope.save = function () {
+            };
+        })
 
     .controller('WhatCtrl',
         function ($tastypieResource, $cordovaGeolocation, $ionicLoading, $ionicPopup,
@@ -322,8 +305,8 @@ angular.module('starter.controllers',
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
             $scope.types.objects.$find().then(
-                function(result) { $ionicLoading.hide(); },
-                function(error){ $ionicLoading.hide(); }
+                function () { $ionicLoading.hide(); },
+                function () { $ionicLoading.hide(); }
             );
             $scope.next = function (typeId) {
                 $ionicLoading.show({template: "Chargement"});
@@ -376,7 +359,7 @@ angular.module('starter.controllers',
             /*global document: false */
             /*global google: false */
             var map, geocoder, marker,
-                infowindow=null, placeinfowindow=null, lastinfowindow=null,
+                infowindow = null, placeinfowindow = null, lastinfowindow = null,
                 lat = 48.8567,
                 long = 2.3508,
                 setAddress = function (address, position) {
@@ -434,22 +417,22 @@ angular.module('starter.controllers',
                 var fx = google.maps.InfoWindow.prototype.setPosition;
                 //override the built-in setPosition-method
                 google.maps.InfoWindow.prototype.setPosition = function () {
-                //this property isn't documented, but as it seems
-                //it's only defined for InfoWindows opened on POI's
-                if (this.logAsInternal) {
-                    placeinfowindow = this;
-                    lastinfowindow = this;
-                    google.maps.event.addListenerOnce(this, 'map_changed',function () {
-                        var map = this.getMap();
-                        //the infoWindow will be opened, usually after a click on a POI
-                        if (map) {
-                            //trigger the click
-                            google.maps.event.trigger(map, 'click', {latLng: this.getPosition()});
-                        }
-                    });
-                }
-                //call the original setPosition-method
-                fx.apply(this, arguments);
+                    //this property isn't documented, but as it seems
+                    //it's only defined for InfoWindows opened on POI's
+                    if (this.logAsInternal) {
+                        placeinfowindow = this;
+                        lastinfowindow = this;
+                        google.maps.event.addListenerOnce(this, 'map_changed', function () {
+                            var map = this.getMap();
+                            //the infoWindow will be opened, usually after a click on a POI
+                            if (map) {
+                                //trigger the click
+                                google.maps.event.trigger(map, 'click', {latLng: this.getPosition()});
+                            }
+                        });
+                    }
+                    //call the original setPosition-method
+                    fx.apply(this, arguments);
                 };
                 ///#####
                 map.addListener('click', function (e) {
@@ -457,13 +440,15 @@ angular.module('starter.controllers',
                     setAddress('', position);
                     marker.setPosition(position);
                     marker.setVisible(true);
-                    geocoder.geocode({'location': position}, function(results, status, address) {
+                    geocoder.geocode({'location': position}, function (results, status, address) {
                         if (status === google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
                                 address = results[0].formatted_address;
                                 setAddress(address, position);
                                 $scope.button.title = address;
-                                $scope.$apply(function() { $scope.button.title = address; });
+                                $scope.$apply(function () {
+                                    $scope.button.title = address;
+                                });
                                 infowindow.setContent(address);
                                 infowindow.open(map, marker);
                             }
@@ -522,7 +507,7 @@ angular.module('starter.controllers',
         })
 
     .controller('EventsCtrl',
-        function ($scope) {
+        function ($scope, $state) {
             "use strict";
             $scope.friends_title = "Ce que mes amis ont prévu";
 //                 $scope.mine_title = "Mes sorties";
@@ -537,15 +522,32 @@ angular.module('starter.controllers',
             "use strict";
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Ce que mes amis ont prévu";
-            var today = new Date();
+            $scope.events = [];
+            var today = new Date(), eventsResource,
+                nextPages = function (eventsPage) {
+                    eventsPage.then(function (result) {
+                        var i;
+                        if (result) {
+                            for (i = 0; i < result.objects.length; i += 1) {
+                                $scope.events.push(result.objects[i]);
+                            }
+                        }
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    });
+                };
             today.setHours(0);
             today.setMinutes(0);
-            $scope.events = new $tastypieResource('friendsevents',
-                                                  {order_by: 'start', start__gte: today});
-            $scope.events.objects.$find().then(
-                function(result) { $ionicLoading.hide(); },
-                function(error){ $ionicLoading.hide(); }
-            );
+            eventsResource = new $tastypieResource('friendsevents',
+                                            {order_by: 'start', start__gte: today});
+            nextPages(eventsResource.objects.$find());
+            $scope.loadMore = function () {
+                var nextEventPage = null;
+                if (eventsResource.page.meta.next) {
+                    nextEventPage = eventsResource.page.next();
+                }
+                nextPages(nextEventPage);
+            };
             $scope.home = function () {
                 $state.go('new.what');
             };
@@ -556,15 +558,32 @@ angular.module('starter.controllers',
             "use strict";
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mon agenda";
-            var today = new Date();
+            $scope.events = [];
+            var today = new Date(), eventsResource,
+                nextPages = function (eventsPage) {
+                    eventsPage.then(function (result) {
+                        var i;
+                        if (result) {
+                            for (i = 0; i < result.objects.length; i += 1) {
+                                $scope.events.push(result.objects[i]);
+                            }
+                        }
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    });
+                };
             today.setHours(0);
             today.setMinutes(0);
-            $scope.events = new $tastypieResource('myagenda',
-                                                  {order_by: 'start', start__gte: today});
-            $scope.events.objects.$find().then(
-                function(result) { $ionicLoading.hide(); },
-                function(error){ $ionicLoading.hide(); }
-            );
+            var eventsResource = new $tastypieResource('myagenda',
+                                        {order_by: 'start', start__gte: today});
+            nextPages(eventsResource.objects.$find());
+            $scope.loadMore = function () {
+                var nextEventPage = null;
+                if (eventsResource.page.meta.next) {
+                    nextEventPage = eventsResource.page.next();
+                }
+                nextPages(nextEventPage);
+            };
             $scope.home = function () {
                 $state.go('new.what');
             };
@@ -575,7 +594,7 @@ angular.module('starter.controllers',
             "use strict";
             var event = new $tastypieResource('allevents');
             $scope.buttonTitle = "Chargement";
-            $scope.buttonAction = function (eventId) {};
+//             $scope.buttonAction = function (eventId) {};
             console.log($stateParams);
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                 function (result) {
@@ -654,75 +673,92 @@ angular.module('starter.controllers',
             };
         })
     .controller('NewFriendsCtrl',
-        function ($tastypieResource, $ionicLoading, $ionicGesture,
+        function ($tastypieResource, $ionicLoading, $q,
                   $scope, $state, sendInvite, ignoreInvite, inviteFriend, ignoreFriend) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.friends = new $tastypieResource('friends/new');
-            $scope.friends.objects.$find().then(
-                function(result) { $ionicLoading.hide(); },
-                function(error){ $ionicLoading.hide(); }
-            );
-            $ionicLoading.show({template: "Chargement"});
-            var invitesResource = new $tastypieResource('invite',
-                                                    {status__exact: 'NEW'});
-            $scope.invites = [];
-            invitesResource.objects.$find().then(
-                function(result) {
-                    for (var i=0; i<invitesResource.page.objects.length; i+=1) {
-                        $scope.invites.push(invitesResource.page.objects[i]);
-                    }
-                    $ionicLoading.hide();
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                },
-                function(error) { $ionicLoading.hide(); }
-            );
             $scope.title = "Ajouter des amis";
-            $scope.acceptFriendButton = function (friend) {
-                $scope.friends.page.objects.splice(friend.$index, 1);
+            $scope.invites = [];
+            $scope.friends = [];
+            var invitesResource = new $tastypieResource('invite',
+                                                    {status__exact: 'NEW'}),
+                friendsResource = new $tastypieResource('friends/new'),
+                nextPages = function (invitePage, friendsPage) {
+                    $q.all([invitePage, friendsPage]).then(function (arrayOfResults) {
+                        var i;
+                        if (arrayOfResults[0]) {
+                            for (i = 0; i < arrayOfResults[0].objects.length; i += 1) {
+                                $scope.invites.push(arrayOfResults[0].objects[i]);
+                            }
+                        }
+                        if (arrayOfResults[1]) {
+                            for (i = 0; i < arrayOfResults[1].objects.length; i += 1) {
+                                $scope.friends.push(arrayOfResults[1].objects[i]);
+                            }
+                        }
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    });
+                };
+            nextPages(invitesResource.objects.$find(), friendsResource.objects.$find());
+            $scope.loadMore = function () {
+                var nextInvitePage = null,
+                    nextFriendPage = null;
+                if (invitesResource.page.meta.next) {
+                    nextInvitePage = invitesResource.page.next();
+                }
+                if (friendsResource.page.meta.next) {
+                    nextFriendPage = friendsResource.page.next();
+                }
+                nextPages(nextInvitePage, nextFriendPage);
+            };
+            $scope.inviteFriendButton = function (friend) {
+                $scope.friends.splice($scope.friends.indexOf(friend), 1);
                 inviteFriend(friend.user.id);
             };
             $scope.ignoreFriendButton = function (friend) {
-                $scope.friends.page.objects.splice(friend.$index, 1);
+                $scope.friends.splice($scope.friends.indexOf(friend), 1);
                 ignoreFriend(friend.user.id);
             };
             $scope.sendInviteButton = function (invite) {
-                $scope.invites.page.objects.splice(invite.$index, 1);
+                $scope.invites.splice($scope.invites.indexOf(invite), 1);
                 sendInvite(invite.id);
             };
             $scope.ignoreInviteButton = function (invite) {
-                $scope.invites.page.objects.splice(invite.$index, 1);
+                $scope.invites.splice($scope.invites.indexOf(invite), 1);
                 ignoreInvite(invite.id);
             };
             $scope.home = function () {
                 $state.go('new.what');
-            };
-            $scope.nextPage = function () {
-                invitesResource.page.next().then(
-                    function(result){
-                        for (var i=0; i<invitesResource.page.objects.length; i+=1) {
-                            $scope.invites.push(invitesResource.page.objects[i]);
-                        }
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    },
-                    function(error){
-                        console.log(error);
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    }
-                );
             };
         })
     .controller('MyFriendsCtrl',
         function ($tastypieResource, $ionicLoading, $scope, $state) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.friends = new $tastypieResource('friends/my');
-            $scope.friends.objects.$find().then(
-                function(result) { $ionicLoading.hide(); },
-                function(error){ $ionicLoading.hide(); }
-            );
             $scope.title = "Mes amis";
-            $scope.buttonTitle = "Retirer";
+            $scope.friends = [];
+            var friendsResource = new $tastypieResource('friends/my'),
+                nextPages = function (friendsPage) {
+                    friendsPage.then(function (result) {
+                        var i;
+                        if (result) {
+                            for (i = 0; i < result.objects.length; i += 1) {
+                                $scope.friends.push(result.objects[i]);
+                            }
+                        }
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    });
+                };
+            nextPages(friendsResource.objects.$find());
+            $scope.loadMore = function () {
+                var nextFriendPage = null;
+                if (friendsResource.page.meta.next) {
+                    nextFriendPage = friendsResource.page.next();
+                }
+                nextPages(nextFriendPage);
+            };
             $scope.home = function () {
                 $state.go('new.what');
             };
@@ -732,18 +768,35 @@ angular.module('starter.controllers',
                   $scope, $state) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.friends = new $tastypieResource('friends/pending');
-            $scope.friends.objects.$find().then(
-                function(result) { $ionicLoading.hide(); },
-                function(error){ $ionicLoading.hide(); }
-            );
             $scope.title = "Invitations en attente";
-            $scope.acceptFriendButton = function (friend) {
-                $scope.friends.page.objects.splice(friend.$index, 1);
+            $scope.friends = [];
+            var friendsResource = new $tastypieResource('friends/pending'),
+                nextPages = function (friendsPage) {
+                    friendsPage.then(function (result) {
+                        var i;
+                        if (result) {
+                            for (i = 0; i < result.objects.length; i += 1) {
+                                $scope.friends.push(result.objects[i]);
+                            }
+                        }
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    });
+                };
+            nextPages(friendsResource.objects.$find());
+            $scope.loadMore = function () {
+                var nextFriendPage = null;
+                if (friendsResource.page.meta.next) {
+                    nextFriendPage = friendsResource.page.next();
+                }
+                nextPages(nextFriendPage);
+            };
+            $scope.inviteFriendButton = function (friend) {
+                $scope.friends.splice(friend.$index, 1);
                 acceptFriend(friend.user.id);
             };
             $scope.ignoreFriendButton = function (friend) {
-                $scope.friends.page.objects.splice(friend.$index, 1);
+                $scope.friends.splice(friend.$index, 1);
                 rejectFriend(friend.user.id);
             };
             $scope.home = function () {

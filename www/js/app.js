@@ -15,9 +15,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
-        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
+            if (window.cordova && window.cordova.plugins
+                    && window.cordova.plugins.Keyboard) {
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                cordova.plugins.Keyboard.disableScroll(true);
             }
             if (window.StatusBar) {
                 // org.apache.cordova.statusbar required
@@ -26,9 +27,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         });
     })
 
-    .config(function($ionicConfigProvider) {
+    .config(function ($ionicConfigProvider) {
+        "use strict";
         $ionicConfigProvider.tabs.style('standard');
-        $ionicConfigProvider.tabs.position('bottom');
+        $ionicConfigProvider.tabs.position('top');
         $ionicConfigProvider.views.transition('ios');
         $ionicConfigProvider.navBar.alignTitle('center');
         $ionicConfigProvider.navBar.positionPrimaryButtons('left');
@@ -230,7 +232,7 @@ function fb_init() {
         return;
     }
     if (window.cordova.platformId === "browser") {
-        if ( typeof(FB) !== "undefined" ) {
+        if (typeof (FB) !== "undefined") {
             console.log("FB init");
             window.facebookConnectPlugin.browserInit("948253448566545");
         } else {
@@ -247,7 +249,7 @@ function fb_init() {
     );
 }
 
-(function() {
+(function () {
     'use strict';
     setTimeout(fb_init, 1000);
 })();

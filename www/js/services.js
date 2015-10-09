@@ -24,10 +24,10 @@
 angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
-        var hostname = 'http://geoevent.herokuapp.com/';
-//         var hostname = 'http://192.168.43.198:8000/';
-//         var hostname = 'http://localhost:8000/';
-        var apiUrl = hostname + 'api/v1/';
+        var hostname = 'http://geoevent.herokuapp.com/',
+//         var hostname = 'http://192.168.43.198:8000/',
+//         var hostname = 'http://localhost:8000/',
+            apiUrl = hostname + 'api/v1/';
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
         $tastypieProvider.setResourceUrl(apiUrl);
@@ -274,7 +274,7 @@ angular.module('starter.services', [])
              function ($q, $http, apiUrl, $localstorage, UserData) {
             "use strict";
             return {
-                registerUser: function (authData, social) {
+                registerUser: function (authData) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
                         command = 'auth/register/';
@@ -289,11 +289,11 @@ angular.module('starter.services', [])
                         deferred.resolve('Welcome!');
                     }, function (error) {
                         console.log(error);
-                        if ( error.data ) {
-                            if ( error.data.reason ) {
+                        if (error.data) {
+                            if (error.data.reason) {
                                 console.log("server return error:", error.data.reason);
                             }
-                            if ( error.data.code ) {
+                            if (error.data.code) {
                                 deferred.reject(error.data.code);
                             }
                         }

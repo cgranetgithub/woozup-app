@@ -7,7 +7,7 @@
     <ion-content>
         <ion-list>
             <ion-item class="item item-avatar item-button-right"
-                      ng-repeat="friend in friends.page.objects">
+                      ng-repeat="friend in friends track by $index">
                 <img ng-src="{{friend.image}}">
                 <h2>{{friend.name}}</h2>
                 <p>{{friend.user.username}}</p>
@@ -41,6 +41,6 @@
                 </div>
             </ion-item>
         </ion-list>
-        <ion-infinite-scroll on-infinite="nextPage()"></ion-infinite-scroll>
+        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
     </ion-content>
 </ion-view>
