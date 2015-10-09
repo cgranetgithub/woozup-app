@@ -14,32 +14,33 @@
                 <p>{{friend.user.email}}</p>
                 <div class="buttons">
                     <button class="button button-outline roundbutton"
-                            ng-click="ignoreFriendButton(friend.user.id)">
+                            ng-click="ignoreFriendButton(friend)">
                             <i class="icon ion-android-cancel"></i>
                     </button>
                     <button class="button button-outline button-calm roundbutton"
-                            ng-click="inviteFriendButton(friend.user.id)">
+                            ng-click="inviteFriendButton(friend)">
                             <i class="icon ion-person-add"></i>
                     </button>
                 </div>
             </ion-item>
             <ion-item class="item item-avatar item-button-right"
-                      ng-repeat="invite in invites.page.objects">
+                      ng-repeat="invite in invites track by $index">
                 <img ng-src="{{invite.photo}}">
                 <h2>{{invite.name}}</h2>
                 <p>{{invite.number}}</p>
                 <p>{{invite.email}}</p>
                 <div class="buttons">
                     <button class="button button-outline roundbutton"
-                            ng-click="ignoreInviteButton(invite.id)">
+                            ng-click="ignoreInviteButton(invite)">
                             <i class="icon ion-android-cancel"></i>
                     </button>
                     <button class="button button-outline button-calm roundbutton"
-                            ng-click="sendInviteButton(invite.id)">
+                            ng-click="sendInviteButton(invite)">
                             <i class="icon ion-person-add"></i>
                     </button>
                 </div>
             </ion-item>
         </ion-list>
+        <ion-infinite-scroll on-infinite="nextPage()"></ion-infinite-scroll>
     </ion-content>
 </ion-view>
