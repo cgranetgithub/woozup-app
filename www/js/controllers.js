@@ -524,29 +524,30 @@ angular.module('starter.controllers',
             $scope.title = "Ce que mes amis ont prévu";
             $scope.events = [];
             var today = new Date(), eventsResource,
-                nextPages = function (eventsPage) {
-                    eventsPage.then(function (result) {
+                nextPages = function (result) {
                         var i;
                         if (result) {
                             for (i = 0; i < result.objects.length; i += 1) {
                                 $scope.events.push(result.objects[i]);
                             }
                         }
-                        $ionicLoading.hide();
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    });
-                };
+                    };
             today.setHours(0);
             today.setMinutes(0);
             eventsResource = new $tastypieResource('friendsevents',
                                             {order_by: 'start', start__gte: today});
-            nextPages(eventsResource.objects.$find());
+            eventsResource.objects.$find().then(function (result) {
+                nextPages(result);
+                $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
             $scope.loadMore = function () {
-                var nextEventPage = null;
-                if (eventsResource.page.meta.next) {
-                    nextEventPage = eventsResource.page.next();
+                if (eventsResource.page.meta && eventsResource.page.meta.next) {
+                    eventsResource.page.next().then(function (result) {
+                        nextPages(result);
+                    });
                 }
-                nextPages(nextEventPage);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.home = function () {
                 $state.go('new.what');
@@ -560,29 +561,30 @@ angular.module('starter.controllers',
             $scope.title = "Mon agenda";
             $scope.events = [];
             var today = new Date(), eventsResource,
-                nextPages = function (eventsPage) {
-                    eventsPage.then(function (result) {
+                nextPages = function (result) {
                         var i;
                         if (result) {
                             for (i = 0; i < result.objects.length; i += 1) {
                                 $scope.events.push(result.objects[i]);
                             }
                         }
-                        $ionicLoading.hide();
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    });
-                };
+                    };
             today.setHours(0);
             today.setMinutes(0);
             var eventsResource = new $tastypieResource('myagenda',
                                         {order_by: 'start', start__gte: today});
-            nextPages(eventsResource.objects.$find());
+            eventsResource.objects.$find().then(function (result) {
+                nextPages(result);
+                $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
             $scope.loadMore = function () {
-                var nextEventPage = null;
-                if (eventsResource.page.meta.next) {
-                    nextEventPage = eventsResource.page.next();
+                if (eventsResource.page.meta && eventsResource.page.meta.next) {
+                    eventsResource.page.next().then(function (result) {
+                        nextPages(result);
+                    });
                 }
-                nextPages(nextEventPage);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.home = function () {
                 $state.go('new.what');
@@ -594,8 +596,6 @@ angular.module('starter.controllers',
             "use strict";
             var event = new $tastypieResource('allevents');
             $scope.buttonTitle = "Chargement";
-//             $scope.buttonAction = function (eventId) {};
-            console.log($stateParams);
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                 function (result) {
                     $scope.event = result;
@@ -704,10 +704,10 @@ angular.module('starter.controllers',
             $scope.loadMore = function () {
                 var nextInvitePage = null,
                     nextFriendPage = null;
-                if (invitesResource.page.meta.next) {
+                if (invitesResource.page.meta && invitesResource.page.meta.next) {
                     nextInvitePage = invitesResource.page.next();
                 }
-                if (friendsResource.page.meta.next) {
+                if (friendsResource.page.meta && friendsResource.page.meta.next) {
                     nextFriendPage = friendsResource.page.next();
                 }
                 nextPages(nextInvitePage, nextFriendPage);
@@ -739,25 +739,26 @@ angular.module('starter.controllers',
             $scope.title = "Mes amis";
             $scope.friends = [];
             var friendsResource = new $tastypieResource('friends/my'),
-                nextPages = function (friendsPage) {
-                    friendsPage.then(function (result) {
+                nextPages = function (result) {
                         var i;
                         if (result) {
                             for (i = 0; i < result.objects.length; i += 1) {
                                 $scope.friends.push(result.objects[i]);
                             }
                         }
-                        $ionicLoading.hide();
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    });
-                };
-            nextPages(friendsResource.objects.$find());
+                    };
+            friendsResource.objects.$find().then(function (result) {
+                nextPages(result);
+                $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
             $scope.loadMore = function () {
-                var nextFriendPage = null;
-                if (friendsResource.page.meta.next) {
-                    nextFriendPage = friendsResource.page.next();
+                if (friendsResource.page.meta && friendsResource.page.meta.next) {
+                    friendsResource.page.next().then(function (result) {
+                        nextPages(result);
+                    });
                 }
-                nextPages(nextFriendPage);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.home = function () {
                 $state.go('new.what');
@@ -771,25 +772,26 @@ angular.module('starter.controllers',
             $scope.title = "Invitations en attente";
             $scope.friends = [];
             var friendsResource = new $tastypieResource('friends/pending'),
-                nextPages = function (friendsPage) {
-                    friendsPage.then(function (result) {
+                nextPages = function (result) {
                         var i;
                         if (result) {
                             for (i = 0; i < result.objects.length; i += 1) {
                                 $scope.friends.push(result.objects[i]);
                             }
                         }
-                        $ionicLoading.hide();
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    });
-                };
-            nextPages(friendsResource.objects.$find());
+                    };
+            friendsResource.objects.$find().then(function (result) {
+                nextPages(result);
+                $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
             $scope.loadMore = function () {
-                var nextFriendPage = null;
-                if (friendsResource.page.meta.next) {
-                    nextFriendPage = friendsResource.page.next();
+                if (friendsResource.page.meta && friendsResource.page.meta.next) {
+                    friendsResource.page.next().then(function (result) {
+                        nextPages(result);
+                    });
                 }
-                nextPages(nextFriendPage);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.inviteFriendButton = function (friend) {
                 $scope.friends.splice(friend.$index, 1);

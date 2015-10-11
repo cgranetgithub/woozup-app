@@ -1,3 +1,19 @@
+.bar.bar-dark, .tabs-dark > .tabs, .tabs.tabs-dark, .bar-dark .button {
+    background: transparent;
+    border-color: #FFF;
+}
+.item {
+    opacity: 0.6;
+}
+.item-avatar {
+    padding-left: 55px;
+}
+.item-avatar > img:first-child {
+    left: 5px;
+}
+.item-button-right .buttons {
+    right: 5px;
+}
 .event-item .item-content {
     padding-left: 80px;
 }
@@ -6,10 +22,10 @@
 /*     border-radius: 50% 200% 75% 0; */
     border-radius: 0 80% 0 0;
     position: absolute;
-    bottom: 1px;
+    bottom: 0;
     left: 1px;
-    height: 90%;
-    padding: 20px 10px 20px 5px;
+    height: 70%;
+    padding: 15px 10px 5px 5px;
     z-index: -1;
     opacity: 0.2;
 }
@@ -18,7 +34,7 @@
     position: absolute;
     top: 1px;
     bottom: 1px;
-    right: 1px;
+    right: 5px;
     height: 85%;
     margin: auto;
 /*     padding: 20px 10px 20px 5px; */
@@ -79,9 +95,7 @@
 .centered {
     text-align: center;
 }
-.scroll {
-    height: 100%;
-}
+
 #dtpick {
     padding: 2px;
 }

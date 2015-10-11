@@ -1,4 +1,4 @@
-<ion-view view-title={{title}}>
+<ion-view view-title={{title}} class="bgim">
     <ion-nav-buttons side="primary">
         <button class="button" ui-sref="new.what" nav-transition="none">
             <i class="icon ion-home"></i>
@@ -8,7 +8,7 @@
     <!--    <button class="button button-date button-outline button-balanced" ng-click="showDatePicker()">{{date | date : 'fullDate'}}</button>
         <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'H : mm'}}</button>-->
         <datepicker id="dtpick" ng-model="when.date" show-weeks="false" starting-day="1"></datepicker>
-        <button class="button button-block button-energized" ng-click="next(when.date)">Le {{when.date | date:'EEEE d MMMM'}}</button>
+        <button class="button button-block button-balanced" ng-click="next(when.date)">Le {{when.date | date:'EEEE d MMMM'}}</button>
         <ion-list>
             <ion-item class="item event-item" ng-repeat="event in events.page.objects" href="#/event/{{event.id}}">
                 <img class="event-item-avatar" ng-src="{{event.owner.image}}">
