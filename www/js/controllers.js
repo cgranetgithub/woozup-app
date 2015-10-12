@@ -21,7 +21,7 @@ angular.module('starter.controllers',
                 .success(function () {
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $ionicLoading.hide();
-                    $state.go('new.what');
+                    $state.go('events.agenda');
 
                     var options,
                         filter = ["displayName", "name"],
@@ -95,7 +95,7 @@ angular.module('starter.controllers',
                     LoginService.loginUser(authData, "facebook")
                         .success(function () {
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                            $state.go('new.what');
+                            $state.go('events.agenda');
                         }).error(function () {
                             $ionicPopup.alert({
                                 title: "Problème lors de la création du compte",
@@ -156,7 +156,7 @@ angular.module('starter.controllers',
                 LoginService.loginUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        $state.go('new.what');
+                        $state.go('events.agenda');
                         $ionicLoading.hide();
                     }).error(function () {
                         $ionicLoading.hide();
@@ -246,7 +246,7 @@ angular.module('starter.controllers',
                         "file": b64,
                     };
                 setpicture(file_field);
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
         })
 
@@ -280,6 +280,7 @@ angular.module('starter.controllers',
         function ($tastypieResource, $cordovaGeolocation, $ionicLoading, $ionicPopup,
                   $scope, $state, setlast, EventData, UserData) {
             "use strict";
+            $scope.title = "Sélectionnez l'activité"
             var posOptions = {timeout: 5000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
@@ -509,11 +510,11 @@ angular.module('starter.controllers',
     .controller('EventsCtrl',
         function ($scope, $state) {
             "use strict";
-            $scope.friends_title = "Ce que mes amis ont prévu";
-//                 $scope.mine_title = "Mes sorties";
+            $scope.friendsEventTitle = "Ce que mes amis ont prévu";
+            $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
             $scope.home = function () {
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
         })
 
@@ -521,7 +522,7 @@ angular.module('starter.controllers',
         function ($scope, $state, $tastypieResource, $ionicLoading) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.title = "Ce que mes amis ont prévu";
+            $scope.title = "Mes sorties";
             $scope.events = [];
             var today = new Date(), eventsResource,
                 nextPages = function (result) {
@@ -550,7 +551,7 @@ angular.module('starter.controllers',
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.home = function () {
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
             $ionicLoading.hide();
         })
@@ -558,7 +559,7 @@ angular.module('starter.controllers',
         function ($scope, $state, $tastypieResource, $ionicLoading) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.title = "Mon agenda";
+            $scope.title = "Mes sorties";
             $scope.events = [];
             var today = new Date(), eventsResource,
                 nextPages = function (result) {
@@ -586,8 +587,11 @@ angular.module('starter.controllers',
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
-            $scope.home = function () {
+            $scope.newEvent = function () {
                 $state.go('new.what');
+            };
+            $scope.home = function () {
+                $state.go('events.agenda');
             };
         })
     .controller('EventCtrl',
@@ -638,7 +642,7 @@ angular.module('starter.controllers',
                 }
             );
             $scope.home = function () {
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
         })
     .controller('FriendsCtrl',
@@ -663,21 +667,19 @@ angular.module('starter.controllers',
                     $scope.pending.badge = result.meta.total_count;
                 }
             );
+            $scope.agendaTitle = "Mes sorties";
             $scope.my = {title: "Mes amis"};
-            $scope.new = {title: "Ajouter des amis",
-                            badge: 0};
-            $scope.pending = {title: "Invitations en attente",
-                                badge: 0};
-            $scope.home = function () {
-                $state.go('new.what');
-            };
+            $scope.new = {title: "Ajouter des amis", badge: 0};
+            $scope.pending = {title: "Invitations en attente", badge: 0};
+            $scope.home = function () { $state.go('events.agenda'); };
         })
     .controller('NewFriendsCtrl',
         function ($tastypieResource, $ionicLoading, $q,
                   $scope, $state, sendInvite, ignoreInvite, inviteFriend, ignoreFriend) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.title = "Ajouter des amis";
+            $scope.title = "Mes amis";
+            $scope.displayButton = true;
             $scope.invites = [];
             $scope.friends = [];
             var invitesResource = new $tastypieResource('invite',
@@ -729,7 +731,7 @@ angular.module('starter.controllers',
                 ignoreInvite(invite.id);
             };
             $scope.home = function () {
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
         })
     .controller('MyFriendsCtrl',
@@ -737,6 +739,7 @@ angular.module('starter.controllers',
             "use strict";
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
+            $scope.displayButton = false;
             $scope.friends = [];
             var friendsResource = new $tastypieResource('friends/my'),
                 nextPages = function (result) {
@@ -761,7 +764,7 @@ angular.module('starter.controllers',
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.home = function () {
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
         })
     .controller('PendingFriendsCtrl',
@@ -769,7 +772,8 @@ angular.module('starter.controllers',
                   $scope, $state) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
-            $scope.title = "Invitations en attente";
+            $scope.title = "Mes amis";
+            $scope.displayButton = true;
             $scope.friends = [];
             var friendsResource = new $tastypieResource('friends/pending'),
                 nextPages = function (result) {
@@ -802,6 +806,6 @@ angular.module('starter.controllers',
                 rejectFriend(friend.user.id);
             };
             $scope.home = function () {
-                $state.go('new.what');
+                $state.go('events.agenda');
             };
         });

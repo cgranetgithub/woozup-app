@@ -1,12 +1,7 @@
 <ion-view view-title={{title}} class="bgim">
-    <ion-nav-buttons side="primary">
-        <button class="button" ui-sref="new.what" nav-transition="none">
-            <i class="icon ion-home"></i>
-        </button>
-    </ion-nav-buttons>
     <ion-content ng-controller="WhereCtrl" ng-init="initialize()">
 <!--         <input id="pac-input" class="controls" type="text" placeholder="Entrez une adresse ou un nom"> -->
-        <form class="form">
+        <form class="form mapInput">
             <input class="form-control" g-places-autocomplete ng-model="place" ng-change="place_changed()"/>
         </form>        
         <div id="map" data-tap-disabled="true"></div>

@@ -1,11 +1,8 @@
-<ion-view view-title="Profile">
-    <ion-nav-buttons side="primary">
-        <button class="button" ui-sref="new.what" nav-transition="none">
-            <i class="icon ion-home"></i>
-        </button>
-    </ion-nav-buttons>
+<ion-view view-title={{title}} class="bgim">
     <ion-content>
-        <img ng-src="{{profile.image}}">
+        <div class="profilePicture">
+            <img ng-src="{{profile.image}}">
+        </div>
         <form name="myform">
             <label class="item item-input">
                 <input type="text" ng-model="data.first_name" placeholder="Prénom">
@@ -24,7 +21,7 @@
             </label>
         </form>
     </ion-content>
-    <ion-footer-bar class="bar-energized" ng-click="save()">
+    <ion-footer-bar class="bar-balanced" ng-click="save()">
         <h1 class="title">Mettre à jour</h1>
     </ion-footer-bar>
 </ion-view>

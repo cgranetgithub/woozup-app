@@ -1,9 +1,4 @@
 <ion-view view-title={{title}} class="bgim">
-    <ion-nav-buttons side="primary">
-        <button class="button" ng-click="home()" nav-transition="none">
-            <i class="icon ion-home"></i>
-        </button>
-    </ion-nav-buttons>
     <ion-content>
         <ion-list>
             <ion-item class="item item-avatar item-button-right"
@@ -14,11 +9,13 @@
                 <p>{{friend.user.email}}</p>
                 <div class="buttons">
                     <button class="button button-outline roundbutton"
-                            ng-click="ignoreFriendButton(friend)">
+                            ng-click="ignoreFriendButton(friend)"
+                            ng-if="displayButton">
                             <i class="icon ion-android-cancel"></i>
                     </button>
                     <button class="button button-outline button-balanced roundbutton"
-                            ng-click="inviteFriendButton(friend)">
+                            ng-click="inviteFriendButton(friend)"
+                            ng-if="displayButton">
                             <i class="icon ion-person-add"></i>
                     </button>
                 </div>

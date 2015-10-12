@@ -1,20 +1,17 @@
 <ion-view view-title={{event.event_type.name}} class="bgim">
-    <ion-nav-buttons side="primary">
-        <button class="button" ui-sref="new.what" nav-transition="none">
-            <i class="icon ion-home"></i>
-        </button>
-    </ion-nav-buttons>
     <ion-content>
         <ion-list>
-            <ion-item class="item item-thumbnail-right event-descr item-text-wrap" ng-style={{event.type.style}}>
+            <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
                 <img ng-src="{{event.type.image}}">
                 <h1>{{event.type.name}}</h1>
                 <h2>{{event.start | date : 'EEEE d MMMM'}}</h2>
+            </ion-item>
+            <ion-item class="item event-descr">
                 <h2>{{event.where.address}}</h2>
             </ion-item>
             <timepicker id="tmpick" ng-model="event.start" minute-step="15" show-meridian="false"></timepicker>
             <form name="myform">
-                <label class="item item-input item-stacked-label">
+                <label class="item item-input">
                     <span class="input-label">Titre</span>
                     <input ng-model="event.title" type="text" placeholder="Titre">
                 </label>

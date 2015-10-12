@@ -1,9 +1,4 @@
 <ion-view view-title={{title}} class="bgim">
-    <ion-nav-buttons side="primary">
-        <button class="button"  ng-click="home()" nav-transition="none">
-            <i class="icon ion-home"></i>
-        </button>
-    </ion-nav-buttons>
     <ion-content>
         <ion-list>
             <ion-item class="item event-item" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">
@@ -16,4 +11,7 @@
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
     </ion-content>
+        <button class="button button-balanced roundbutton bottomright" ng-click="newEvent()" nav-transition="none">
+            <i class="icon ion-plus"></i>
+        </button>
 </ion-view>

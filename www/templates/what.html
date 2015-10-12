@@ -1,5 +1,5 @@
-<ion-view view-title="Meet" class="bgim">
-    <div class="tabs tabs-icon-top tabs-dark bgim">
+<ion-view view-title={{title}} class="bgim">
+<!--    <div class="tabs tabs-icon-top tabs-dark bgim">
         <a class="tab-item" ui-sref="events.friends">
             <i class="icon ion-ios-calendar"></i>
             Mes sorties
@@ -8,7 +8,7 @@
             <i class="icon ion-ios-people"></i>
             Mes amis
         </a>
-    </div>
+    </div>-->
     <ion-content class="gallery">
         <span class="item-tile" ng-repeat="type in types.page.objects" ng-style={{type.style}} ng-click="next(type.id)">
             <img class="category" ng-src="{{type.image}}">

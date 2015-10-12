@@ -15,7 +15,8 @@
     right: 5px;
 }
 .event-item .item-content {
-    padding-left: 80px;
+    padding-left: 70px;
+    padding-right: 90px;
 }
 .event-item-icon {
     background: grey;
@@ -43,22 +44,20 @@
 .gallery {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
+    text-align: center;
 /*     margin: 3px; */
 }
 .item-tile {
-    border-radius: 5%;
+    border-radius: 50%;
     color: white;
     background: #929292;
     display: inline-block;
-/*     margin-left: 2px; */
-/*     margin-top: 2px; */
-/*     margin-bottom: -7px; */
-    margin: 1px 0 0 1px;
+    margin: 2%;
 /*     padding: 15px 0 5px 0; */
     padding-top: 10px;
     text-align: center;
-/*     height: 120px; */
-    min-width: 33%;
+    height: 100px;
+    width: 100px;
 }
 .category-title {
     color: white;
@@ -73,23 +72,29 @@
     margin-top: 20px;
 }
 .event-descr {
-    background-color: #DDD;
-    border-radius: 0 0 70% 30%;
+    background-color: transparent;
+    border-width: 0;
+/*     border-radius: 0 0 70% 30%; */
     color: white;
-    padding-bottom: 40px;
+/*     padding-bottom: 40px; */
+    opacity: 1;
 }
 .event-descr h1 {
     color: #EEE;
+    white-space: normal;
 }
 .event-descr h2 {
     color: #FFF;
+    white-space: normal;
+    line-height: 1.2;
+/*     margin-top: 5px; */
 }
 .event-descr img {
     bottom: 15px;
 }
 .event-participant-title {
     margin-top: 0px;
-    color: #999;
+    color: #EEE;
     text-align: center;
 }
 .centered {
@@ -113,6 +118,14 @@
 #map {
     width: 100%;
     height: 100%;
+}
+.mapInput {
+    position: absolute;
+    top: 4px;
+    left: 2%;
+    width: 96%;
+    right: 2%;
+    z-index: 1;
 }
 .full button span {
     background-color: limegreen;
@@ -151,7 +164,12 @@
     height: 50px;
     width: 50px;
 }
-
+.bottomright {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    box-shadow: 2px 2px 20px #545454;
+}
 .cropArea {
   background: #E4E4E4;
   overflow: hidden;
@@ -159,7 +177,9 @@
   width:300px;
   height:350px;
 }
-
+.scroll {
+    height: 100%;
+}
 .bgim {
  background: url('../img/cloud.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -167,7 +187,6 @@
   -o-background-size: cover;
   background-size: cover;
 }
-
 .logocontainer {
     text-align: center;
     margin: 30px;
@@ -175,4 +194,11 @@
 .logo {
     width: 60%;
     margin: 30px;
+}
+.profilePicture {
+margin: 10px auto;
+width: 50%
+}
+#myform {
+    padding: 16px;
 }

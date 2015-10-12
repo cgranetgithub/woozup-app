@@ -96,10 +96,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                         controller: 'WhatCtrl'
                     }
                 }
-        //         resolve: {
-        //             what: function(starter.services) {
-        //             return starter.services.getWhat()
-        //         }}
             })
             .state('new.when', {
                 cache: false,
@@ -110,10 +106,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                         controller: 'WhenCtrl'
                     }
                 }
-        //         resolve: {
-        //             when: function(starter.services) {
-        //             return starter.services.getWhen()
-        //         }}
             })
             .state('new.where', {
                 cache: false,
@@ -124,10 +116,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                         controller: 'WhereCtrl'
                     }
                 }
-        //         resolve: {
-        //             where: function(starter.services) {
-        //             return starter.services.getWhere()
-        //         }}
             })
             .state('new.done', {
                 cache: false,
@@ -146,16 +134,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/events.html',
                 controller: 'EventsCtrl'
             })
-//             .state('events.mine', {
-//                 cache: false,
-//                 url: '/mine',
-//                 views: {
-//                     'myevents': {
-//                         templateUrl: 'templates/eventlist.html',
-//                         controller: 'MyEventsCtrl'
-//                     }
-//                 }
-//             })
             .state('events.friends', {
                 cache: false,
                 url: '/friends',
