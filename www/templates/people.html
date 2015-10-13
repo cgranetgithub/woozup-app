@@ -5,7 +5,7 @@
                       ng-repeat="friend in friends track by $index">
                 <img ng-src="{{friend.image}}">
                 <h2>{{friend.name}}</h2>
-                <p>{{friend.user.username}}</p>
+                <p>{{friend.user.phone_number}}</p>
                 <p>{{friend.user.email}}</p>
                 <div class="buttons">
                     <button class="button button-outline roundbutton"
@@ -24,8 +24,8 @@
                       ng-repeat="invite in invites track by $index">
                 <img ng-src="{{invite.photo}}">
                 <h2>{{invite.name}}</h2>
-                <p>{{invite.number}}</p>
-                <p>{{invite.email}}</p>
+                <p>{{invite.numbers}}</p>
+                <p>{{invite.emails}}</p>
                 <div class="buttons">
                     <button class="button button-outline roundbutton"
                             ng-click="ignoreInviteButton(invite)">

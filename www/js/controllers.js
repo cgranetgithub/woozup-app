@@ -277,32 +277,9 @@ angular.module('starter.controllers',
         })
 
     .controller('WhatCtrl',
-        function ($tastypieResource, $cordovaGeolocation, $ionicLoading, $ionicPopup,
-                  $scope, $state, setlast, EventData, UserData) {
+        function ($tastypieResource, $ionicLoading, $scope, $state, EventData) {
             "use strict";
             $scope.title = "Sélectionnez l'activité"
-            var posOptions = {timeout: 5000, enableHighAccuracy: false};
-            $cordovaGeolocation
-                .getCurrentPosition(posOptions)
-                .then(function (loc) {
-                    setlast(loc);
-                    UserData.setWhere(loc.coords);
-                }, function (err) {
-                    console.log(err);
-                    $scope.userposition = new $tastypieResource('userposition', {});
-                    $scope.userposition.objects.$get({id: UserData.getUserId()}).then(
-                        function (result) {
-                            UserData.setWhere(result.last);
-                        },
-                        function (error) {
-                            console.log(error);
-                        }
-                    );
-                    var alertPopup = $ionicPopup.alert({
-                        title: "Erreur de géolocalisation",
-                        template: "Je n'arrive pas à vous localiser. Merci d'activer le GPS et le wifi."
-                    });
-                });
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
             $scope.types.objects.$find().then(
@@ -347,7 +324,7 @@ angular.module('starter.controllers',
             $scope.$watch("when.date", function (newValue, oldValue) {
                 newValue.setHours(0);
                 newValue.setMinutes(0);
-                $scope.events = new $tastypieResource('friendsevents',
+                $scope.events = new $tastypieResource('events/friends',
                                                       {order_by: 'start',
                                                        start__gte: newValue});
                 $scope.events.objects.$find();
@@ -484,7 +461,7 @@ angular.module('starter.controllers',
             $scope.event.start.setMinutes(0);
             $scope.next = function () {
                 $ionicLoading.show({template: "Création du rendez-vous"});
-                var event = new $tastypieResource('myevents');
+                var event = new $tastypieResource('events/mine');
                 event.objects.$create({
                     name: $scope.event.title,
                     start: $scope.event.start,
@@ -508,11 +485,34 @@ angular.module('starter.controllers',
         })
 
     .controller('EventsCtrl',
-        function ($scope, $state) {
+        function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
+                  $scope, $state, setlast, UserData) {
             "use strict";
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
+            var posOptions = {timeout: 5000, enableHighAccuracy: false};
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (loc) {
+                    setlast(loc);
+                    UserData.setWhere(loc.coords);
+                }, function (err) {
+                    console.log(err);
+                    $scope.userposition = new $tastypieResource('userposition', {});
+                    $scope.userposition.objects.$get({id: UserData.getUserId()}).then(
+                        function (result) {
+                            UserData.setWhere(result.last);
+                        },
+                        function (error) {
+                            console.log(error);
+                        }
+                    );
+                    var alertPopup = $ionicPopup.alert({
+                        title: "Erreur de géolocalisation",
+                        template: "Je n'arrive pas à vous localiser. Merci d'activer le GPS et le wifi."
+                    });
+                });
             $scope.home = function () {
                 $state.go('events.agenda');
             };
@@ -535,7 +535,7 @@ angular.module('starter.controllers',
                     };
             today.setHours(0);
             today.setMinutes(0);
-            eventsResource = new $tastypieResource('friendsevents',
+            eventsResource = new $tastypieResource('events/friends',
                                             {order_by: 'start', start__gte: today});
             eventsResource.objects.$find().then(function (result) {
                 nextPages(result);
@@ -572,7 +572,7 @@ angular.module('starter.controllers',
                     };
             today.setHours(0);
             today.setMinutes(0);
-            var eventsResource = new $tastypieResource('myagenda',
+            var eventsResource = new $tastypieResource('events/agenda',
                                         {order_by: 'start', start__gte: today});
             eventsResource.objects.$find().then(function (result) {
                 nextPages(result);
@@ -611,7 +611,7 @@ angular.module('starter.controllers',
                     if (my_id === result.owner.user.id) {
                         $scope.buttonTitle = "J'annule";
                         $scope.buttonAction = function (eventId) {
-                            var myevent = new $tastypieResource('myevents');
+                            var myevent = new $tastypieResource('events/mine');
                             myevent.objects.$delete({id: eventId});
                             $state.go('events.agenda', {}, { reload: true });
                         };
@@ -741,7 +741,7 @@ angular.module('starter.controllers',
             $scope.title = "Mes amis";
             $scope.displayButton = false;
             $scope.friends = [];
-            var friendsResource = new $tastypieResource('friends/my'),
+            var friendsResource = new $tastypieResource('friends/mine'),
                 nextPages = function (result) {
                         var i;
                         if (result) {

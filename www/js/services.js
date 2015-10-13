@@ -24,8 +24,8 @@
 angular.module('starter.services', [])
     .config(function ($provide, $tastypieProvider) {
         "use strict";
-        var hostname = 'http://geoevent.herokuapp.com/',
-//         var hostname = 'http://192.168.43.198:8000/',
+        var hostname = 'http://geoevent.herokuapp.com/';
+//         var hostname = 'http://192.168.1.102:8000/',
 //         var hostname = 'http://localhost:8000/',
             apiUrl = hostname + 'api/v1/';
         $provide.value('apiUrl', apiUrl);
@@ -103,7 +103,7 @@ angular.module('starter.services', [])
             "use strict";
             return function (eventId) {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'friendsevents/join/' + eventId + '/');
+                $http.post(apiUrl + 'events/friends/join/' + eventId + '/');
             };
         }])
     .factory('leave', ['$http', 'apiUrl', 'UserData',
@@ -111,7 +111,7 @@ angular.module('starter.services', [])
             "use strict";
             return function (eventId) {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'friendsevents/leave/' + eventId + '/');
+                $http.post(apiUrl + 'events/friends/leave/' + eventId + '/');
             };
         }])
     .factory('sortContacts', ['$http', 'apiUrl', 'UserData',
