@@ -30,9 +30,9 @@ angular.module('starter.controllers',
                     if (!navigator.contacts) {
                         return;
                     }
-                    if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
-                        return;
-                    }
+//                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
+//                         return;
+//                     }
 
                     options = new ContactFindOptions();
                     options.filter = "";
@@ -598,7 +598,7 @@ angular.module('starter.controllers',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
                   join, leave, UserData) {
             "use strict";
-            var event = new $tastypieResource('allevents');
+            var event = new $tastypieResource('events/all');
             $scope.buttonTitle = "Chargement";
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                 function (result) {

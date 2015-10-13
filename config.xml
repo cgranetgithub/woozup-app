@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.ionicapp610654" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.ionicapp610654" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Meet</name>
     <description>
         Une app pour rencontrer ses amis.
     </description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">
+    <author email="contact@varioware">
       CG MB
     </author>
     <content src="index.html" />
