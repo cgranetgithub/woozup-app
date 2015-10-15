@@ -2,18 +2,20 @@
     <ion-content class="padding">
         <h2 class="centered category-title">Il vous faut une photo !</h2>
         <hr>
-        <button class="button button-block button-light button-outline" ng-click="photoFromFB()">
+        <div class=centered>
+        <button class="button button-light button-outline photoButton" ng-click="photoFromFB()">
             <i class="icon ion-social-facebook"></i>
-            Utiliser ma photo Facebook
+<!--             Utiliser ma photo Facebook -->
         </button>
-        <button class="button button-block button-light button-outline" ng-click="photoFromCamera()">
+        <button class="button button-light button-outline photoButton" ng-click="photoFromCamera()">
             <i class="icon ion-camera"></i>
-            Prendre une photo
+<!--             Prendre une photo -->
         </button>
-        <button class="button button-block button-light button-outline" ng-click="photoFromGallery()">
+        <button class="button button-light button-outline photoButton" ng-click="photoFromGallery()">
             <i class="icon ion-images"></i>
-            Choisir dans la gallerie
+<!--             Choisir dans la gallerie -->
         </button>
+        </div>
         <div class="cropArea">
             <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
         </div>
@@ -25,7 +27,7 @@
             </div>
         </div>
         <div>
-            <button class="button button-block button-balanced" ng-click="next(myCroppedImage)">
+            <button class="button button-block button-balanced" ng-click="next(myCroppedImage)" ng-disabled="!myImage">
                 OK, c'est bon
             </button>
         </div>

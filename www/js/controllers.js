@@ -22,7 +22,7 @@ angular.module('starter.controllers',
                     findContacts(sortContacts);
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $ionicLoading.hide();
-                    $state.go('events.agenda');
+                    $state.go('events.friends');
                 })
                 .error(function () {
                     $state.go('connect');
@@ -45,7 +45,7 @@ angular.module('starter.controllers',
                         .success(function () {
                             findContacts(sortContacts);
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                            $state.go('events.agenda');
+                            $state.go('friends.new');
                         }).error(function () {
                             $ionicPopup.alert({
                                 title: "Problème lors de la création du compte",
@@ -108,7 +108,7 @@ angular.module('starter.controllers',
                     .success(function () {
                         findContacts(sortContacts);
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        $state.go('events.agenda');
+                        $state.go('friends.new');
                         $ionicLoading.hide();
                     }).error(function () {
                         $ionicLoading.hide();
@@ -198,7 +198,7 @@ angular.module('starter.controllers',
                         "file": b64,
                     };
                 setpicture(file_field);
-                $state.go('events.agenda');
+                $state.go('friends.new');
             };
         })
 
@@ -253,15 +253,6 @@ angular.module('starter.controllers',
                 );
             };
         })
-//     .directive('tileSize', function () {
-//         return function (scope, element, attr) {
-// 
-//             // Get parent elmenets width and subtract fixed width
-//             element.css({ 
-//                 width: element.parent()[0].offsetWidth /4 + 'px' 
-//             });
-//         };
-//     })
 
     .controller('WhenCtrl',
         function ($tastypieResource, $scope, $state, EventData) {
