@@ -19,60 +19,10 @@ angular.module('starter.controllers',
             $ionicLoading.show({template: "Vérification de l'identité"});
             CheckauthService.checkUserAuth()
                 .success(function () {
+                    findContacts(sortContacts);
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                     $ionicLoading.hide();
                     $state.go('events.agenda');
-
-                    var options,
-                        filter = ["displayName", "name"],
-                        lastCheck, //window.localStorage.contact_sync,
-                        curDate = new Date();
-                    if (!navigator.contacts) {
-                        return;
-                    }
-//                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
-//                         return;
-//                     }
-
-                    options = new ContactFindOptions();
-                    options.filter = "";
-                    options.multiple = true;
-
-                    navigator.contacts.find(filter, function (contacts) {
-                        if (contacts === null) {
-                            console.log("No contact retrieved");
-                            return;
-                        }
-                        var stuff = [],
-                            helper = function (tab, k) {
-                                var t = [], i;
-                                k = k || "value";
-                                if (!tab) { return t; }
-                                for (i = 0; i < tab.length; i += 1) {
-                                    t.push(tab[i][k]);
-                                }
-                                return t;
-                            };
-                        contacts.forEach(function (entry) {
-                            if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
-                                    && (!entry.emails || !entry.emails.length)) {
-                                console.log("skipping " + entry.name.formatted);
-                                return;
-                            }
-
-                            stuff.push({
-                                'name': entry.name.formatted,
-                                'emails': helper(entry.emails).join(', '),
-                                'numbers': helper(entry.phoneNumbers).join(', '),
-                                'photo': helper(entry.photos).join(', '),
-                            });
-                        });
-                        sortContacts(stuff);
-                    }, function () {
-                        // an error has occured, try to resync next day
-                        window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
-                        console.log("Error");
-                    }, options);
                 })
                 .error(function () {
                     $state.go('connect');
@@ -81,10 +31,9 @@ angular.module('starter.controllers',
         })
 
     .controller('ConnectCtrl',
-        function ($tastypie, $ionicPopup, LoginService,
+        function ($tastypie, $ionicPopup, LoginService, sortContacts,
                   $scope, $state, UserData) {
             "use strict";
-
             $scope.fbLogin = function () {
                 facebookConnectPlugin.login([], function (obj) {
                     var authData = {
@@ -94,6 +43,7 @@ angular.module('starter.controllers',
                     /* we have to call registerbyToken from service LoginService */
                     LoginService.loginUser(authData, "facebook")
                         .success(function () {
+                            findContacts(sortContacts);
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                             $state.go('events.agenda');
                         }).error(function () {
@@ -109,7 +59,7 @@ angular.module('starter.controllers',
         })
 
     .controller('RegisterCtrl',
-        function ($tastypie, $ionicPopup, $ionicLoading, RegisterService,
+        function ($tastypie, $ionicPopup, $ionicLoading, RegisterService, sortContacts,
                   $scope, $state, UserData) {
             "use strict";
             $scope.data = {};
@@ -123,6 +73,7 @@ angular.module('starter.controllers',
                         };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
+                        findContacts(sortContacts);
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         $state.go('picture');
                         $ionicLoading.hide();
@@ -145,7 +96,7 @@ angular.module('starter.controllers',
         })
 
     .controller('LoginCtrl',
-        function ($tastypie, $ionicLoading, LoginService, $ionicPopup,
+        function ($tastypie, $ionicLoading, LoginService, $ionicPopup, sortContacts,
                   $scope, $state, UserData) {
             "use strict";
             $scope.data = {};
@@ -155,6 +106,7 @@ angular.module('starter.controllers',
                                 'password': $scope.data.password};
                 LoginService.loginUser(authData, false)
                     .success(function () {
+                        findContacts(sortContacts);
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         $state.go('events.agenda');
                         $ionicLoading.hide();
@@ -809,3 +761,54 @@ angular.module('starter.controllers',
                 $state.go('events.agenda');
             };
         });
+
+    
+findContacts = function(sortContacts) {
+        var options,
+            filter = ["displayName", "name"],
+            lastCheck, //window.localStorage.contact_sync,
+            curDate = new Date();
+        if (!navigator.contacts) { return; }
+//                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
+//                         return;
+//                     }
+        options = new ContactFindOptions();
+        options.filter = "";
+        options.multiple = true;
+        navigator.contacts.find(filter, function (contacts) {
+            if (contacts === null) {
+                console.log("No contact retrieved");
+                return;
+            }
+            var stuff = [],
+                helper = function (tab, k) {
+                    var t = [], i;
+                    k = k || "value";
+                    if (!tab) { return t; }
+                    for (i = 0; i < tab.length; i += 1) {
+                        t.push(tab[i][k]);
+                    }
+                    return t;
+                };
+            contacts.forEach(function (entry) {
+                if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
+                        && (!entry.emails || !entry.emails.length)) {
+                    console.log("skipping " + entry.name.formatted);
+                    return;
+                }
+
+                stuff.push({
+                    'name': entry.name.formatted,
+                    'emails': helper(entry.emails).join(', '),
+                    'numbers': helper(entry.phoneNumbers).join(', '),
+                    'photo': helper(entry.photos).join(', '),
+                });
+            });
+            sortContacts(stuff);
+        }, function () {
+            // an error has occured, try to resync next day
+            window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
+            console.log("Error");
+        }, options);
+    }
+    
