@@ -34,9 +34,6 @@
       "platform": "browser",
       "locator": "browser"
     },
-    {
-      "platform": "ios",
-      "locator": "ios"
-    }
+    "ios"
   ]
 }

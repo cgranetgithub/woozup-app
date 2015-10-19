@@ -105,6 +105,14 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'contact/sort/', contacts);
             };
         }])
+    .factory('logout', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function () {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.get(apiUrl + 'logout/');
+            };
+        }])
     .factory('EventData', function () {
         "use strict";
         var data = {};

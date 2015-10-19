@@ -45,12 +45,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         // Each state's controller can be found in controllers.js
         $stateProvider
 
+            .state('logout', {
+                   cache: false,
+                   url: '/logout',
+                   templateUrl: 'templates/logout.html',
+                   controller: 'LogoutCtrl'
+                   })
             .state('checkauth', {
-                cache: false,
-                url: '/checkauth',
-                templateUrl: 'templates/checkauth.html',
-                controller: 'CheckauthCtrl'
-            })
+                   cache: false,
+                   url: '/checkauth',
+                   templateUrl: 'templates/checkauth.html',
+                   controller: 'CheckauthCtrl'
+                   })
             .state('connect', {
                 cache: false,
                 url: '/connect',

@@ -12,6 +12,15 @@ angular.module('starter.controllers',
 //$scope.$on('$ionicView.enter', function (e) {
 //});
 
+    .controller('LogoutCtrl',
+            function ($tastypie, $ionicLoading, logout,
+                      $state, UserData) {
+            "use strict";
+            $ionicLoading.show({template: "Déconnection"});
+            logout();
+            $state.go('connect');
+            })
+
     .controller('CheckauthCtrl',
         function ($tastypie, $ionicLoading, CheckauthService, sortContacts,
                   $state, UserData) {
@@ -21,8 +30,8 @@ angular.module('starter.controllers',
                 .success(function () {
                     findContacts(sortContacts);
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                    $ionicLoading.hide();
                     $state.go('events.friends');
+                    $ionicLoading.hide();
                 })
                 .error(function () {
                     $state.go('connect');
@@ -312,6 +321,7 @@ angular.module('starter.controllers',
 //                     'Place ID: ' + place.place_id + '<br>' +
 //                     place.formatted_address);
 //                 infowindow.open(map, marker);
+                $scope.map.focus(); //make sure the keyboard hides
             };
             $scope.initialize = function () {
                 if (UserData.getWhere()) {
@@ -357,6 +367,10 @@ angular.module('starter.controllers',
                 };
                 ///#####
                 map.addListener('click', function (e) {
+                    $scope.$apply(function () {
+                        $scope.map.focus(); //make sure the keyboard hides
+                    });
+                    
                     var address = '', position = e.latLng;
                     setAddress('', position);
                     marker.setPosition(position);
