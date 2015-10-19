@@ -640,8 +640,9 @@ angular.module('starter.controllers',
             $scope.invites = [];
             $scope.friends = [];
             var invitesResource = new $tastypieResource('invite',
-                                                    {status__exact: 'NEW'}),
-                friendsResource = new $tastypieResource('friends/new'),
+                                            {status__exact: 'NEW', order_by: 'name'}),
+                friendsResource = new $tastypieResource('friends/new',
+                                                        {order_by: 'user__first_name'}),
                 nextPages = function (invitePage, friendsPage) {
                     $q.all([invitePage, friendsPage]).then(function (arrayOfResults) {
                         var i;
@@ -698,7 +699,8 @@ angular.module('starter.controllers',
             $scope.title = "Mes amis";
             $scope.displayButton = false;
             $scope.friends = [];
-            var friendsResource = new $tastypieResource('friends/mine'),
+            var friendsResource = new $tastypieResource('friends/mine',
+                                                        {order_by: 'user__first_name'}),
                 nextPages = function (result) {
                         var i;
                         if (result) {
@@ -732,7 +734,8 @@ angular.module('starter.controllers',
             $scope.title = "Mes amis";
             $scope.displayButton = true;
             $scope.friends = [];
-            var friendsResource = new $tastypieResource('friends/pending'),
+            var friendsResource = new $tastypieResource('friends/pending',
+                                                        {order_by: 'user__first_name'}),
                 nextPages = function (result) {
                         var i;
                         if (result) {
