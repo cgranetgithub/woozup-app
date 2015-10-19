@@ -1,5 +1,5 @@
 {
-  "name": "MeetMe",
+  "name": "GeoEvent",
   "version": "1.0.0",
   "description": "Le meilleur moyen de sortir avec ses amis !",
   "dependencies": {
@@ -23,7 +23,6 @@
     "cordova-plugin-geolocation",
     "cordova-plugin-contacts",
     "cordova-plugin-console",
-    "com.phonegap.plugins.facebookconnect",
     "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
