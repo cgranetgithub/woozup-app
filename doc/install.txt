@@ -29,3 +29,10 @@ $ cordova -d plugin add /path/to/cloned/phonegap-facebook-plugin --variable APP_
 # For Android: don't forget to fill FB Account with your key hash
 $ keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
 Q6Tcst8iqeloTBRmsyrA5Njtt0c=
+
+
+# push notification plugin
+ionic plugin add https://github.com/phonegap-build/PushPlugin.git
+!!! ANDROID build !!! need to install from the SDK:
+-  Extras > Android support repository
+-  Extras > Google repository

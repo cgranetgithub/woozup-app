@@ -19,17 +19,77 @@ angular.module('starter.controllers',
             $ionicLoading.show({template: "Déconnection"});
             logout();
             $state.go('connect');
-            })
+        })
 
     .controller('CheckauthCtrl',
-        function ($tastypie, $ionicLoading, CheckauthService, sortContacts,
-                  $state, UserData) {
+        function ($scope, $rootScope, $cordovaPush, $ionicPlatform, $tastypie,
+                  $ionicLoading, CheckauthService, sortContacts, $cordovaDevice,
+                  $state, UserData, gcmRegister) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
+            // Register for push notifications
+            $scope.register = function () {
+                var config = null;
+                if (ionic.Platform.isAndroid()) {
+                    config = {
+                        "senderID": "496829276290"
+                    };
+                }
+                else if (ionic.Platform.isIOS()) {
+                    config = {
+                        "badge": "true",
+                        "sound": "true",
+                        "alert": "true"
+                    }
+                }
+                if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+                    $cordovaPush.register(config).then(function (result) {
+                        console.log("Register success " + result);
+                        // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
+                        if (ionic.Platform.isIOS()) {
+                            $scope.regId = result;
+                            storeDeviceToken("ios");
+                        }
+                    }, function (err) {
+                        console.log("Register error " + err)
+                    });
+                }
+            }
+            $ionicPlatform.ready(function() {
+                $scope.register();
+            });
+            // Subscribe for receiveing notifications
+            $rootScope.$on('$cordovaPush:notificationReceived',
+                           function(event, notification) {
+                switch(notification.event) {
+                    case 'registered':
+                    if (notification.regid.length > 0 ) {
+                        UserData.setNotifData(notification.regid,
+                                              $cordovaDevice.getModel(),
+                                              $cordovaDevice.getUUID());
+                        gcmRegister(UserData.getNotifData());
+//                         gcmRegister({'registration_id' : notification.regid,
+//                         'name': $cordovaDevice.getModel(),
+//                         'device_id': $cordovaDevice.getUUID()});
+                    }
+                    break;
+                    case 'message':
+                    // this is the actual push notification. its format depends on the data model from the push server
+                    alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+                    break;
+                    case 'error':
+                    alert('GCM error = ' + notification.msg);
+                    break;
+                    default:
+                    alert('An unknown GCM event has occurred');
+                    break;
+                }
+            });
             CheckauthService.checkUserAuth()
                 .success(function () {
-                    findContacts(sortContacts);
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                    gcmRegister(UserData.getNotifData());
+                    findContacts(sortContacts);
                     $state.go('events.friends');
                     $ionicLoading.hide();
                 })
@@ -41,7 +101,7 @@ angular.module('starter.controllers',
 
     .controller('ConnectCtrl',
         function ($tastypie, $ionicPopup, LoginService, sortContacts,
-                  $scope, $state, UserData) {
+                  $scope, $state, UserData, gcmRegister) {
             "use strict";
             $scope.fbLogin = function () {
                 facebookConnectPlugin.login([], function (obj) {
@@ -52,8 +112,9 @@ angular.module('starter.controllers',
                     /* we have to call registerbyToken from service LoginService */
                     LoginService.loginUser(authData, "facebook")
                         .success(function () {
-                            findContacts(sortContacts);
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                            gcmRegister(UserData.getNotifData());
+                            findContacts(sortContacts);
                             $state.go('friends.new');
                         }).error(function () {
                             $ionicPopup.alert({
@@ -69,7 +130,7 @@ angular.module('starter.controllers',
 
     .controller('RegisterCtrl',
         function ($tastypie, $ionicPopup, $ionicLoading, RegisterService, sortContacts,
-                  $scope, $state, UserData) {
+                  $scope, $state, UserData, gcmRegister) {
             "use strict";
             $scope.data = {};
             $scope.register = function () {
@@ -82,8 +143,9 @@ angular.module('starter.controllers',
                         };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
-                        findContacts(sortContacts);
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                        gcmRegister(UserData.getNotifData());
+                        findContacts(sortContacts);
                         $state.go('picture');
                         $ionicLoading.hide();
                     }).error(function (err) {
@@ -106,7 +168,7 @@ angular.module('starter.controllers',
 
     .controller('LoginCtrl',
         function ($tastypie, $ionicLoading, LoginService, $ionicPopup, sortContacts,
-                  $scope, $state, UserData) {
+                  $scope, $state, UserData, gcmRegister) {
             "use strict";
             $scope.data = {};
             $scope.login = function () {
@@ -115,8 +177,9 @@ angular.module('starter.controllers',
                                 'password': $scope.data.password};
                 LoginService.loginUser(authData, false)
                     .success(function () {
-                        findContacts(sortContacts);
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                        gcmRegister(UserData.getNotifData());
+                        findContacts(sortContacts);
                         $state.go('friends.new');
                         $ionicLoading.hide();
                     }).error(function () {
@@ -772,51 +835,50 @@ angular.module('starter.controllers',
 
     
 findContacts = function(sortContacts) {
-        var options,
-            filter = ["displayName", "name"],
-            lastCheck, //window.localStorage.contact_sync,
-            curDate = new Date();
-        if (!navigator.contacts) { return; }
+    var options,
+        filter = ["displayName", "name"],
+        lastCheck, //window.localStorage.contact_sync,
+        curDate = new Date();
+    if (!navigator.contacts) { return; }
 //                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
 //                         return;
 //                     }
-        options = new ContactFindOptions();
-        options.filter = "";
-        options.multiple = true;
-        navigator.contacts.find(filter, function (contacts) {
-            if (contacts === null) {
-                console.log("No contact retrieved");
+    options = new ContactFindOptions();
+    options.filter = "";
+    options.multiple = true;
+    navigator.contacts.find(filter, function (contacts) {
+        if (contacts === null) {
+            console.log("No contact retrieved");
+            return;
+        }
+        var stuff = [],
+            helper = function (tab, k) {
+                var t = [], i;
+                k = k || "value";
+                if (!tab) { return t; }
+                for (i = 0; i < tab.length; i += 1) {
+                    t.push(tab[i][k]);
+                }
+                return t;
+            };
+        contacts.forEach(function (entry) {
+            if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
+                    && (!entry.emails || !entry.emails.length)) {
+                console.log("skipping " + entry.name.formatted);
                 return;
             }
-            var stuff = [],
-                helper = function (tab, k) {
-                    var t = [], i;
-                    k = k || "value";
-                    if (!tab) { return t; }
-                    for (i = 0; i < tab.length; i += 1) {
-                        t.push(tab[i][k]);
-                    }
-                    return t;
-                };
-            contacts.forEach(function (entry) {
-                if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
-                        && (!entry.emails || !entry.emails.length)) {
-                    console.log("skipping " + entry.name.formatted);
-                    return;
-                }
 
-                stuff.push({
-                    'name': entry.name.formatted,
-                    'emails': helper(entry.emails).join(', '),
-                    'numbers': helper(entry.phoneNumbers).join(', '),
-                    'photo': helper(entry.photos).join(', '),
-                });
+            stuff.push({
+                'name': entry.name.formatted,
+                'emails': helper(entry.emails).join(', '),
+                'numbers': helper(entry.phoneNumbers).join(', '),
+                'photo': helper(entry.photos).join(', '),
             });
-            sortContacts(stuff);
-        }, function () {
-            // an error has occured, try to resync next day
-            window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
-            console.log("Error");
-        }, options);
-    }
-    
+        });
+        sortContacts(stuff);
+    }, function () {
+        // an error has occured, try to resync next day
+        window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
+        console.log("Error");
+    }, options);
+};

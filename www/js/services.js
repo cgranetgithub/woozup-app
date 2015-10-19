@@ -113,6 +113,16 @@ angular.module('starter.services', [])
                 $http.get(apiUrl + 'logout/');
             };
         }])
+    .factory('gcmRegister', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (data) {
+                if ( data.registration_id ) {
+                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                    $http.post(apiUrl + 'user/gcm/', data);
+                }
+            };
+        }])
     .factory('EventData', function () {
         "use strict";
         var data = {};
@@ -172,6 +182,16 @@ angular.module('starter.services', [])
             },
             getApiKey: function () {
                 return data.apiKey;
+            },
+            setNotifData: function (regid, devName, devId) {
+                data.registrationId = regid,
+                data.deviceName = devName,
+                data.deviceId = devId
+            },
+            getNotifData: function () {
+                return {'registration_id' : data.registrationId,
+                        'name': data.deviceName,
+                        'device_id': data.deviceId};
             }
         };
     })

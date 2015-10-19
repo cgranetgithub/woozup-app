@@ -48,7 +48,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             .state('logout', {
                    cache: false,
                    url: '/logout',
-                   templateUrl: 'templates/logout.html',
+                   templateUrl: 'templates/checkauth.html',
                    controller: 'LogoutCtrl'
                    })
             .state('checkauth', {
