@@ -10,7 +10,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-    .run(function ($ionicPlatform) {
+    .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister) {
         "use strict";
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -24,6 +24,32 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
+            // won't wor in browser, normal (cordova)
+            var push = PushNotification.init({
+                "android": {"senderID": "496829276290"},
+                "ios": {"alert": "true", "badge": "true", "sound": "true"},
+                "windows": {}
+            } );
+            push.on('registration', function(data) {
+                console.info(data);
+                UserData.setNotifData(data.registrationId,
+                                     $cordovaDevice.getModel(),
+                                     $cordovaDevice.getUUID());
+                gcmRegister(UserData.getNotifData());
+            });
+            push.on('notification', function(data) {
+                console.info(
+                    data.message,
+                    data.title,
+                    data.count,
+                    data.sound,
+                    data.image,
+                    data.additionalData
+                );
+            });
+            push.on('error', function(e) {
+                console.error(e.message);
+            });            
         });
     })
 
