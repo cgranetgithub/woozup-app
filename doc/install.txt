@@ -36,3 +36,5 @@ ionic plugin add https://github.com/phonegap-build/PushPlugin.git
 !!! ANDROID build !!! need to install from the SDK:
 -  Extras > Android support repository
 -  Extras > Google repository
+$ android update sdk --no-ui -t extra-google-m2repository,extra-android-m2repository
+
