@@ -7,13 +7,26 @@ angular.module('starter.services', [])
         var hostname = 'http://geoevent.herokuapp.com/',
             apiUrl = hostname + 'api/v1/';
         // for debug
-//         var hostname = 'http://192.168.1.102:8000/',
+        var hostname = 'http://192.168.1.101:8000/',
 //             hostname = 'http://localhost:8000/',
-//             apiUrl = hostname + 'api/v1/';
+            apiUrl = hostname + 'api/v1/';
         // #########
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
         $tastypieProvider.setResourceUrl(apiUrl);
+    })
+    // Race condition found when trying to use $ionicPlatform.ready in app.js and calling register to display id in AppCtrl.
+    // Implementing it here as a factory with promises to ensure register function is called before trying to display the id.
+    .factory(("ionPlatform"), function( $q ){
+        var ready = $q.defer();
+
+        ionic.Platform.ready(function( device ){
+            ready.resolve( device );
+        });
+
+        return {
+            ready: ready.promise
+        }
     })
     .factory('setlast', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {

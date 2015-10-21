@@ -28,63 +28,62 @@ angular.module('starter.controllers',
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
             // Register for push notifications
-            $scope.register = function () {
-                var config = null;
-                if (ionic.Platform.isAndroid()) {
-                    config = {
-                        "senderID": "496829276290"
-                    };
-                }
-                else if (ionic.Platform.isIOS()) {
-                    config = {
-                        "badge": "true",
-                        "sound": "true",
-                        "alert": "true"
-                    }
-                }
-                if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-                    $cordovaPush.register(config).then(function (result) {
-                        console.log("Register success " + result);
-                        // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
-                        if (ionic.Platform.isIOS()) {
-                            $scope.regId = result;
-                            storeDeviceToken("ios");
-                        }
-                    }, function (err) {
-                        console.log("Register error " + err)
-                    });
-                }
-            }
-            $ionicPlatform.ready(function() {
-                $scope.register();
-            });
-            // Subscribe for receiveing notifications
-            $rootScope.$on('$cordovaPush:notificationReceived',
-                           function(event, notification) {
-                switch(notification.event) {
-                    case 'registered':
-                    if (notification.regid.length > 0 ) {
-                        UserData.setNotifData(notification.regid,
-                                              $cordovaDevice.getModel(),
-                                              $cordovaDevice.getUUID());
-                        gcmRegister(UserData.getNotifData());
-//                         gcmRegister({'registration_id' : notification.regid,
-//                         'name': $cordovaDevice.getModel(),
-//                         'device_id': $cordovaDevice.getUUID()});
-                    }
-                    break;
-                    case 'message':
-                    // this is the actual push notification. its format depends on the data model from the push server
-                    alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
-                    break;
-                    case 'error':
-                    alert('GCM error = ' + notification.msg);
-                    break;
-                    default:
-                    alert('An unknown GCM event has occurred');
-                    break;
-                }
-            });
+//             $scope.register = function () {
+//                 var config = null;
+//                 if (ionic.Platform.isAndroid()) {
+//                     config = {"senderID": "496829276290"};
+//                 }
+//                 else if (ionic.Platform.isIOS()) {
+//                     config = {
+//                         "badge": "true",
+//                         "sound": "true",
+//                         "alert": "true"
+//                     }
+//                 }
+//                 if (! ionic.Platform.isWebView()) {
+//                     $cordovaPush.register(config).then(function (result) {
+//                         console.log("Register success " + result);
+//                         // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
+//                         if (ionic.Platform.isIOS()) {
+//                             $scope.regId = result;
+//                             storeDeviceToken("ios");
+//                         }
+//                     }, function (err) {
+//                         console.log("Register error " + err)
+//                     });
+//                 }
+//                 // Subscribe for receiveing notifications
+//                 $rootScope.$on('$cordovaPush:notificationReceived',
+//                             function(event, notification) {
+//                     console.log(JSON.stringify(notification));
+//                     if (ionic.Platform.isAndroid()) {
+//                         alert(JSON.stringify(notification));
+//                         switch(notification.event) {
+//                             case 'registered':
+//                             if (notification.regid.length > 0 ) {
+//                                 UserData.setNotifData(notification.regid,
+//                                                     $cordovaDevice.getModel(),
+//                                                     $cordovaDevice.getUUID());
+//                                 gcmRegister(UserData.getNotifData());
+//                             }
+//                             break;
+//                             case 'message':
+//                             // this is the actual push notification. its format depends on the data model from the push server
+//                             alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+//                             break;
+//                             case 'error':
+//                             console.log('GCM error = ' + notification.msg);
+//                             break;
+//                             default:
+//                             console.log('An unknown GCM event has occurred');
+//                             break;
+//                         }
+//                     }
+//                 });
+//             }
+//             $ionicPlatform.ready(function() {
+//                 $scope.register();
+//             });
             CheckauthService.checkUserAuth()
                 .success(function () {
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
@@ -864,7 +863,7 @@ findContacts = function(sortContacts) {
         contacts.forEach(function (entry) {
             if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
                     && (!entry.emails || !entry.emails.length)) {
-                console.log("skipping " + entry.name.formatted);
+//                 console.log("skipping " + entry.name.formatted);
                 return;
             }
 
