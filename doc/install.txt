@@ -34,5 +34,7 @@ Q6Tcst8iqeloTBRmsyrA5Njtt0c=
 # push notification plugin
 ionic plugin add https://github.com/phonegap-build/PushPlugin.git
 !!! ANDROID build !!! need to install from the SDK:
--  Extras > Android support repository
--  Extras > Google repository
+-  Extras > Android Support Library version 23 or greater
+-  Extras > Android Support Repository version 20 or greater
+-  Extras > Google Play Services version 27 or greater
+-  Extras > Google Repository version 22 or greater

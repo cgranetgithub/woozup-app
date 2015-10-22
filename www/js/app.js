@@ -10,7 +10,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-    .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister) {
+    .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister, $cordovaDialogs) {
         "use strict";
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -26,7 +26,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
             // won't wor in browser, normal (cordova)
             var push = PushNotification.init({
-                "android": {"senderID": "496829276290"},
+                "android": {"senderID": "496829276290", "forceShow": "true"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
                 "windows": {}
             } );
@@ -38,14 +38,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 gcmRegister(UserData.getNotifData());
             });
             push.on('notification', function(data) {
+                $cordovaDialogs.alert(data.message, 'title', 'button name')
+                .then(function() {
+                // callback success
+                });
                 console.info(
-                    data.message,
-                    data.title,
-                    data.count,
-                    data.sound,
-                    data.image,
+                    data.message +
+                    data.title +
+                    data.count +
+                    data.sound +
+                    data.image +
                     data.additionalData
                 );
+                alert("tftft");
             });
             push.on('error', function(e) {
                 console.error(e.message);
