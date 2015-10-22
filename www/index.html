@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+<!-- works with browser, not with android, need more test
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: maps.googleapis.com; style-src 'self' 'unsafe-inline' *.bootstrapcdn.com *.googleapis.com; font-src 'self' 'unsafe-inline' *.bootstrapcdn.com; img-src *; script-src 'self' 'unsafe-eval' data: *.googleapis.com; connect-src 'self' geoevent.herokuapp.com">
+-->
+
     <title>GeoEvent</title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
@@ -13,7 +18,6 @@
     <link rel="stylesheet" href="css/autocomplete.css">
     <link rel="stylesheet" href="css/ng-img-crop.css">
     <link href="css/style.css" rel="stylesheet">
-    
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">

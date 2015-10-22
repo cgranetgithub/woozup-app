@@ -7,7 +7,7 @@ angular.module('starter.services', [])
         var hostname = 'http://geoevent.herokuapp.com/',
             apiUrl = hostname + 'api/v1/';
         // for debug
-        var hostname = 'http://192.168.1.101:8000/',
+//        var hostname = 'http://192.168.1.101:8000/',
 //             hostname = 'http://localhost:8000/',
             apiUrl = hostname + 'api/v1/';
         // #########
