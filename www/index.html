@@ -4,9 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-<!-- works with browser, not with android, need more test
+    <!--
+    works with browser, not with android -->
+    <!--
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: maps.googleapis.com; style-src 'self' 'unsafe-inline' *.bootstrapcdn.com *.googleapis.com; font-src 'self' 'unsafe-inline' *.bootstrapcdn.com; img-src *; script-src 'self' 'unsafe-eval' data: *.googleapis.com; connect-src 'self' geoevent.herokuapp.com">
--->
+    -->
+    <!--
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *; ">
+    -->
+    <!-- work but not google maps !
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *; connect-src 'self' 'unsafe-inline' 'unsafe-eval' *">
 
     <title>GeoEvent</title>
 
