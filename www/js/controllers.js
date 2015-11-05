@@ -27,63 +27,6 @@ angular.module('starter.controllers',
                   $state, UserData, gcmRegister) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
-            // Register for push notifications
-//             $scope.register = function () {
-//                 var config = null;
-//                 if (ionic.Platform.isAndroid()) {
-//                     config = {"senderID": "496829276290"};
-//                 }
-//                 else if (ionic.Platform.isIOS()) {
-//                     config = {
-//                         "badge": "true",
-//                         "sound": "true",
-//                         "alert": "true"
-//                     }
-//                 }
-//                 if (! ionic.Platform.isWebView()) {
-//                     $cordovaPush.register(config).then(function (result) {
-//                         console.log("Register success " + result);
-//                         // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
-//                         if (ionic.Platform.isIOS()) {
-//                             $scope.regId = result;
-//                             storeDeviceToken("ios");
-//                         }
-//                     }, function (err) {
-//                         console.log("Register error " + err)
-//                     });
-//                 }
-//                 // Subscribe for receiveing notifications
-//                 $rootScope.$on('$cordovaPush:notificationReceived',
-//                             function(event, notification) {
-//                     console.log(JSON.stringify(notification));
-//                     if (ionic.Platform.isAndroid()) {
-//                         alert(JSON.stringify(notification));
-//                         switch(notification.event) {
-//                             case 'registered':
-//                             if (notification.regid.length > 0 ) {
-//                                 UserData.setNotifData(notification.regid,
-//                                                     $cordovaDevice.getModel(),
-//                                                     $cordovaDevice.getUUID());
-//                                 gcmRegister(UserData.getNotifData());
-//                             }
-//                             break;
-//                             case 'message':
-//                             // this is the actual push notification. its format depends on the data model from the push server
-//                             alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
-//                             break;
-//                             case 'error':
-//                             console.log('GCM error = ' + notification.msg);
-//                             break;
-//                             default:
-//                             console.log('An unknown GCM event has occurred');
-//                             break;
-//                         }
-//                     }
-//                 });
-//             }
-//             $ionicPlatform.ready(function() {
-//                 $scope.register();
-//             });
             CheckauthService.checkUserAuth()
                 .success(function () {
                     $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
@@ -199,9 +142,11 @@ angular.module('starter.controllers',
     })
 
     .controller('PictureCtrl',
-        function ($tastypieResource, $cordovaCamera, $ionicLoading, setpicture,
-                    $scope, $state, UserData) {
+        function ($tastypieResource, $cordovaCamera, $ionicLoading, 
+                  $scope, $state, CheckauthService, UserData, setpicture) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.myImage = '';
             $scope.myCroppedImage = '';
@@ -274,8 +219,11 @@ angular.module('starter.controllers',
         })
 
     .controller('ProfileCtrl',
-        function ($tastypieResource, $ionicLoading, $scope, UserData) {
+        function ($tastypieResource, $ionicLoading, $scope,
+                  CheckauthService, UserData) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
                         'number' : '', 'gender' : ''};
@@ -300,8 +248,11 @@ angular.module('starter.controllers',
         })
 
     .controller('WhatCtrl',
-        function ($tastypieResource, $ionicLoading, $scope, $state, EventData) {
+        function ($tastypieResource, $ionicLoading, $scope, $state,
+                  EventData, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $scope.title = "Sélectionnez l'activité"
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
@@ -326,8 +277,10 @@ angular.module('starter.controllers',
         })
 
     .controller('WhenCtrl',
-        function ($tastypieResource, $scope, $state, EventData) {
+        function ($tastypieResource, $scope, $state, EventData, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $scope.when = {};
             $scope.when.date = new Date();
             $scope.title = EventData.getWhat().name;
@@ -346,10 +299,12 @@ angular.module('starter.controllers',
         })
 
     .controller('WhereCtrl',
-        function ($scope, $state, $filter, EventData, UserData) {
+        function ($scope, $state, $filter, EventData, UserData, CheckauthService) {
             "use strict";
             /*global document: false */
             /*global google: false */
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             var map, geocoder, marker,
                 infowindow = null, placeinfowindow = null, lastinfowindow = null,
                 lat = 48.8567,
@@ -468,8 +423,11 @@ angular.module('starter.controllers',
         })
 
     .controller('DoneCtrl',
-        function ($tastypieResource, $ionicLoading, $scope, $state, EventData) {
+        function ($tastypieResource, $ionicLoading, $scope, $state,
+                  EventData, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             var date = new Date();
             $scope.event = {};
             $scope.event.type = EventData.getWhat();
@@ -505,8 +463,10 @@ angular.module('starter.controllers',
 
     .controller('EventsCtrl',
         function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
-                  $scope, $state, setlast, UserData) {
+                  $scope, $state, setlast, UserData, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
@@ -538,8 +498,11 @@ angular.module('starter.controllers',
         })
 
     .controller('FriendsEventsCtrl',
-        function ($scope, $state, $tastypieResource, $ionicLoading) {
+        function ($scope, $state, $tastypieResource, $ionicLoading,
+                  CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -575,8 +538,11 @@ angular.module('starter.controllers',
             $ionicLoading.hide();
         })
     .controller('AgendaEventsCtrl',
-        function ($scope, $state, $tastypieResource, $ionicLoading) {
+        function ($scope, $state, $tastypieResource, $ionicLoading,
+                  CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -615,8 +581,10 @@ angular.module('starter.controllers',
         })
     .controller('EventCtrl',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
-                  join, leave, UserData) {
+                  join, leave, UserData, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             var event = new $tastypieResource('events/all');
             $scope.buttonTitle = "Chargement";
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
@@ -665,8 +633,10 @@ angular.module('starter.controllers',
             };
         })
     .controller('FriendsCtrl',
-        function ($scope, $state, $tastypieResource) {
+        function ($scope, $state, $tastypieResource, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             var newFriends = new $tastypieResource('friends/new'),
                 pendingFriends = new $tastypieResource('friends/pending'),
                 invites = new $tastypieResource('invite',
@@ -693,9 +663,12 @@ angular.module('starter.controllers',
             $scope.home = function () { $state.go('events.agenda'); };
         })
     .controller('NewFriendsCtrl',
-        function ($tastypieResource, $ionicLoading, $q,
-                  $scope, $state, sendInvite, ignoreInvite, inviteFriend, ignoreFriend) {
+        function ($tastypieResource, $ionicLoading, $q, $scope, $state,
+                  sendInvite, ignoreInvite, inviteFriend, ignoreFriend,
+                  CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -755,8 +728,11 @@ angular.module('starter.controllers',
             };
         })
     .controller('MyFriendsCtrl',
-        function ($tastypieResource, $ionicLoading, $scope, $state) {
+        function ($tastypieResource, $ionicLoading, $scope, $state,
+                  CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = false;
@@ -790,8 +766,10 @@ angular.module('starter.controllers',
         })
     .controller('PendingFriendsCtrl',
         function ($tastypieResource, $ionicLoading, acceptFriend, rejectFriend,
-                  $scope, $state) {
+                  $scope, $state, CheckauthService) {
             "use strict";
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;

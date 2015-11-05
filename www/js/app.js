@@ -24,7 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
-            // won't wor in browser, normal (cordova)
+            // won't work in browser, normal (cordova)
             var push = PushNotification.init({
                 "android": {"senderID": "496829276290", "forceShow": "true"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
@@ -38,19 +38,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 gcmRegister(UserData.getNotifData());
             });
             push.on('notification', function(data) {
-                $cordovaDialogs.alert(data.message, 'title', 'button name')
+                $cordovaDialogs.alert(data.message, data.additionalData.ttl, 'OK')
                 .then(function() {
                 // callback success
                 });
                 console.info(
                     data.message +
-                    data.title +
-                    data.count +
-                    data.sound +
-                    data.image +
-                    data.additionalData
+//                     data.title +
+//                     data.count +
+//                     data.sound +
+//                     data.image +
+                    JSON.stringify(data.additionalData)
                 );
-                alert("tftft");
             });
             push.on('error', function(e) {
                 console.error(e.message);
