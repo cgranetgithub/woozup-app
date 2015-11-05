@@ -267,7 +267,7 @@ angular.module('starter.services', [])
                         promise = deferred.promise,
                         command = apiUrl + 'auth/login/';
                     if (social) {
-                        command = hostname + 'register_by_access_token/';
+                        command = hostname + 'register-by-token/' + social + '/';
                     }
                     $http.post(command, authData
                         ).then(function (response) {
