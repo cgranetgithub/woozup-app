@@ -38,6 +38,14 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'userposition/setlast/', {'last': where});
             };
         }])
+    .factory('setprofile', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
+            "use strict";
+            return function (profileData) {
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'userprofile/setprofile/', profileData);
+            };
+        }])
     .factory('setpicture', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";

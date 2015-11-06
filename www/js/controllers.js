@@ -221,7 +221,7 @@ angular.module('starter.controllers',
 
     .controller('ProfileCtrl',
         function ($tastypieResource, $ionicLoading, $scope,
-                  CheckauthService, UserData) {
+                  CheckauthService, UserData, setprofile) {
             "use strict";
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
@@ -235,7 +235,7 @@ angular.module('starter.controllers',
                     $scope.data.first_name = result.user.first_name;
                     $scope.data.last_name = result.user.last_name;
                     $scope.data.email = result.user.email;
-                    $scope.data.number = result.number;
+                    $scope.data.number = result.phone_number;
                     $scope.data.gender = result.gender;
                     $ionicLoading.hide();
                 },
@@ -245,6 +245,13 @@ angular.module('starter.controllers',
                 }
             );
             $scope.save = function () {
+                setprofile({
+                    'first_name': $scope.data.first_name,
+                    'last_name': $scope.data.last_name,
+                    'email': $scope.data.email,
+                    'number': $scope.data.number,
+                    'gender': $scope.data.gender
+                });
             };
         })
 

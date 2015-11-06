@@ -171,11 +171,11 @@
     box-shadow: 2px 2px 20px #545454;
 }
 .cropArea {
-  background: #E4E4E4;
-  overflow: hidden;
-  margin: auto;
-/*   width:300px; */
-  height:50%;
+    background: #E4E4E4;
+    overflow: hidden;
+    margin: auto;
+/*     width:300px; */
+    height:50%;
 }
 .photoButton{
     margin: -10px 10px 10px 10px;
@@ -184,11 +184,11 @@
     height: 100%;
 }
 .bgim {
- background: url('../img/cloud.jpg') no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    background: url('../img/cloud.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 .logocontainer {
     text-align: center;
@@ -199,8 +199,12 @@
     margin: 30px;
 }
 .profilePicture {
-margin: 10px auto;
-width: 50%
+    margin: 10px auto;
+    width: 50%;
+    text-align: center;
+}
+.profilePicture img {
+    border-radius: 50%;
 }
 #myform {
     padding: 16px;
