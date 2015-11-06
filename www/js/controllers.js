@@ -19,6 +19,7 @@ angular.module('starter.controllers',
             $ionicLoading.show({template: "Déconnection"});
             logout();
             $state.go('connect');
+            $ionicLoading.hide();
         })
 
     .controller('CheckauthCtrl',

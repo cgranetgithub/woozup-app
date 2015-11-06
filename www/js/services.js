@@ -123,7 +123,7 @@ angular.module('starter.services', [])
             "use strict";
             return function () {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.get(apiUrl + 'logout/');
+                $http.get(apiUrl + 'user/logout/');
             };
         }])
     .factory('gcmRegister', ['$http', 'apiUrl', 'UserData',
