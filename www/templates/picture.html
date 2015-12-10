@@ -1,34 +1,17 @@
 <ion-view view-title="Meet" class="bgim" hide-nav-bar="true">
     <ion-content class="padding">
-        <h2 class="centered category-title">Il vous faut une photo !</h2>
-        <hr>
-        <div class=centered>
-        <button class="button button-light button-outline photoButton" ng-click="photoFromFB()">
-            <i class="icon ion-social-facebook"></i>
-<!--             Utiliser ma photo Facebook -->
-        </button>
-        <button class="button button-light button-outline photoButton" ng-click="photoFromCamera()">
-            <i class="icon ion-camera"></i>
-<!--             Prendre une photo -->
-        </button>
-        <button class="button button-light button-outline photoButton" ng-click="photoFromGallery()">
-            <i class="icon ion-images"></i>
-<!--             Choisir dans la gallerie -->
-        </button>
-        </div>
-        <div class="cropArea">
+        <h2 class="centered" style="color:#FFF;">Ajoutez une photo à votre profil</h2>
+        <div class="cropArea" ng-click="pictureMethods()">
             <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
         </div>
-        <div class="list card">
-            <div class="item item-avatar">
-                <img ng-src="{{myCroppedImage}}">
-                <h2>{{ userprofile.name }}</h2>
-                <p>{{ userprofile.email }}  {{ userprofile.phone_number }}</p>
-            </div>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" placeholder="Nom complet (facultatif)" ng-model="data.firstname">
+            </label>
         </div>
         <div>
             <button class="button button-block button-balanced" ng-click="next(myCroppedImage)" ng-disabled="!myImage">
-                OK, c'est bon
+                OK, ça me va
             </button>
         </div>
     </ion-content>

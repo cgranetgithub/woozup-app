@@ -78,11 +78,11 @@ angular.module('starter.controllers',
             $scope.data = {};
             $scope.register = function () {
                 $ionicLoading.show({template: "Création du compte"});
-                var authData = {'email': $scope.data.email,
-                                'username': $scope.data.email,
+                var authData = {'username': $scope.data.username,
                                 'password': $scope.data.password,
-                                'name': $scope.data.firstname,
-                                'number': $scope.data.number
+//                                 'name': $scope.data.firstname,
+//                                 'number': $scope.data.number,
+//                                 'email': $scope.data.email
                         };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
@@ -94,11 +94,17 @@ angular.module('starter.controllers',
                     }).error(function (err) {
                         var message;
                         switch (err) {
+                        case '10':
+                            message = "Saisir un nom d'utilisateur et un mot de passe";
+                            break;
                         case '200':
-                            message = "Cet utilisateur est déjà enregistré.";
+                            message = "Désolé, ce nom d'utilisateur est déjà pris.";
+                            break;
+                        case '150':
+                            message = "Cet utilisateur a été désactivé. Contactez Woozup.";
                             break;
                         default:
-                            message = "Entrez votre prénom, un email et un mot de passe, puis réessayez";
+                            message = "Problème lors de la création du compte. Veuillez réessayez plus tard.";
                         }
                         $ionicPopup.alert({
                             title: "Problème lors de la création du compte",
@@ -143,8 +149,9 @@ angular.module('starter.controllers',
     })
 
     .controller('PictureCtrl',
-        function ($tastypieResource, $cordovaCamera, $ionicLoading, 
-                  $scope, $state, CheckauthService, UserData, setpicture) {
+        function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
+                  $state, $ionicActionSheet, $timeout, CheckauthService,
+                  UserData, setpicture) {
             "use strict";
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
@@ -208,6 +215,38 @@ angular.module('starter.controllers',
             $scope.photoFromFB = function () {
                 $scope.myImage = 'http://localhost:8100/img/logo.png';
             };
+            // ActionSheet
+            $scope.pictureMethods = function() {
+                // Show the action sheet
+                var hideSheet = $ionicActionSheet.show({
+                    buttons: [
+                        { text: "Prendre une photo" },
+                        { text: 'Choisir dans la galerie' }
+                    ],
+                    titleText: '<b>Choisir une photo pour mon profil</b>',
+                    buttonClicked: function(index) {
+                        switch (index) {
+                        case 0:
+                            $scope.photoFromCamera();
+                            break;
+                        case 1:
+                            $scope.photoFromGallery()
+                            break;
+                        }
+                        return true;
+                    }
+                });
+
+                // For example's sake, hide the sheet after two seconds
+//                 $timeout(function() {
+//                     hideSheet();
+//                 }, 2000);
+            };            
+            
+            
+            
+            
+            
             $scope.next = function (croppedImage) {
                 var b64 = croppedImage.split(',')[1],
                     file_field = {

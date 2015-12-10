@@ -1,20 +1,31 @@
 <ion-view view-title="Se connecter" class="bgim" hide-nav-bar="true">
-  <ion-content class="padding">
+    <ion-content class="padding">
         <div class="logocontainer">
 <!--             <img class="logo" src="./img/logo.png"> -->
-            <h1 style="color:#33CD5F; font-size: 60px">GeoEvent</h1>
+            <h1 style="color:#33CD5F; font-size: 60px">Woozup</h1>
+            <hr>
+            <br>
         </div>
-      <div class="list list-inset">
-          <label class="item item-input">
-              <input type="text" placeholder="Nom d'utilisateur" ng-model="data.username">
-          </label>
-          <label class="item item-input">
-              <input type="password" placeholder="Mot de passe" ng-model="data.password">
-          </label>
-      </div>
-      <button class="button button-block button-balanced" ng-click="login()">Login</button>
-      <button class="button button-block button-balanced button-clear" ui-sref="connect">
-          Choisir un autre mode de connexion
-      </button>
-  </ion-content>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" autocapitalize="off" autocorrect="off"
+                       placeholder="Nom d'utilisateur"
+                       ng-model="data.username">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Mot de passe"
+                        ng-model="data.password">
+            </label>
+        </div>
+        <button class="button button-block button-balanced" ng-click="login()">
+            Se connecter
+            </button>
+        <br>
+        <button class="button button-block button-balanced button-clear" ui-sref="connect">
+            J'ai perdu mon mot de passe
+        </button>
+        <button class="button button-block button-balanced button-clear" ui-sref="register">
+            Créer un compte
+        </button>
+    </ion-content>
 </ion-view>
