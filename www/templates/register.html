@@ -11,11 +11,13 @@
             <label class="item item-input">
                 <input type="text" autocapitalize="off" autocorrect="off"
                        placeholder="Nom d'utilisateur (pseudo, email, n° tél, ...)"
-                       ng-model="data.username">
+                       ng-model="data.username"
+                       ng-pattern="regex_username">
             </label>
             <label class="item item-input">
                 <input type="password" placeholder="Mot de passe"
-                       ng-model="data.password">
+                       ng-model="data.password"
+                       ng-pattern="regex_password">
             </label>
         </div>
         <button class="button button-block button-balanced"

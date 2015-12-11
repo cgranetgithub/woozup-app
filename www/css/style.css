@@ -214,3 +214,12 @@
     color: white;
     text-align: center;
 }
+
+input.ng-invalid-pattern {
+    color: red;
+}
+
+
+/*
+#ng-dirty ng-valid-parse ng-touched ng-invalid ng-invalid-pattern
+*/

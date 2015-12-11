@@ -76,6 +76,8 @@ angular.module('starter.controllers',
                   $scope, $state, UserData, gcmRegister) {
             "use strict";
             $scope.data = {};
+            $scope.regex_username = new RegExp("^[0-9A-Za-z]{4,20}$");
+            $scope.regex_password = new RegExp("^.{6,20}$");
             $scope.register = function () {
                 $ionicLoading.show({template: "Création du compte"});
                 var authData = {'username': $scope.data.username,
