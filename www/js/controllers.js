@@ -1,6 +1,8 @@
 /*jslint browser: true, devel: true*/
 /*global angular, cordova, StatusBar, ContactFindOptions, facebookConnectPlugin*/
 
+var gps_in_progress = false;
+
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
                'google.places', 'ngImgCrop', 'starter.services'])
@@ -519,13 +521,19 @@ angular.module('starter.controllers',
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
+            if (gps_in_progress) {
+                return;
+            }
+            gps_in_progress = true;
             var posOptions = {timeout: 5000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (loc) {
+                    gps_in_progress = false;
                     setlast(loc);
                     UserData.setWhere(loc.coords);
                 }, function (err) {
+                    gps_in_progress = false;
                     console.log(err);
                     $scope.userposition = new $tastypieResource('userposition', {});
                     $scope.userposition.objects.$get({id: UserData.getUserId()}).then(
