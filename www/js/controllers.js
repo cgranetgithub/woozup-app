@@ -886,8 +886,8 @@ findContacts = function(sortContacts) {
                 return t;
             };
         contacts.forEach(function (entry) {
-            if ((!entry.phoneNumbers ||  !entry.phoneNumbers.length)
-                    && (!entry.emails || !entry.emails.length)) {
+            if (!entry.phoneNumbers || !entry.phoneNumbers.length
+               || !entry.emails || !entry.emails.length) {
 //                 console.log("skipping " + entry.name.formatted);
                 return;
             }
