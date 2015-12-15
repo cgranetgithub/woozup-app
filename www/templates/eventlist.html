@@ -3,7 +3,7 @@
         <ion-list>
             <ion-item class="item event-item" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">
                 <img class="event-item-avatar" ng-src="{{event.owner.image}}">
-                <img class="event-item-icon" ng-src="{{event.event_type.image}}" ng-style={{event.event_type.style}}>
+                <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}>
                 <h2>{{event.name}}</h2>
                 <p>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
                 <p>avec {{event.owner.name}}</p>

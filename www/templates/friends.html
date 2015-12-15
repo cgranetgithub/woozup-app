@@ -6,16 +6,20 @@
     </ion-nav-buttons>
 </ion-nav-bar>-->
 <ion-tabs class="tabs-icon-top tabs-dark">
-    <ion-tab title={{new.title}} ui-sref="friends.new" icon="ion-person-add" badge="new.badge" badge-style="badge-energized">
+    <ion-tab title={{new.title}} ui-sref="friends.new"
+             icon="ion-person-add" badge="new.badge"
+             badge-style="badge-energized">
         <ion-nav-view name="newfriends"></ion-nav-view>
     </ion-tab>
-    <ion-tab title={{pending.title}} ui-sref="friends.pending" icon="ion-person-stalker" badge="pending.badge" badge-style="badge-energized">
+    <ion-tab title={{pending.title}} ui-sref="friends.pending"
+             icon="ion-person-stalker" badge="pending.badge"
+             badge-style="badge-energized">
         <ion-nav-view name="pendingfriends"></ion-nav-view>
     </ion-tab>
     <ion-tab title={{my.title}} ui-sref="friends.my" icon="ion-ios-people">
         <ion-nav-view name="myfriends"></ion-nav-view>
     </ion-tab>
-    <ion-tab title={{agendaTitle}} ui-sref="events.agenda" icon="ion-ios-people">
+    <ion-tab title={{agendaTitle}} ui-sref="events.agenda" icon="ion-ios-calendar">
         <ion-nav-view name="agendaevents"></ion-nav-view>
     </ion-tab>
 </ion-tabs>

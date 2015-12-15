@@ -1,8 +1,9 @@
-<ion-view view-title={{event.event_type.name}} class="bgim">
+<ion-view view-title={{event.event_type.name}} class="withBg"
+          style="background-image: url({{event.event_type.background}})">
     <ion-content>
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
-                <img ng-src="{{event.event_type.image}}">
+                <img ng-src="{{event.event_type.icon}}">
                 <h1>{{event.name}}</h1>
                 <h2>{{event.start | date : 'EEEE d MMMM à H:mm'}}</h2>
             </ion-item>

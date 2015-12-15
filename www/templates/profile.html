@@ -5,17 +5,21 @@
         </div>
         <form name="myform">
             <label class="item item-input">
-                <input type="text" ng-model="data.first_name" placeholder="Nom à afficher">
+                <span class="input-label">Nom</span>
+                <input type="text" ng-model="data.first_name">
             </label>
             <label class="item item-input">
-                <input type="email" ng-model="data.email" placeholder="Email">
+                <span class="input-label">Email</span>
+                <input type="email" ng-model="data.email">
             </label>
             <label class="item item-input">
-                <input type="tel" ng-model="data.number" placeholder="Numéro de mobile (ex : +33601020304)">
+                <span class="input-label">N° de mobile</span>
+                <input type="tel" ng-model="data.number" placeholder="+33601020304">
             </label>
         </form>
+        <br>
+        <button class="button button-block button-balanced" ng-click="save()">
+            Mettre à jour
+        </button>
     </ion-content>
-    <ion-footer-bar class="bar-balanced" ng-click="save()">
-        <h1 class="title">Mettre à jour</h1>
-    </ion-footer-bar>
 </ion-view>

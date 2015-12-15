@@ -10,8 +10,9 @@
         </a>
     </div>-->
     <ion-content class="gallery">
-        <span class="item-tile" ng-repeat="type in types.page.objects" ng-style={{type.style}} ng-click="next(type.id)">
-            <img class="category" ng-src="{{type.image}}">
+        <span class="item-tile" ng-repeat="type in types.page.objects"
+              ng-style={{type.style}} ng-click="next(type.id)">
+            <img class="category" ng-src="{{type.icon}}">
             <div>
                 <p class="category-title">{{type.short_name}}</p>
             </div>

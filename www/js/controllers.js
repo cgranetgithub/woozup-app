@@ -305,6 +305,7 @@ angular.module('starter.controllers',
                 }
             );
             $scope.save = function () {
+                $ionicLoading.show({template: "Mise à jour du profil"});
                 setprofile({
                     'first_name': $scope.data.first_name,
                     'last_name': $scope.data.last_name,
@@ -312,6 +313,7 @@ angular.module('starter.controllers',
                     'number': $scope.data.number,
                     'gender': $scope.data.gender
                 });
+                $ionicLoading.hide();
             };
         })
 
@@ -356,6 +358,7 @@ angular.module('starter.controllers',
             $scope.when = {};
             $scope.when.date = new Date();
             $scope.title = EventData.getWhat().name;
+            $scope.backgroundUrl = EventData.getWhat().background;
             $scope.next = function () {
                 EventData.setWhen($scope.when.date);
                 $state.go('new.where', {}, { reload: true });
@@ -505,6 +508,7 @@ angular.module('starter.controllers',
                 .error(function () {$state.go('connect');});
 
             var date = new Date();
+            $scope.backgroundUrl = EventData.getWhat().background;
             $scope.event = {};
             $scope.event.type = EventData.getWhat();
             $scope.event.title = EventData.getWhat().name;

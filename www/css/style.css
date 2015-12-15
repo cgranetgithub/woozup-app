@@ -191,6 +191,11 @@
     -o-background-size: cover;
     background-size: cover;
 }
+.withBg {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
 .logocontainer {
     text-align: center;
     margin: 30px;
