@@ -10,7 +10,8 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-    .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister, $cordovaDialogs) {
+    .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister,
+                   $cordovaDialogs) {
         "use strict";
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -55,6 +56,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 console.error(e.message);
             });            
         });
+        // disable go back button
+        $ionicPlatform.registerBackButtonAction(function (event) {
+            event.preventDefault();
+            }, 100);
     })
 
     .config(function ($ionicConfigProvider) {
@@ -110,6 +115,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 url: '/picture',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
+            })
+            .state('email', {
+                cache: false,
+                url: '/email',
+                templateUrl: 'templates/email.html',
+                controller: 'EmailCtrl'
             })
             .state('profile', {
                 cache: false,

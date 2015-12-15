@@ -1,0 +1,19 @@
+<ion-view view-title="Woozup" class="bgim" hide-nav-bar="true">
+    <ion-content class="padding">
+        <h2 class="centered" style="color:#FFF;">Email de secours</h2>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input type="email" ng-model="data.email">
+            </label>
+        </div>
+        <div>
+            <button class="button button-block button-balanced"
+                    ng-click="next()" ng-disabled="!data.email">
+                Valider
+            </button>
+        </div>
+        <br>
+        <p class="note" style="color:#FFF;">Si vous perdez votre mot de passe, vous pourrez le récupérer grace à cet email.</p>
+    </ion-content>
+</ion-view>

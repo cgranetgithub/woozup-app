@@ -9,13 +9,15 @@
         </div>
         <div class="list list-inset">
             <label class="item item-input">
+                <span class="input-label">Nom d'utilisateur</span>
                 <input type="text" autocapitalize="off" autocorrect="off"
-                       placeholder="Nom d'utilisateur (pseudo, email, n° tél, ...)"
+                       placeholder="(pseudo, email, n° tél, ...)"
                        ng-model="data.username"
                        ng-pattern="regex_username">
             </label>
             <label class="item item-input">
-                <input type="password" placeholder="Mot de passe"
+                <span class="input-label">Mot de passe</span>
+                <input type="password" placeholder="(6 caractères minimum)"
                        ng-model="data.password"
                        ng-pattern="regex_password">
             </label>

@@ -1,17 +1,25 @@
 <ion-view view-title="Woozup" class="bgim" hide-nav-bar="true">
     <ion-content class="padding">
-        <h2 class="centered" style="color:#FFF;">Ajoutez une photo à votre profil</h2>
+        <h2 class="centered" style="color:#FFF;">Il faut que vos amis vous reconnaissent !</h2>
         <div class="list list-inset">
             <label class="item item-input">
-                <span class="input-label">Nom complet</span>
-                <input type="text" ng-model="data.firstname">
+                <span class="input-label">Nom à afficher</span>
+                <input type="text" ng-model="data.first_name">
             </label>
         </div>
         <div class="cropArea" ng-click="pictureMethods()">
             <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
         </div>
+        <div class="list card" ng-if="myImage && data.name">
+            <div class="item item-avatar">
+                <img ng-src="{{myCroppedImage}}">
+                <h2>{{ data.name }}</h2>
+            </div>        
+        </div>
         <div>
-            <button class="button button-block button-balanced" ng-click="next(myCroppedImage)" ng-disabled="!myImage">
+            <button class="button button-block button-balanced"
+                    ng-click="next(myCroppedImage)"
+                    ng-disabled="!data.first_name || !myImage">
                 OK, ça me va
             </button>
         </div>

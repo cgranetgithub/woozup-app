@@ -15,7 +15,8 @@
                 <h2>{{event.owner.name}} (organisateur)</h2>
             </ion-item>
             <ion-list>
-                <ion-item class="item item-avatar-left" ng-repeat="participant in event.participants">
+                <ion-item class="item item-avatar-left"
+                          ng-repeat="participant in event.participants">
                     <img ng-src="{{participant.image}}">
                     <h3>{{participant.name}}</h3>
                 </ion-item>

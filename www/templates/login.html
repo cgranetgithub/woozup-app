@@ -17,14 +17,17 @@
                         ng-model="data.password">
             </label>
         </div>
-        <button class="button button-block button-balanced" ng-click="login()">
+        <button class="button button-block button-balanced" ng-click="login()"
+                ng-disabled="!data.username || !data.password">
             Se connecter
             </button>
         <br>
-        <button class="button button-block button-balanced button-clear" ui-sref="connect">
+        <button class="button button-block button-balanced button-clear"
+                ui-sref="connect">
             J'ai perdu mon mot de passe
         </button>
-        <button class="button button-block button-balanced button-clear" ui-sref="register">
+        <button class="button button-block button-balanced button-clear"
+                ui-sref="register">
             Créer un compte
         </button>
     </ion-content>

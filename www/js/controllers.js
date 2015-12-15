@@ -25,14 +25,16 @@ angular.module('starter.controllers',
         })
 
     .controller('CheckauthCtrl',
-        function ($scope, $rootScope, $cordovaPush, $ionicPlatform, $tastypie,
+        function ($scope, $rootScope, $cordovaPush, $tastypie,
                   $ionicLoading, CheckauthService, sortContacts, $cordovaDevice,
                   $state, UserData, gcmRegister) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
+            // verify authentication
             CheckauthService.checkUserAuth()
                 .success(function () {
-                    $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                    $tastypie.setAuth(UserData.getUserName(),
+                                      UserData.getApiKey());
                     gcmRegister(UserData.getNotifData());
                     findContacts(sortContacts);
                     $state.go('events.friends');
@@ -48,6 +50,7 @@ angular.module('starter.controllers',
         function ($tastypie, $ionicPopup, LoginService, sortContacts,
                   $scope, $state, UserData, gcmRegister) {
             "use strict";
+            // Facebook connect method
             $scope.fbLogin = function () {
                 facebookConnectPlugin.login([], function (obj) {
                     var authData = {
@@ -74,19 +77,17 @@ angular.module('starter.controllers',
         })
 
     .controller('RegisterCtrl',
-        function ($tastypie, $ionicPopup, $ionicLoading, RegisterService, sortContacts,
-                  $scope, $state, UserData, gcmRegister) {
+        function ($tastypie, $ionicPopup, $ionicLoading, RegisterService,
+                  sortContacts, $scope, $state, UserData, gcmRegister) {
             "use strict";
             $scope.data = {};
             $scope.regex_username = new RegExp("^[0-9A-Za-z-_@+.]{4,30}$");
             $scope.regex_password = new RegExp("^.{6,20}$");
+
             $scope.register = function () {
                 $ionicLoading.show({template: "Création du compte"});
                 var authData = {'username': $scope.data.username,
                                 'password': $scope.data.password,
-//                                 'name': $scope.data.firstname,
-//                                 'number': $scope.data.number,
-//                                 'email': $scope.data.email
                         };
                 RegisterService.registerUser(authData, false)
                     .success(function () {
@@ -120,8 +121,8 @@ angular.module('starter.controllers',
         })
 
     .controller('LoginCtrl',
-        function ($tastypie, $ionicLoading, LoginService, $ionicPopup, sortContacts,
-                  $scope, $state, UserData, gcmRegister) {
+        function ($tastypie, $ionicLoading, LoginService, $ionicPopup,
+                  sortContacts, $scope, $state, UserData, gcmRegister) {
             "use strict";
             $scope.data = {};
             $scope.login = function () {
@@ -155,13 +156,17 @@ angular.module('starter.controllers',
     .controller('PictureCtrl',
         function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
                   $state, $ionicActionSheet, $timeout, CheckauthService,
-                  UserData, setpicture) {
+                  UserData, setpicture, setprofile) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
+            $scope.data = {'first_name': UserData.getUserName()};
             $scope.myImage = '';
             $scope.myCroppedImage = '';
+
             var handleFileSelect = function (evt) {
                 var file = evt.currentTarget.files[0],
                     reader = new FileReader();
@@ -172,6 +177,7 @@ angular.module('starter.controllers',
                 };
                 reader.readAsDataURL(file);
             };
+
             $scope.userprofile = new $tastypieResource('userprofile', {});
             $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
                 function (result) {
@@ -219,9 +225,8 @@ angular.module('starter.controllers',
             $scope.photoFromFB = function () {
                 $scope.myImage = 'http://localhost:8100/img/logo.png';
             };
-            // ActionSheet
+            // ActionSheet (present picture selection methods to user)
             $scope.pictureMethods = function() {
-                // Show the action sheet
                 var hideSheet = $ionicActionSheet.show({
                     buttons: [
                         { text: "Prendre une photo" },
@@ -240,25 +245,35 @@ angular.module('starter.controllers',
                         return true;
                     }
                 });
-
-                // For example's sake, hide the sheet after two seconds
-//                 $timeout(function() {
-//                     hideSheet();
-//                 }, 2000);
-            };            
-            
-            
-            
-            
-            
+            };
             $scope.next = function (croppedImage) {
+                $ionicLoading.show({template: "Sauvegarde du profil"});
                 var b64 = croppedImage.split(',')[1],
                     file_field = {
                         "name": "myfile.png",
                         "file": b64,
                     };
+                setprofile({'first_name': $scope.data.first_name});
                 setpicture(file_field);
+                $state.go('email');
+                $ionicLoading.hide();
+            };
+        })
+
+    .controller('EmailCtrl',
+        function ($tastypieResource, $ionicLoading, $scope, $state,
+                  CheckauthService, UserData, setprofile) {
+            "use strict";
+            // verify authentication
+            CheckauthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
+
+            $scope.data = {};
+            $scope.next = function () {
+                $ionicLoading.show({template: "Enregistrement de l'email"});
+                setprofile({'email': $scope.data.email});
                 $state.go('friends.new');
+                $ionicLoading.hide();
             };
         })
 
@@ -266,8 +281,10 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope,
                   CheckauthService, UserData, setprofile) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
             $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
                         'number' : '', 'gender' : ''};
@@ -302,8 +319,10 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   EventData, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $scope.title = "Sélectionnez l'activité"
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
@@ -330,8 +349,10 @@ angular.module('starter.controllers',
     .controller('WhenCtrl',
         function ($tastypieResource, $scope, $state, EventData, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $scope.when = {};
             $scope.when.date = new Date();
             $scope.title = EventData.getWhat().name;
@@ -354,8 +375,10 @@ angular.module('starter.controllers',
             "use strict";
             /*global document: false */
             /*global google: false */
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             var map, geocoder, marker,
                 infowindow = null, placeinfowindow = null, lastinfowindow = null,
                 lat = 48.8567,
@@ -477,8 +500,10 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   EventData, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             var date = new Date();
             $scope.event = {};
             $scope.event.type = EventData.getWhat();
@@ -516,8 +541,10 @@ angular.module('starter.controllers',
         function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
                   $scope, $state, setlast, UserData, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
@@ -558,8 +585,10 @@ angular.module('starter.controllers',
         function ($scope, $state, $tastypieResource, $ionicLoading,
                   CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -598,8 +627,10 @@ angular.module('starter.controllers',
         function ($scope, $state, $tastypieResource, $ionicLoading,
                   CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -640,8 +671,10 @@ angular.module('starter.controllers',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
                   join, leave, UserData, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             var event = new $tastypieResource('events/all');
             $scope.buttonTitle = "Chargement";
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
@@ -692,8 +725,10 @@ angular.module('starter.controllers',
     .controller('FriendsCtrl',
         function ($scope, $state, $tastypieResource, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             var newFriends = new $tastypieResource('friends/new'),
                 pendingFriends = new $tastypieResource('friends/pending'),
                 invites = new $tastypieResource('invite',
@@ -724,8 +759,10 @@ angular.module('starter.controllers',
                   sendInvite, ignoreInvite, inviteFriend, ignoreFriend,
                   CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -788,8 +825,10 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = false;
@@ -825,8 +864,10 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, acceptFriend, rejectFriend,
                   $scope, $state, CheckauthService) {
             "use strict";
+            // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
+
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
