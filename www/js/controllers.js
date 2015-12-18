@@ -337,7 +337,7 @@ angular.module('starter.controllers',
                 $scope.types.objects.$get({id: typeId}).then(
                     function (result) {
                         EventData.setWhat(result);
-                        $state.go('new.when', {}, { reload: true });
+                        $state.go('when', {}, { reload: true });
                         $ionicLoading.hide();
                     },
                     function (error) {
@@ -357,20 +357,21 @@ angular.module('starter.controllers',
 
             $scope.when = {};
             $scope.when.date = new Date();
+            $scope.when.mindate = new Date();
             $scope.title = EventData.getWhat().name;
             $scope.backgroundUrl = EventData.getWhat().background;
             $scope.next = function () {
                 EventData.setWhen($scope.when.date);
-                $state.go('new.where', {}, { reload: true });
+                $state.go('where', {}, { reload: true });
             };
-            $scope.$watch("when.date", function (newValue, oldValue) {
-                newValue.setHours(0);
-                newValue.setMinutes(0);
-                $scope.events = new $tastypieResource('events/friends',
-                                                      {order_by: 'start',
-                                                       start__gte: newValue});
-                $scope.events.objects.$find();
-            });
+//             $scope.$watch("when.date", function (newValue, oldValue) {
+//                 newValue.setHours(0);
+//                 newValue.setMinutes(0);
+//                 $scope.events = new $tastypieResource('events/friends',
+//                                                       {order_by: 'start',
+//                                                        start__gte: newValue});
+//                 $scope.events.objects.$find();
+//             });
         })
 
     .controller('WhereCtrl',
@@ -392,6 +393,7 @@ angular.module('starter.controllers',
                     console.log(address, coords);
                     EventData.setAddress(address, coords);
                 };
+            $scope.backgroundUrl = EventData.getWhat().background;
             $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
             $scope.button = {'title' : "Choisissez le lieu de rendez-vous"};
             $scope.place_changed = function () {
@@ -495,7 +497,7 @@ angular.module('starter.controllers',
                 $scope.map = map;
             };
             $scope.next = function () {
-                $state.go('new.done', {}, { reload: true });
+                $state.go('done', {}, { reload: true });
             };
         })
 
@@ -665,7 +667,7 @@ angular.module('starter.controllers',
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
             $scope.newEvent = function () {
-                $state.go('new.what');
+                $state.go('what');
             };
             $scope.home = function () {
                 $state.go('events.agenda');

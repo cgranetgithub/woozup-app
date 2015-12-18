@@ -128,51 +128,35 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/profile.html',
                 controller: 'ProfileCtrl'
             })
-            .state('new', {
-                url: "/new",
-                abstract: true,
-                templateUrl: "templates/home.html",
-                controller: 'HomeCtrl'
-            })
-            .state('new.what', {
+//             .state('new', {
+//                 url: "/new",
+//                 abstract: true,
+//                 templateUrl: "templates/home.html",
+//                 controller: 'HomeCtrl'
+//             })
+            .state('what', {
                 cache: false,
                 url: "/what",
-                views: {
-                    'new': {
-                        templateUrl: "templates/what.html",
-                        controller: 'WhatCtrl'
-                    }
-                }
+                templateUrl: "templates/what.html",
+                controller: 'WhatCtrl'
             })
-            .state('new.when', {
+            .state('when', {
                 cache: false,
                 url: '/when',
-                views: {
-                    'new': {
-                        templateUrl: 'templates/when.html',
-                        controller: 'WhenCtrl'
-                    }
-                }
+                templateUrl: 'templates/when.html',
+                controller: 'WhenCtrl'
             })
-            .state('new.where', {
+            .state('where', {
                 cache: false,
                 url: '/where',
-                views: {
-                    'new': {
-                        templateUrl: 'templates/where.html',
-                        controller: 'WhereCtrl'
-                    }
-                }
+                templateUrl: 'templates/where.html',
+                controller: 'WhereCtrl'
             })
-            .state('new.done', {
+            .state('done', {
                 cache: false,
                 url: '/done',
-                views: {
-                    'new': {
-                        templateUrl: 'templates/done.html',
-                        controller: 'DoneCtrl'
-                    }
-                }
+                templateUrl: 'templates/done.html',
+                controller: 'DoneCtrl'
             })
             .state('events', {
                 cache: false,

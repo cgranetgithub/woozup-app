@@ -1,4 +1,8 @@
-<ion-view view-title={{title}}>
+<ion-view view-title={{title}} class="withBg"
+          ng-style="{'background-image': 'url({{backgroundUrl}})'}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
     <ion-content ng-controller="WhereCtrl" ng-init="initialize()">
 <!--         <input id="pac-input" class="controls" type="text" placeholder="Entrez une adresse ou un nom"> -->
         <form class="form mapInput">
