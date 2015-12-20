@@ -185,7 +185,7 @@
     height: 100%;
 }
 .bgim {
-    background: url('../img/cloud.jpg') no-repeat center center fixed; 
+    background: url('../img/splash.png') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
