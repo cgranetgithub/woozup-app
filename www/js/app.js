@@ -11,7 +11,7 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister,
-                   $cordovaDialogs) {
+                   $cordovaDialogs, $state) {
         "use strict";
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -27,7 +27,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
             // won't work in browser, normal (cordova)
             var push = PushNotification.init({
-                "android": {"senderID": "496829276290", "forceShow": "true"},
+                "android": {"senderID": "496829276290"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
                 "windows": {}
             } );
@@ -39,17 +39,41 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 gcmRegister(UserData.getNotifData());
             });
             push.on('notification', function(data) {
-                $cordovaDialogs.alert(data.message, data.additionalData.ttl, 'OK')
-                .then(function() {
-                // callback success
-                });
-                console.info(
-                    data.message +
-//                     data.title +
-//                     data.count +
-//                     data.sound +
-//                     data.image +
-                    JSON.stringify(data.additionalData)
+                function onConfirm(buttonIndex) {
+                    if (buttonIndex == '2') {
+                        switch(data.additionalData.reason) {
+                        case 'eventchanged':
+                            $state.go('event', {'eventId': data.additionalData.id});
+                            break;
+                        case 'eventcanceled':
+                            $state.go('events.agenda');
+                            break;
+                        case 'newevent':
+                            $state.go('event', {'eventId': data.additionalData.id});
+                            break;
+                        case 'joinevent':
+                            $state.go('event', {'eventId': data.additionalData.id});
+                            break;
+                        case 'leftevent':
+                            $state.go('event', {'eventId': data.additionalData.id});
+                            break;
+                        case 'friendrequest':
+                            $state.go('friends.pending');
+                            break;
+                        case 'friendaccept':
+                            $state.go('friends.my');
+                            break;
+                        default:
+                            $state.go('checkauth');
+                        }
+                    }
+                }
+
+                navigator.notification.confirm(
+                    data.message,            // message
+                    onConfirm,               // callback to invoke with index of button pressed
+                    data.additionalData.ttl, // title
+                    ['Fermer','Voir']        // buttonLabels (1, 2)
                 );
             });
             push.on('error', function(e) {

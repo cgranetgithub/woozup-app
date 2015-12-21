@@ -286,6 +286,7 @@ angular.module('starter.controllers',
                 .error(function () {$state.go('connect');});
 
             $ionicLoading.show({template: "Chargement"});
+            $scope.title = UserData.getUserName();
             $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
                         'number' : '', 'gender' : ''};
             $scope.userprofile = new $tastypieResource('userprofile', {});
@@ -665,12 +666,6 @@ angular.module('starter.controllers',
                     });
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
-            };
-            $scope.newEvent = function () {
-                $state.go('what');
-            };
-            $scope.home = function () {
-                $state.go('events.agenda');
             };
         })
     .controller('EventCtrl',
