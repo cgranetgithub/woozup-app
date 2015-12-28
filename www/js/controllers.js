@@ -27,7 +27,7 @@ angular.module('starter.controllers',
     .controller('CheckauthCtrl',
         function ($scope, $rootScope, $cordovaPush, $tastypie,
                   $ionicLoading, CheckauthService, sortContacts, $cordovaDevice,
-                  $state, UserData, gcmRegister) {
+                  $state, UserData, pushNotifReg) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
             // verify authentication
@@ -35,7 +35,7 @@ angular.module('starter.controllers',
                 .success(function () {
                     $tastypie.setAuth(UserData.getUserName(),
                                       UserData.getApiKey());
-                    gcmRegister(UserData.getNotifData());
+                    pushNotifReg(UserData.getNotifData());
                     findContacts(sortContacts);
                     $state.go('events.friends');
                     $ionicLoading.hide();
@@ -48,7 +48,7 @@ angular.module('starter.controllers',
 
     .controller('ConnectCtrl',
         function ($tastypie, $ionicPopup, LoginService, sortContacts,
-                  $scope, $state, UserData, gcmRegister) {
+                  $scope, $state, UserData, pushNotifReg) {
             "use strict";
             // Facebook connect method
             $scope.fbLogin = function () {
@@ -61,7 +61,7 @@ angular.module('starter.controllers',
                     LoginService.loginUser(authData, "facebook")
                         .success(function () {
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                            gcmRegister(UserData.getNotifData());
+                            pushNotifReg(UserData.getNotifData());
                             findContacts(sortContacts);
                             $state.go('friends.new');
                         }).error(function () {
@@ -78,7 +78,7 @@ angular.module('starter.controllers',
 
     .controller('RegisterCtrl',
         function ($tastypie, $ionicPopup, $ionicLoading, RegisterService,
-                  sortContacts, $scope, $state, UserData, gcmRegister) {
+                  sortContacts, $scope, $state, UserData, pushNotifReg) {
             "use strict";
             $scope.data = {};
             $scope.regex_username = new RegExp("^[0-9A-Za-z-_@+.]{4,30}$");
@@ -92,7 +92,7 @@ angular.module('starter.controllers',
                 RegisterService.registerUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        gcmRegister(UserData.getNotifData());
+                        pushNotifReg(UserData.getNotifData());
                         findContacts(sortContacts);
                         $state.go('picture');
                         $ionicLoading.hide();
@@ -122,7 +122,7 @@ angular.module('starter.controllers',
 
     .controller('LoginCtrl',
         function ($tastypie, $ionicLoading, LoginService, $ionicPopup,
-                  sortContacts, $scope, $state, UserData, gcmRegister) {
+                  sortContacts, $scope, $state, UserData, pushNotifReg) {
             "use strict";
             $scope.data = {};
             $scope.login = function () {
@@ -132,7 +132,7 @@ angular.module('starter.controllers',
                 LoginService.loginUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        gcmRegister(UserData.getNotifData());
+                        pushNotifReg(UserData.getNotifData());
                         findContacts(sortContacts);
                         $state.go('friends.new');
                         $ionicLoading.hide();

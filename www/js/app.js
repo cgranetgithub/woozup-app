@@ -10,7 +10,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-    .run(function ($ionicPlatform, $cordovaDevice, UserData, gcmRegister,
+    .run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg,
                    $cordovaDialogs, $state) {
         "use strict";
         $ionicPlatform.ready(function () {
@@ -32,11 +32,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 "windows": {}
             } );
             push.on('registration', function(data) {
-                console.info(data);
+                console.info("PushPlug " + data.registrationId + ionic.Platform.platform());
                 UserData.setNotifData(data.registrationId,
                                      $cordovaDevice.getModel(),
-                                     $cordovaDevice.getUUID());
-                gcmRegister(UserData.getNotifData());
+                                     $cordovaDevice.getUUID(),
+                                     ionic.Platform.platform()
+                                     );
+                pushNotifReg(UserData.getNotifData()); // !!! important
             });
             push.on('notification', function(data) {
                 function onConfirm(buttonIndex) {
