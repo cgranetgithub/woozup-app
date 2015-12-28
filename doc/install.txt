@@ -40,3 +40,8 @@ ionic plugin add https://github.com/phonegap-build/PushPlugin.git
 -  Extras > Google Repository version 22 or greater
 $ android update sdk --no-ui -t extra-google-m2repository,extra-android-m2repository
 
+
+# on mac
+build settings
+- provisioning set to the proper account/app/cert
+- bitcode set to NO
