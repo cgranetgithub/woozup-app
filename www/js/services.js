@@ -7,9 +7,9 @@ angular.module('starter.services', [])
         var hostname = 'http://geoevent.herokuapp.com/',
             apiUrl = hostname + 'api/v1/';
 // #### for debug
-//      var hostname = 'http://192.168.1.27:8000/',
+     var hostname = 'http://192.168.1.18:8000/',
 //          hostname = 'http://localhost:8000/',
-//          apiUrl = hostname + 'api/v1/';
+         apiUrl = hostname + 'api/v1/';
 // #########
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -134,14 +134,12 @@ angular.module('starter.services', [])
                 $http.get(apiUrl + 'user/logout/');
             };
         }])
-    .factory('gcmRegister', ['$http', 'apiUrl', 'UserData',
+    .factory('pushNotifReg', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (data) {
-                if ( data.registration_id ) {
-                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                    $http.post(apiUrl + 'user/gcm/', data);
-                }
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.post(apiUrl + 'user/push_notif_reg/', data);
             };
         }])
     .factory('EventData', function () {
@@ -204,15 +202,18 @@ angular.module('starter.services', [])
             getApiKey: function () {
                 return data.apiKey;
             },
-            setNotifData: function (regid, devName, devId) {
+            setNotifData: function (regid, devName, devId, platform) {
                 data.registrationId = regid,
                 data.deviceName = devName,
-                data.deviceId = devId
+                data.deviceId = devId,
+                data.platform = platform
             },
             getNotifData: function () {
                 return {'registration_id' : data.registrationId,
                         'name': data.deviceName,
-                        'device_id': data.deviceId};
+                        'device_id': data.deviceId,
+                        'platform': data.platform
+                };
             }
         };
     })
