@@ -142,6 +142,12 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'user/push_notif_reg/', data);
             };
         }])
+    .factory('resetPassword', function ($http, apiUrl) {
+            "use strict";
+            return function (data) {
+                $http.post(apiUrl + 'auth/reset_password/', data);
+            };
+        })
     .factory('EventData', function () {
         "use strict";
         var data = {};
@@ -274,7 +280,7 @@ angular.module('starter.services', [])
                 loginUser: function (authData, social) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
-                        command = apiUrl + 'auth/login/';
+                        command = apiUrl + 'auth/login_by_email/';
                     if (social) {
                         command = hostname + 'register-by-token/' + social + '/';
                     }
@@ -310,7 +316,7 @@ angular.module('starter.services', [])
                 registerUser: function (authData) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
-                        command = 'auth/register/';
+                        command = 'auth/register_by_email/';
                     $http.post(apiUrl + command, authData
                         ).then(function (response) {
                         $localstorage.set('userid', response.data.userid);

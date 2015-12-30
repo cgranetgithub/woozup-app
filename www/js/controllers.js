@@ -86,7 +86,7 @@ angular.module('starter.controllers',
 
             $scope.register = function () {
                 $ionicLoading.show({template: "Création du compte"});
-                var authData = {'username': $scope.data.username,
+                var authData = {'email': $scope.data.email,
                                 'password': $scope.data.password,
                         };
                 RegisterService.registerUser(authData, false)
@@ -122,12 +122,13 @@ angular.module('starter.controllers',
 
     .controller('LoginCtrl',
         function ($tastypie, $ionicLoading, LoginService, $ionicPopup,
-                  sortContacts, $scope, $state, UserData, pushNotifReg) {
+                  sortContacts, $scope, $state, UserData, pushNotifReg,
+                  resetPassword) {
             "use strict";
             $scope.data = {};
             $scope.login = function () {
                 $ionicLoading.show({template: "Connexion"});
-                var authData = {'username': $scope.data.username,
+                var authData = {'login': $scope.data.login,
                                 'password': $scope.data.password};
                 LoginService.loginUser(authData, false)
                     .success(function () {
@@ -144,6 +145,35 @@ angular.module('starter.controllers',
                         });
                     });
             };
+            $scope.reset = function () {
+                $scope.data = {};
+                var myPopup = $ionicPopup.show({
+                    template: '<input type="email" ng-model="data.email">',
+                    title: 'Entrez votre adresse email',
+                    subTitle: 'Un email va vous être envoyé à cette adresse pour changer votre mot de passe',
+                    scope: $scope,
+                    buttons: [
+                        { text: 'Annuler' },
+                        {
+                            text: "<b>Envoyer l'email</b>",
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                if (!$scope.data.email) {
+                                    //don't allow the user to close unless he enters email
+                                    e.preventDefault();
+                                } else {
+                                    resetPassword({'email': $scope.data.email});
+                                }
+                            }
+                        }
+                    ]
+                });
+
+                myPopup.then(function(res) {
+                    console.log('Tapped!', res);
+                });
+            }
+                
         })
 
     .controller('HomeCtrl', function ($scope, $state) {
@@ -255,23 +285,6 @@ angular.module('starter.controllers',
                     };
                 setprofile({'first_name': $scope.data.first_name});
                 setpicture(file_field);
-                $state.go('email');
-                $ionicLoading.hide();
-            };
-        })
-
-    .controller('EmailCtrl',
-        function ($tastypieResource, $ionicLoading, $scope, $state,
-                  CheckauthService, UserData, setprofile) {
-            "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
-            $scope.data = {};
-            $scope.next = function () {
-                $ionicLoading.show({template: "Enregistrement de l'email"});
-                setprofile({'email': $scope.data.email});
                 $state.go('friends.new');
                 $ionicLoading.hide();
             };

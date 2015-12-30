@@ -2,6 +2,9 @@
     background: transparent;
     border-color: #FFF;
 }
+.woozup-green {
+    color: #ACFFC4;
+}
 .item {
     opacity: 0.6;
 }

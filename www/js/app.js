@@ -142,24 +142,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
             })
-            .state('email', {
-                cache: false,
-                url: '/email',
-                templateUrl: 'templates/email.html',
-                controller: 'EmailCtrl'
-            })
             .state('profile', {
                 cache: false,
                 url: '/profile',
                 templateUrl: 'templates/profile.html',
                 controller: 'ProfileCtrl'
             })
-//             .state('new', {
-//                 url: "/new",
-//                 abstract: true,
-//                 templateUrl: "templates/home.html",
-//                 controller: 'HomeCtrl'
-//             })
             .state('what', {
                 cache: false,
                 url: "/what",
