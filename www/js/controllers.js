@@ -25,11 +25,15 @@ angular.module('starter.controllers',
         })
 
     .controller('CheckauthCtrl',
-        function ($scope, $rootScope, $cordovaPush, $tastypie,
-                  $ionicLoading, CheckauthService, sortContacts, $cordovaDevice,
-                  $state, UserData, pushNotifReg) {
+        function ($scope, $rootScope, $cordovaPush, $tastypie, $ionicLoading,
+                  CheckauthService, sortContacts, $cordovaDevice,
+                  $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true
+            });
             // verify authentication
             CheckauthService.checkUserAuth()
                 .success(function () {

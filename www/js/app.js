@@ -92,7 +92,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         "use strict";
         $ionicConfigProvider.tabs.style('standard');
         $ionicConfigProvider.tabs.position('top');
-        $ionicConfigProvider.views.transition('ios');
+        $ionicConfigProvider.views.transition('none');
         $ionicConfigProvider.navBar.alignTitle('center');
         $ionicConfigProvider.navBar.positionPrimaryButtons('left');
         $ionicConfigProvider.navBar.positionSecondaryButtons('right');
