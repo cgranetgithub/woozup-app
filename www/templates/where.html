@@ -3,20 +3,43 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
+    <ion-content ng-controller="WhereCtrl as vm">
+        <input places-auto-complete class="controls map-input"
+               placeholder="Entrez une adresse ou cliquez sur la carte"
+               ng-model="vm.address"
+               on-place-changed="vm.placeChanged()" /> <br/>
+        <ng-map class="map" zoom="18" center="current"
+                on-click="vm.onClick()" data-tap-disabled="true"
+                disable-default-u-i="true">
+            <marker position="[{{vm.lat}}, {{vm.lng}}]" title="marker"
+                    centered="true" animation="Animation.DROP"></marker>
+        </ng-map>    
+        <button class="button icon-right ion-chevron-right button-balanced button-down"
+                ng-click="next()">
+            {{vm.where}}
+        </button>
+    </ion-content>
+</ion-view>
+
+<!--<ion-view view-title={{title}} class="withBg"
+          ng-style="{'background-image': 'url({{backgroundUrl}})'}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
     <ion-content ng-controller="WhereCtrl" ng-init="initialize()">
-<!--         <input id="pac-input" class="controls" type="text" placeholder="Entrez une adresse ou un nom"> -->
+        <input id="pac-input" class="controls" type="text" placeholder="Entrez une adresse ou un nom">
         <form class="form mapInput">
             <input class="form-control" g-places-autocomplete ng-model="place" ng-change="place_changed()"/>
         </form>        
         <div id="map" data-tap-disabled="true"></div>
     </ion-content>
-<!--    <ion-footer-bar>
+    <ion-footer-bar>
         <button class="button button-energized footer-button" ng-click="next()">{{buttonTitle}}</button>
-    </ion-footer-bar>    -->
+    </ion-footer-bar>    
     <ion-footer-bar class="bar-balanced" ng-click="next()">
         <h1 class="title">{{button.title}}</h1>
         <button class="button">
         {{testt}}
         </button>
     </ion-footer-bar>
-</ion-view>
+</ion-view>-->

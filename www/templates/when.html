@@ -1,22 +1,18 @@
 <ion-view view-title={{title}} class="withBg"
           ng-style="{'background-image': 'url({{backgroundUrl}})'}">
     <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        <button menu-toggle="left"
+                class="button button-icon icon ion-navicon">
+        </button>
     </ion-nav-buttons>
     <ion-content>
-    <!--    <button class="button button-date button-outline button-balanced" ng-click="showDatePicker()">{{date | date : 'fullDate'}}</button>
-        <button class="button button-date button-outline button-balanced" ng-click="showTimePicker()">{{time | date : 'H : mm'}}</button>-->
-        <datepicker id="dtpick" ng-model="when.date" show-weeks="false" starting-day="1" min-date="when.mindate"></datepicker>
-        <button class="button button-block button-balanced" ng-click="next(when.date)">Le {{when.date | date:'EEEE d MMMM'}}</button>
-<!--        <p class="note" ng-if=events>Ce que mes amis ont déjà prévu<p>
-        <ion-list>
-            <ion-item class="item event-item" ng-repeat="event in events.page.objects" href="#/event/{{event.id}}">
-                <img class="event-item-avatar" ng-src="{{event.owner.image}}">
-                <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style="{{event.event_type.style}}">
-                <h2>{{event.name}}</h2>
-                <p>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
-                <p>avec {{event.owner.name}}</p>
-            </ion-item>
-        </ion-list>-->
+        <datepicker id="dtpick" ng-model="when.date" show-weeks="false"
+                    starting-day="1" min-date="when.mindate">
+        </datepicker>
+        <button class="button icon-right ion-chevron-right
+                       button-balanced button-down"
+                ng-click="next(when.date)">
+            Le {{when.date | date:'EEEE d MMMM'}}
+        </button>
     </ion-content>
 </ion-view>

@@ -5,7 +5,7 @@ var gps_in_progress = false;
 
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
-               'google.places', 'ngImgCrop', 'starter.services'])
+                'ngImgCrop', 'starter.services', 'ngMap'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
@@ -393,7 +393,8 @@ angular.module('starter.controllers',
         })
 
     .controller('WhereCtrl',
-        function ($scope, $state, $filter, EventData, UserData, CheckauthService) {
+        function ($scope, $state, $filter, EventData, UserData,
+                  CheckauthService, NgMap) {
             "use strict";
             /*global document: false */
             /*global google: false */
@@ -401,118 +402,66 @@ angular.module('starter.controllers',
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
 
-            var map, geocoder, marker,
-                infowindow = null, placeinfowindow = null, lastinfowindow = null,
-                lat = 48.8567,
-                long = 2.3508,
-                setAddress = function (address, position) {
-                    var coords = '{ "type": "Point", "coordinates": ['
-                            + position.lat() + ', ' + position.lng() + '] }';
-                    console.log(address, coords);
-                    EventData.setAddress(address, coords);
-                };
             $scope.backgroundUrl = EventData.getWhat().background;
             $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
-            $scope.button = {'title' : "Choisissez le lieu de rendez-vous"};
-            $scope.place_changed = function () {
-//                 infowindow.close();
-//                 placeinfowindow.close();
-                var place = $scope.place;
-                if (!place.geometry) { return; }
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(18);
-                }
-//                     marker.setPlace({
-//                         placeId: place.place_id,
-//                         location: place.geometry.location
-//                     });
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
-//                 infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-//                     'Place ID: ' + place.place_id + '<br>' +
-//                     place.formatted_address);
-//                 infowindow.open(map, marker);
-                $scope.map.focus(); //make sure the keyboard hides
-            };
-            $scope.initialize = function () {
-                if (UserData.getWhere()) {
-                    lat = UserData.getWhere().latitude;
-                    long = UserData.getWhere().longitude;
-                }
-                var initpos = new google.maps.LatLng(lat, long),
-                    mapOptions = {
-                        center: initpos,
-                        zoom: 15,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP,
-                        zoomControl: false,
-                        mapTypeControl: false,
-                        panControl: false,
-                        streetViewControl: false,
-                    };
-                map = new google.maps.Map(document.getElementById("map"),
-                                          mapOptions);
-                infowindow = new google.maps.InfoWindow();
-                marker = new google.maps.Marker({map: map});
-                geocoder = new google.maps.Geocoder;
-                ///##### hack to get clic even on google places
-                //keep a reference to the original setPosition-function
-                var fx = google.maps.InfoWindow.prototype.setPosition;
-                //override the built-in setPosition-method
-                google.maps.InfoWindow.prototype.setPosition = function () {
-                    //this property isn't documented, but as it seems
-                    //it's only defined for InfoWindows opened on POI's
-                    if (this.logAsInternal) {
-                        placeinfowindow = this;
-                        lastinfowindow = this;
-                        google.maps.event.addListenerOnce(this, 'map_changed', function () {
-                            var map = this.getMap();
-                            //the infoWindow will be opened, usually after a click on a POI
-                            if (map) {
-                                //trigger the click
-                                google.maps.event.trigger(map, 'click', {latLng: this.getPosition()});
+            // initialize coords
+            var lat = 48.8567, long = 2.3508, vm = this,
+                geocoder = new google.maps.Geocoder,
+                setAddress = function (address, lat, lng) {
+                    var coords = '{ "type": "Point", "coordinates": ['
+                                 + lat + ', ' + lng + '] }';
+                    EventData.setAddress(address, coords);
+                },
+                coordChanged = function(latLng, addr) {
+                    vm.lat = latLng.lat().toString();
+                    vm.lng = latLng.lng().toString();
+                    if (addr) {
+                        vm.where = addr;
+                        setAddress(vm.where, vm.lat, vm.lng);
+                    } else {
+                        geocoder.geocode({'location': latLng},
+                                        function (results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) {
+                                if (results[0]) {
+                                    $scope.$apply(function () {
+                                        vm.where = results[0].formatted_address;
+                                        setAddress(vm.where, vm.lat, vm.lng);
+                                    });
+                                }
                             }
                         });
                     }
-                    //call the original setPosition-method
-                    fx.apply(this, arguments);
                 };
-                ///#####
-                map.addListener('click', function (e) {
-                    $scope.$apply(function () {
-                        $scope.map.focus(); //make sure the keyboard hides
-                    });
-                    
-                    var address = '', position = e.latLng;
-                    setAddress('', position);
-                    marker.setPosition(position);
-                    marker.setVisible(true);
-                    geocoder.geocode({'location': position}, function (results, status, address) {
-                        if (status === google.maps.GeocoderStatus.OK) {
-                            if (results[0]) {
-                                address = results[0].formatted_address;
-                                setAddress(address, position);
-                                $scope.button.title = address;
-                                $scope.$apply(function () {
-                                    $scope.button.title = address;
-                                });
-                                infowindow.setContent(address);
-                                infowindow.open(map, marker);
-                            }
-                        }
-                    });
-                    console.log(placeinfowindow);
-                    if (!placeinfowindow) {
-//                         lastinfowindow.close();
-                        infowindow.setContent(address);
-                        infowindow.open(map, marker);
-                        lastinfowindow = infowindow;
-                    }
-                    placeinfowindow = null;
-                });
-                $scope.map = map;
+            if (UserData.getWhere()) {
+                lat = UserData.getWhere().latitude;
+                long = UserData.getWhere().longitude;
+            }
+            var pos = new google.maps.LatLng(lat, long);
+            coordChanged(pos, null);
+            NgMap.getMap().then(function(map) {
+                // disable POI (to avoid info window)
+                var styles = [{
+                    featureType: "poi",
+                    stylers: [{ visibility: "off" }]   
+                }];
+                map.setOptions({styles: styles});
+                vm.map = map;
+            });
+            // when autocomplete changes, center on the place,
+            // show marker and set address in button
+            vm.placeChanged = function() {
+                vm.place = this.getPlace();
+                console.log(vm.place);
+                EventData.setPlace(vm.place.name, vm.place.place_id);
+                vm.map.setCenter(vm.place.geometry.location);
+                coordChanged(vm.place.geometry.location,
+                             vm.place.formatted_address
+                );
+            }
+            // on click event, show marker and set address in button
+            vm.onClick= function(event) {
+                EventData.setPlace('', '');
+                coordChanged(event.latLng);
             };
             $scope.next = function () {
                 $state.go('done', {}, { reload: true });
@@ -702,7 +651,6 @@ angular.module('starter.controllers',
                         index,
                         participants = result.participants,
                         found = false;
-                    console.log(my_id, result.owner.user.id);
                     if (my_id === result.owner.user.id) {
                         $scope.buttonTitle = "J'annule";
                         $scope.buttonAction = function (eventId) {
