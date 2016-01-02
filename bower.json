@@ -2,8 +2,7 @@
   "name": "Woozup",
   "private": true,
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.1.0",
-    "ng-cordova": "~0.0.3"
+    "ionic": "driftyco/ionic-bower#1.1.0"
   },
   "authors": [
     "charles <c.granet@gmail.com>"
@@ -29,6 +28,7 @@
     "angular-ui-router": "0.2.13",
     "angular-sanitize": "1.4.3",
     "ng-img-crop": "~0.3.2",
-    "ngmap": "~1.16.3"
+    "ngmap": "~1.16.3",
+    "ngCordova": "~0.1.23-alpha"
   }
 }
