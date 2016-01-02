@@ -2,7 +2,7 @@
   "name": "Woozup",
   "private": true,
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.1.0"
+    "ionic": "driftyco/ionic-bower#1.2.1"
   },
   "authors": [
     "charles <c.granet@gmail.com>"
