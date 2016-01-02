@@ -30,6 +30,8 @@
     "ng-img-crop": "~0.3.2",
     "ngmap": "~1.16.3",
     "ngCordova": "~0.1.23-alpha",
-    "angular-resource": "~1.4.8"
+    "angular-resource": "~1.4.8",
+    "bootstrap": "~3.3.6",
+    "angular-i18n": "~1.4.8"
   }
 }
