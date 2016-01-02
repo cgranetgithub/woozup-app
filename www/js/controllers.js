@@ -5,7 +5,7 @@ var gps_in_progress = false;
 
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
-                'ngImgCrop', 'starter.services', 'ngMap'])
+                'ngImgCrop', 'starter.services', 'ngMap', 'google.places'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
@@ -450,13 +450,14 @@ angular.module('starter.controllers',
             // when autocomplete changes, center on the place,
             // show marker and set address in button
             vm.placeChanged = function() {
-                vm.place = this.getPlace();
                 console.log(vm.place);
-                EventData.setPlace(vm.place.name, vm.place.place_id);
-                vm.map.setCenter(vm.place.geometry.location);
-                coordChanged(vm.place.geometry.location,
-                             vm.place.formatted_address
-                );
+                if (vm.place.geometry) {
+                    EventData.setPlace(vm.place.name, vm.place.place_id);
+                    vm.map.setCenter(vm.place.geometry.location);
+                    coordChanged(vm.place.geometry.location,
+                                vm.place.formatted_address
+                    );
+                }
             }
             // on click event, show marker and set address in button
             vm.onClick= function(event) {

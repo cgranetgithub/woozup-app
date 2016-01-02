@@ -143,6 +143,9 @@
     border-radius: 32px;
     color: black;
 }
+input[type="text"].controls {
+    padding-left: 10px;
+}
 .controls {
     background-color: #fff;
     border-radius: 2px;

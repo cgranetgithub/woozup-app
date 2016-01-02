@@ -20,12 +20,10 @@
     <title>Woozup</title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-<!--    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="css/autocomplete.css">
-    <link rel="stylesheet" href="css/ng-img-crop.css">
+    <link href="lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/angular-google-places-autocomplete/dist/autocomplete.min.css" rel="stylesheet">
+    <link href="lib/ng-img-crop/compile/minified/ng-img-crop.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -33,15 +31,17 @@
     -->
 
     <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
-    <script src="lib/ionic/js/angular/angular-resource.js"></script>
-    <script src="js/angular-resource-tastypie.min.js"></script>
-    <script src="js/ui-bootstrap-tpls-0.13.1.min.js"></script>
+    <script src="lib/ionic/js/ionic.bundle.min.js"></script>
+    <script src="lib/ionic/js/angular/angular-resource.min.js"></script>
+    <script src="lib/angular-resource-tastypie/src/angular-resource-tastypie.min.js"></script>
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="i18n/angular-locale_fr-fr.js"></script>
-    <script src="js/ng-map.min.js"></script>
-
+    <script src="lib/ngmap/build/scripts/ng-map.min.js"></script>
+    <script src="lib/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+    <script src="lib/angular-google-places-autocomplete/dist/autocomplete.min.js"></script>
+    
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="lib/ng-cordova-master/dist/ng-cordova.js"></script>
+    <script src="lib/ng-cordova/dist/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -92,8 +92,7 @@
         </ion-side-menu-content>
     </ion-side-menus>
     
-    <div id="fb-root"></div>
+<!--     <div id="fb-root"></div> -->
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
-    <script src="js/ng-img-crop.js"></script>
   </body>
 </html>
