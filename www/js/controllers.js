@@ -52,8 +52,12 @@ angular.module('starter.controllers',
 
     .controller('ConnectCtrl',
         function ($tastypie, $ionicPopup, LoginService, sortContacts,
-                  $scope, $state, UserData, pushNotifReg) {
+                  $scope, $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true
+            });
             // Facebook connect method
             $scope.fbLogin = function () {
                 facebookConnectPlugin.login([], function (obj) {
@@ -82,8 +86,13 @@ angular.module('starter.controllers',
 
     .controller('RegisterCtrl',
         function ($tastypie, $ionicPopup, $ionicLoading, RegisterService,
-                  sortContacts, $scope, $state, UserData, pushNotifReg) {
+                  sortContacts, $scope, $state, UserData, pushNotifReg,
+                  $ionicHistory) {
             "use strict";
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true
+            });
             $scope.data = {};
             $scope.regex_username = new RegExp("^[0-9A-Za-z-_@+.]{4,30}$");
             $scope.regex_password = new RegExp("^.{6,20}$");
@@ -127,8 +136,12 @@ angular.module('starter.controllers',
     .controller('LoginCtrl',
         function ($tastypie, $ionicLoading, LoginService, $ionicPopup,
                   sortContacts, $scope, $state, UserData, pushNotifReg,
-                  resetPassword) {
+                  resetPassword, $ionicHistory) {
             "use strict";
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true
+            });
             $scope.data = {};
             $scope.login = function () {
                 $ionicLoading.show({template: "Connexion"});
@@ -183,8 +196,13 @@ angular.module('starter.controllers',
     .controller('PictureCtrl',
         function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
                   $state, $ionicActionSheet, $timeout, CheckauthService,
-                  UserData, setpicture, setprofile, $ionicPlatform) {
+                  UserData, setpicture, setprofile, $ionicPlatform,
+                  $ionicHistory) {
             "use strict";
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true
+            });
             // disable back button
             var deregister = $ionicPlatform.registerBackButtonAction(function () {}, 101);
             // verify authentication
