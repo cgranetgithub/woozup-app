@@ -83,10 +83,6 @@ angular.module('starter', ['ionic', 'ngCordova',
                 console.error(e.message);
             });            
         });
-        // disable go back button
-        $ionicPlatform.registerBackButtonAction(function (event) {
-            event.preventDefault();
-            }, 100);
     })
 
     .config(function ($ionicConfigProvider) {
@@ -108,17 +104,17 @@ angular.module('starter', ['ionic', 'ngCordova',
         $stateProvider
 
             .state('logout', {
-                   cache: false,
-                   url: '/logout',
-                   templateUrl: 'templates/checkauth.html',
-                   controller: 'LogoutCtrl'
-                   })
+                cache: false,
+                url: '/logout',
+                templateUrl: 'templates/checkauth.html',
+                controller: 'LogoutCtrl'
+            })
             .state('checkauth', {
-                   cache: false,
-                   url: '/checkauth',
-                   templateUrl: 'templates/checkauth.html',
-                   controller: 'CheckauthCtrl'
-                   })
+                cache: false,
+                url: '/checkauth',
+                templateUrl: 'templates/checkauth.html',
+                controller: 'CheckauthCtrl'
+            })
             .state('connect', {
                 cache: false,
                 url: '/connect',

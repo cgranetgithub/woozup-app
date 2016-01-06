@@ -1,8 +1,10 @@
 <ion-view view-title={{title}} class="withBg"
           ng-style="{'background-image': 'url({{backgroundUrl}})'}">
-    <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-back-button class="button-clear icon-left ion-chevron-left">
+            retour
+        </ion-nav-back-button>
+    </ion-nav-bar>
     <ion-content ng-controller="WhereCtrl as vm">
         <input g-places-autocomplete class="controls map-input" type="text"
                placeholder="Entrez une adresse ou cliquez sur la carte"

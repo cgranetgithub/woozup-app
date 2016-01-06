@@ -1,8 +1,10 @@
 <ion-view view-title={{event.event_type.name}} class="withBg"
           ng-style="{'background-image': 'url({{backgroundUrl}})'}">
-    <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-back-button class="button-clear icon-left ion-chevron-left">
+            retour
+        </ion-nav-back-button>
+    </ion-nav-bar>
     <ion-content>
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
@@ -13,8 +15,8 @@
             <ion-item class="item event-descr">
                 <h2>{{event.where.address}}</h2>
             </ion-item>
-            <timepicker id="tmpick" ng-model="event.start" minute-step="15"
-                        show-meridian="false"></timepicker>
+            <uibtimepicker id="tmpick" ng-model="event.start" minute-step="15"
+                        show-meridian="false"></uibtimepicker>
             <form name="myform">
                 <label class="item item-input">
                     <span class="input-label">Titre</span>

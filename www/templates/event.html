@@ -1,5 +1,10 @@
 <ion-view view-title={{event.event_type.name}} class="withBg"
           ng-style="{'background-image': 'url(' + event.event_type.background + ')'}">
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-back-button class="button-clear icon-left ion-chevron-left">
+            retour
+        </ion-nav-back-button>
+    </ion-nav-bar>
     <ion-content>
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap">

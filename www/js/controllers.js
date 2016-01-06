@@ -180,18 +180,13 @@ angular.module('starter.controllers',
                 
         })
 
-    .controller('HomeCtrl', function ($scope, $state) {
-        "use strict";
-        $scope.next = function () {
-            $state.go('checkauth', {}, { reload: true });
-        };
-    })
-
     .controller('PictureCtrl',
         function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
                   $state, $ionicActionSheet, $timeout, CheckauthService,
-                  UserData, setpicture, setprofile) {
+                  UserData, setpicture, setprofile, $ionicPlatform) {
             "use strict";
+            // disable back button
+            var deregister = $ionicPlatform.registerBackButtonAction(function () {}, 101);
             // verify authentication
             CheckauthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
@@ -290,6 +285,8 @@ angular.module('starter.controllers',
                 setprofile({'first_name': $scope.data.first_name});
                 setpicture(file_field);
                 $state.go('friends.new');
+                // enable back button again
+                deregister();
                 $ionicLoading.hide();
             };
         })

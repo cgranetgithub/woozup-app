@@ -1,17 +1,13 @@
 <ion-view view-title={{title}} class="bgim">
-    <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon-left ion-chevron-left"
+                    ui-sref="events.agenda">
+                retour
+            </button>
     </ion-nav-buttons>
-<!--    <div class="tabs tabs-icon-top tabs-dark bgim">
-        <a class="tab-item" ui-sref="events.friends">
-            <i class="icon ion-ios-calendar"></i>
-            Mes sorties
-        </a>
-        <a class="tab-item" ui-sref="friends.new">
-            <i class="icon ion-ios-people"></i>
-            Mes amis
-        </a>
-    </div>-->
+
+    </ion-nav-bar>
     <ion-content class="gallery">
         <span class="item-tile" ng-repeat="type in types.page.objects"
               ng-style={{type.style}} ng-click="next(type.id)">
