@@ -26,7 +26,7 @@ angular.module('starter.controllers',
 
     .controller('CheckauthCtrl',
         function ($scope, $rootScope, $cordovaPush, $tastypie, $ionicLoading,
-                  CheckauthService, sortContacts, $cordovaDevice,
+                  AuthService, sortContacts, $cordovaDevice,
                   $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
@@ -35,7 +35,7 @@ angular.module('starter.controllers',
                 disableBack: true
             });
             // verify authentication
-            CheckauthService.checkUserAuth()
+            AuthService.checkUserAuth()
                 .success(function () {
                     $tastypie.setAuth(UserData.getUserName(),
                                       UserData.getApiKey());
@@ -51,7 +51,7 @@ angular.module('starter.controllers',
         })
 
     .controller('ConnectCtrl',
-        function ($tastypie, $ionicPopup, LoginService, sortContacts,
+        function ($tastypie, $ionicPopup, AuthService, sortContacts,
                   $scope, $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
             $ionicHistory.nextViewOptions({
@@ -65,8 +65,8 @@ angular.module('starter.controllers',
                         "provider": "facebook",
                         "access_token": obj.authResponse.accessToken
                     };
-                    /* we have to call registerbyToken from service LoginService */
-                    LoginService.loginUser(authData, "facebook")
+                    /* we have to call registerbyToken from service AuthService */
+                    AuthService.loginUser(authData, "facebook")
                         .success(function () {
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                             pushNotifReg(UserData.getNotifData());
@@ -85,7 +85,7 @@ angular.module('starter.controllers',
         })
 
     .controller('RegisterCtrl',
-        function ($tastypie, $ionicPopup, $ionicLoading, RegisterService,
+        function ($tastypie, $ionicPopup, $ionicLoading, AuthService,
                   sortContacts, $scope, $state, UserData, pushNotifReg,
                   $ionicHistory) {
             "use strict";
@@ -102,7 +102,7 @@ angular.module('starter.controllers',
                 var authData = {'email': $scope.data.email,
                                 'password': $scope.data.password,
                         };
-                RegisterService.registerUser(authData, false)
+                AuthService.registerUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         pushNotifReg(UserData.getNotifData());
@@ -134,7 +134,7 @@ angular.module('starter.controllers',
         })
 
     .controller('LoginCtrl',
-        function ($tastypie, $ionicLoading, LoginService, $ionicPopup,
+        function ($tastypie, $ionicLoading, AuthService, $ionicPopup,
                   sortContacts, $scope, $state, UserData, pushNotifReg,
                   resetPassword, $ionicHistory) {
             "use strict";
@@ -147,7 +147,7 @@ angular.module('starter.controllers',
                 $ionicLoading.show({template: "Connexion"});
                 var authData = {'login': $scope.data.login,
                                 'password': $scope.data.password};
-                LoginService.loginUser(authData, false)
+                AuthService.loginUser(authData, false)
                     .success(function () {
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         pushNotifReg(UserData.getNotifData());
@@ -185,17 +185,13 @@ angular.module('starter.controllers',
                         }
                     ]
                 });
-
-                myPopup.then(function(res) {
-                    console.log('Tapped!', res);
-                });
+                myPopup.then(function(res) {});
             }
-                
         })
 
     .controller('PictureCtrl',
         function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
-                  $state, $ionicActionSheet, $timeout, CheckauthService,
+                  $state, $ionicActionSheet, $timeout, AuthService,
                   UserData, setpicture, setprofile, $ionicPlatform,
                   $ionicHistory) {
             "use strict";
@@ -205,10 +201,6 @@ angular.module('starter.controllers',
             });
             // disable back button
             var deregister = $ionicPlatform.registerBackButtonAction(function () {}, 101);
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.data = {'first_name': UserData.getUserName()};
             $scope.myImage = '';
@@ -233,6 +225,9 @@ angular.module('starter.controllers',
                 },
                 function (error) {
                     console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
                     $ionicLoading.hide();
                 }
             );
@@ -311,12 +306,8 @@ angular.module('starter.controllers',
 
     .controller('ProfileCtrl',
         function ($tastypieResource, $ionicLoading, $scope,
-                  CheckauthService, UserData, setprofile) {
+                  AuthService, UserData, setprofile, $state) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.title = UserData.getUserName();
             $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
@@ -334,6 +325,9 @@ angular.module('starter.controllers',
                 },
                 function (error) {
                     console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
                     $ionicLoading.hide();
                 }
             );
@@ -352,18 +346,19 @@ angular.module('starter.controllers',
 
     .controller('WhatCtrl',
         function ($tastypieResource, $ionicLoading, $scope, $state,
-                  EventData, CheckauthService) {
+                  EventData, AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $scope.title = "Sélectionnez l'activité"
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
             $scope.types.objects.$find().then(
                 function () { $ionicLoading.hide(); },
-                function () { $ionicLoading.hide(); }
+                function () {
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
+                    $ionicLoading.hide();                    
+                }
             );
             $scope.next = function (typeId) {
                 $ionicLoading.show({template: "Chargement"});
@@ -382,12 +377,8 @@ angular.module('starter.controllers',
         })
 
     .controller('WhenCtrl',
-        function ($tastypieResource, $scope, $state, EventData, CheckauthService) {
+        function ($tastypieResource, $scope, $state, EventData) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $scope.when = {};
             $scope.when.date = new Date();
             $scope.when.mindate = new Date();
@@ -408,15 +399,9 @@ angular.module('starter.controllers',
         })
 
     .controller('WhereCtrl',
-        function ($scope, $state, $filter, EventData, UserData,
-                  CheckauthService, NgMap) {
+        function ($scope, $state, $filter, EventData, UserData, NgMap) {
             "use strict";
-            /*global document: false */
             /*global google: false */
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $scope.backgroundUrl = EventData.getWhat().background;
             $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
             // initialize coords
@@ -486,12 +471,8 @@ angular.module('starter.controllers',
 
     .controller('DoneCtrl',
         function ($tastypieResource, $ionicLoading, $scope, $state,
-                  EventData, CheckauthService) {
+                  EventData, AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             var date = new Date();
             $scope.backgroundUrl = EventData.getWhat().background;
             $scope.event = {};
@@ -519,7 +500,9 @@ angular.module('starter.controllers',
                     },
                     function (error) {
                         console.log(error);
-                        $state.go('checkauth', {}, { reload: true });
+                        // verify authentication
+                        AuthService.checkUserAuth().success()
+                            .error(function () {$state.go('connect');});
                         $ionicLoading.hide();
                     }
                 );
@@ -528,12 +511,8 @@ angular.module('starter.controllers',
 
     .controller('EventsCtrl',
         function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
-                  $scope, $state, setlast, UserData, CheckauthService) {
+                  $scope, $state, setlast, UserData, AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
@@ -558,6 +537,9 @@ angular.module('starter.controllers',
                         },
                         function (error) {
                             console.log(error);
+                            // verify authentication
+                            AuthService.checkUserAuth().success()
+                                .error(function () {$state.go('connect');});
                         }
                     );
                     var alertPopup = $ionicPopup.alert({
@@ -572,12 +554,8 @@ angular.module('starter.controllers',
 
     .controller('FriendsEventsCtrl',
         function ($scope, $state, $tastypieResource, $ionicLoading,
-                  CheckauthService) {
+                  AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -594,16 +572,29 @@ angular.module('starter.controllers',
             today.setMinutes(0);
             eventsResource = new $tastypieResource('events/friends',
                                             {order_by: 'start', start__gte: today});
-            eventsResource.objects.$find().then(function (result) {
-                nextPages(result);
-                $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
+            eventsResource.objects.$find().then(
+                function (result) {
+                    nextPages(result);
+                    $ionicLoading.hide();
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                }, function (error) {
+                    console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
+                }
+            );
             $scope.loadMore = function () {
                 if (eventsResource.page.meta && eventsResource.page.meta.next) {
-                    eventsResource.page.next().then(function (result) {
-                        nextPages(result);
-                    });
+                    eventsResource.page.next().then(
+                        function (result) {
+                            nextPages(result);
+                        }, function (error) {
+                            console.log(error);
+                            // verify authentication
+                            AuthService.checkUserAuth().success()
+                                .error(function () {$state.go('connect');});
+                        });
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
@@ -614,12 +605,8 @@ angular.module('starter.controllers',
         })
     .controller('AgendaEventsCtrl',
         function ($scope, $state, $tastypieResource, $ionicLoading,
-                  CheckauthService) {
+                  AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -636,28 +623,38 @@ angular.module('starter.controllers',
             today.setMinutes(0);
             var eventsResource = new $tastypieResource('events/agenda',
                                         {order_by: 'start', start__gte: today});
-            eventsResource.objects.$find().then(function (result) {
-                nextPages(result);
-                $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
+            eventsResource.objects.$find().then(
+                function (result) {
+                    nextPages(result);
+                    $ionicLoading.hide();
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                }, function (error) {
+                    console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
+                }
+            );
             $scope.loadMore = function () {
                 if (eventsResource.page.meta && eventsResource.page.meta.next) {
-                    eventsResource.page.next().then(function (result) {
-                        nextPages(result);
-                    });
+                    eventsResource.page.next().then(
+                        function (result) {
+                            nextPages(result);
+                        }, function (error) {
+                            console.log(error);
+                            // verify authentication
+                            AuthService.checkUserAuth().success()
+                                .error(function () {$state.go('connect');});
+                        }
+                    );
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
         })
     .controller('EventCtrl',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
-                  join, leave, UserData, CheckauthService) {
+                  join, leave, UserData, AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             var event = new $tastypieResource('events/all');
             $scope.buttonTitle = "Chargement";
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
@@ -694,10 +691,12 @@ angular.module('starter.controllers',
                             };
                         }
                     }
-                },
-                function (error) {
-                    $scope.buttonTitle = "Erreur de chargement";
+                }, function (error) {
                     console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
+                    $scope.buttonTitle = "Erreur de chargement";
                 }
             );
             $scope.home = function () {
@@ -705,12 +704,8 @@ angular.module('starter.controllers',
             };
         })
     .controller('FriendsCtrl',
-        function ($scope, $state, $tastypieResource, CheckauthService) {
+        function ($scope, $state, $tastypieResource) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             var newFriends = new $tastypieResource('friends/new'),
                 pendingFriends = new $tastypieResource('friends/pending'),
                 invites = new $tastypieResource('invite',
@@ -738,13 +733,8 @@ angular.module('starter.controllers',
         })
     .controller('NewFriendsCtrl',
         function ($tastypieResource, $ionicLoading, $q, $scope, $state,
-                  sendInvite, ignoreInvite, inviteFriend, ignoreFriend,
-                  CheckauthService) {
+                  sendInvite, ignoreInvite, inviteFriend, ignoreFriend) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -804,13 +794,8 @@ angular.module('starter.controllers',
             };
         })
     .controller('MyFriendsCtrl',
-        function ($tastypieResource, $ionicLoading, $scope, $state,
-                  CheckauthService) {
+        function ($tastypieResource, $ionicLoading, $scope, $state, AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = false;
@@ -825,11 +810,18 @@ angular.module('starter.controllers',
                             }
                         }
                     };
-            friendsResource.objects.$find().then(function (result) {
-                nextPages(result);
-                $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
+            friendsResource.objects.$find().then(
+                function (result) {
+                    nextPages(result);
+                    $ionicLoading.hide();
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                }, function (error) {
+                    console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
+                }
+            );
             $scope.loadMore = function () {
                 if (friendsResource.page.meta && friendsResource.page.meta.next) {
                     friendsResource.page.next().then(function (result) {
@@ -844,12 +836,8 @@ angular.module('starter.controllers',
         })
     .controller('PendingFriendsCtrl',
         function ($tastypieResource, $ionicLoading, acceptFriend, rejectFriend,
-                  $scope, $state, CheckauthService) {
+                  $scope, $state, AuthService) {
             "use strict";
-            // verify authentication
-            CheckauthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
-
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -864,11 +852,18 @@ angular.module('starter.controllers',
                             }
                         }
                     };
-            friendsResource.objects.$find().then(function (result) {
-                nextPages(result);
-                $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
+            friendsResource.objects.$find().then(
+                function (result) {
+                    nextPages(result);
+                    $ionicLoading.hide();
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                }, function (error) {
+                    console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('connect');});
+                }
+            );
             $scope.loadMore = function () {
                 if (friendsResource.page.meta && friendsResource.page.meta.next) {
                     friendsResource.page.next().then(function (result) {
@@ -919,8 +914,8 @@ findContacts = function(sortContacts) {
                 return t;
             };
         contacts.forEach(function (entry) {
-            if (!entry.phoneNumbers || !entry.phoneNumbers.length
-               || !entry.emails || !entry.emails.length) {
+            if (!entry.phoneNumbers || !entry.phoneNumbers.length) {
+//                || !entry.emails || !entry.emails.length) {
 //                 console.log("skipping " + entry.name.formatted);
                 return;
             }
@@ -932,7 +927,12 @@ findContacts = function(sortContacts) {
                 'photo': helper(entry.photos).join(', '),
             });
         });
-        sortContacts(stuff);
+        // send to server by chunk
+        var i, j, temparray, chunk = 30;
+        for (i=0, j=stuff.length; i<j; i+=chunk) {
+            temparray = stuff.slice(i,i+chunk);
+            sortContacts(temparray);
+        }
     }, function () {
         // an error has occured, try to resync next day
         window.localStorage.contact_sync = curDate - 6 * 3600 * 24;

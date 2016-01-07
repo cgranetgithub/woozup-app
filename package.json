@@ -28,7 +28,8 @@
     {
       "locator": "https://github.com/tsubik/cordova-plugin-start-on-boot.git",
       "id": "com.tsubik.cordova.start_on_boot"
-    }
+    },
+    "cordova-plugin-network-information"
   ],
   "cordovaPlatforms": [
     "ios",

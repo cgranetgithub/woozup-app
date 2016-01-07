@@ -15,8 +15,8 @@ angular.module('starter', ['ionic', 'ngCordova',
                    $cordovaDialogs, $state) {
         "use strict";
         $ionicPlatform.ready(function () {
-            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-            // for form inputs)
+            // Hide the accessory bar by default (remove this to show the
+            // accessory bar above the keyboard for form inputs)
             if (window.cordova && window.cordova.plugins
                     && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -33,7 +33,6 @@ angular.module('starter', ['ionic', 'ngCordova',
                 "windows": {}
             } );
             push.on('registration', function(data) {
-                console.info("PushPlug " + data.registrationId + ionic.Platform.platform());
                 UserData.setNotifData(data.registrationId,
                                      $cordovaDevice.getModel(),
                                      $cordovaDevice.getUUID(),
@@ -81,7 +80,18 @@ angular.module('starter', ['ionic', 'ngCordova',
             });
             push.on('error', function(e) {
                 console.error(e.message);
-            });            
+            });
+            var alertDismissed = function () {},
+                onOffline = function () {
+                    navigator.notification.alert(
+                        'La connection à Internet a été perdu', //message
+                        alertDismissed,         // callback
+                        'Perte de connection',  // title
+                        'OK'                    // buttonName
+                    )
+                    $state.go('checkauth');
+                };
+            document.addEventListener("offline", onOffline, false);
         });
     })
 

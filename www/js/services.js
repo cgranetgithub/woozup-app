@@ -15,19 +15,6 @@ angular.module('starter.services', [])
         $provide.value('hostname', hostname);
         $tastypieProvider.setResourceUrl(apiUrl);
     })
-    // Race condition found when trying to use $ionicPlatform.ready in app.js and calling register to display id in AppCtrl.
-    // Implementing it here as a factory with promises to ensure register function is called before trying to display the id.
-    .factory(("ionPlatform"), function( $q ){
-        var ready = $q.defer();
-
-        ionic.Platform.ready(function( device ){
-            ready.resolve( device );
-        });
-
-        return {
-            ready: ready.promise
-        }
-    })
     .factory('setlast', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -35,17 +22,32 @@ angular.module('starter.services', [])
                 var where = '{ "type": "Point", "coordinates": ['
                             + position.coords.latitude + ', ' + position.coords.longitude + '] }';
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'userposition/setlast/', {'last': where});
+                $http({
+                    method: 'POST',
+                    url: apiUrl + 'userposition/setlast/',
+                    data: {'last': where},
+                    timeout: 5000
+                }).then(function successCallback(response) {
+                }, function errorCallback(response) {
+                });
             };
         }])
-    .factory('setprofile', ['$http', 'apiUrl', 'UserData',
-        function ($http, apiUrl, UserData) {
+    .factory('setprofile', function ($http, apiUrl, UserData) {
             "use strict";
             return function (profileData) {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'userprofile/setprofile/', profileData);
+                $http({
+                    method: 'POST',
+                    url: apiUrl + 'userprofile/setprofile/',
+                    data: profileData,
+                    timeout: 5000
+                }).then(function successCallback(response) {
+                    console.log(response);
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
             };
-        }])
+        })
     .factory('setpicture', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -240,7 +242,7 @@ angular.module('starter.services', [])
             }
         };
     }])
-    .service('CheckauthService',
+    .service('AuthService',
              function ($q, $http, $localstorage, apiUrl, UserData) {
             "use strict";
             return {
@@ -270,13 +272,7 @@ angular.module('starter.services', [])
                         return promise;
                     };
                     return promise;
-                }
-            };
-        })
-    .service('LoginService',
-             function ($q, $http, apiUrl, hostname, $localstorage, UserData) {
-            "use strict";
-            return {
+                },
                 loginUser: function (authData, social) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
@@ -306,13 +302,7 @@ angular.module('starter.services', [])
                         return promise;
                     };
                     return promise;
-                }
-            };
-        })
-        .service('RegisterService',
-             function ($q, $http, apiUrl, $localstorage, UserData) {
-            "use strict";
-            return {
+                },
                 registerUser: function (authData) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
@@ -350,3 +340,16 @@ angular.module('starter.services', [])
                 }
             };
         });
+    // Race condition found when trying to use $ionicPlatform.ready in app.js and calling register to display id in AppCtrl.
+    // Implementing it here as a factory with promises to ensure register function is called before trying to display the id.
+//     .factory(("ionPlatform"), function( $q ){
+//         var ready = $q.defer();
+// 
+//         ionic.Platform.ready(function( device ){
+//             ready.resolve( device );
+//         });
+// 
+//         return {
+//             ready: ready.promise
+//         }
+//     })
