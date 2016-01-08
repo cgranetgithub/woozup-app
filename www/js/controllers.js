@@ -14,9 +14,8 @@ angular.module('starter.controllers',
 //$scope.$on('$ionicView.enter', function (e) {
 //});
 
-    .controller('LogoutCtrl', ['$tastypie', '$ionicLoading', 'logout',
-                '$state', 'UserData',
-        function ($tastypie, $ionicLoading, logout, $state, UserData) {
+    .controller('LogoutCtrl', ['$ionicLoading', 'logout', '$state',
+        function ($ionicLoading, logout, $state) {
             "use strict";
             $ionicLoading.show({template: "Déconnection"});
             logout();
@@ -140,7 +139,7 @@ angular.module('starter.controllers',
         }])
 
     .controller('LoginCtrl', ['$tastypie', '$ionicLoading', 'AuthService',
-                '$ionicPopup', 'sortContacts', '$scope', '$state',' UserData',
+                '$ionicPopup', 'sortContacts', '$scope', '$state', 'UserData',
                 'pushNotifReg', 'resetPassword', '$ionicHistory',
         function ($tastypie, $ionicLoading, AuthService, $ionicPopup,
                   sortContacts, $scope, $state, UserData, pushNotifReg,
@@ -702,8 +701,11 @@ angular.module('starter.controllers',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
                   join, leave, UserData, AuthService) {
             "use strict";
-            var event = new $tastypieResource('events/all');
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $scope.buttonTitle = "Chargement";
+            var event = new $tastypieResource('events/all');
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                 function (result) {
                     $scope.event = result;
