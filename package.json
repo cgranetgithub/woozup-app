@@ -33,7 +33,7 @@
   ],
   "cordovaPlatforms": [
     "ios",
-    "android",
-    "browser"
+    "browser",
+    "android"
   ]
 }

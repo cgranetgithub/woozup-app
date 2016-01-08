@@ -705,49 +705,59 @@ angular.module('starter.controllers',
             AuthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
             $scope.buttonTitle = "Chargement";
-            var event = new $tastypieResource('events/all');
-            event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
-                function (result) {
-                    $scope.event = result;
-                    var my_id = UserData.getUserId(),
-                        index,
-                        participants = result.participants,
-                        found = false;
-                    if (my_id === result.owner.user.id) {
-                        $scope.buttonTitle = "J'annule";
-                        $scope.buttonAction = function (eventId) {
-                            var myevent = new $tastypieResource('events/mine');
-                            myevent.objects.$delete({id: eventId});
-                            $state.go('events.agenda', {}, { reload: true });
-                        };
-                    } else {
-                        for (index = 0; index < participants.length; index += 1) {
-                            if (my_id === participants[index].user.id) {
-                                found = true;
+            var event = new $tastypieResource('events/all'),
+                updateEvent = function () {
+                    event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
+                        function (result) {
+                            $scope.event = result;
+                            var my_id = UserData.getUserId(),
+                                index,
+                                participants = result.participants,
+                                found = false;
+                            if (my_id === result.owner.user.id) {
+                                $scope.buttonTitle = "J'annule";
+                                $scope.buttonAction = function (eventId) {
+                                    var myevent = new $tastypieResource('events/mine');
+                                    myevent.objects.$delete({id: eventId});
+                                    $state.go('events.agenda', {}, { reload: true });
+                                };
+                            } else {
+                                for (index = 0; index < participants.length; index += 1) {
+                                    if (my_id === participants[index].user.id) {
+                                        found = true;
+                                    }
+                                }
+                                if (found) {
+                                    $scope.buttonTitle = "J'annule";
+                                    $scope.buttonAction = function (eventId) {
+                                        leaveAndReload(eventId);
+        //                                 $window.location.reload(true);
+                                    };
+                                } else {
+                                    $scope.buttonTitle = "Je participe";
+                                    $scope.buttonAction = function (eventId) {
+                                        joinAndReload(eventId);
+        //                                 $window.location.reload(true);
+                                    };
+                                }
                             }
-                        }
-                        if (found) {
-                            $scope.buttonTitle = "J'annule";
-                            $scope.buttonAction = function (eventId) {
-                                leave(eventId);
-                                $window.location.reload(true);
-                            };
-                        } else {
-                            $scope.buttonTitle = "Je participe";
-                            $scope.buttonAction = function (eventId) {
-                                join(eventId);
-                                $window.location.reload(true);
-                            };
-                        }
-                    }
-                }, function (error) {
-                    console.log(error);
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
-                    $scope.buttonTitle = "Erreur de chargement";
-                }
-            );
+                        }, function (error) {
+                            console.log(error);
+                            // verify authentication
+                            AuthService.checkUserAuth().success()
+                                .error(function () {$state.go('connect');});
+                            $scope.buttonTitle = "Erreur de chargement";
+                        })
+                },
+               leaveAndReload = function (eventId) {
+                    leave(eventId);
+                    updateEvent();
+                },
+               joinAndReload = function (eventId) {
+                    join(eventId);
+                    updateEvent();
+                };
+            updateEvent();
             $scope.home = function () {
                 $state.go('events.agenda');
             };
