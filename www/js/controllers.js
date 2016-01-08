@@ -14,18 +14,20 @@ angular.module('starter.controllers',
 //$scope.$on('$ionicView.enter', function (e) {
 //});
 
-    .controller('LogoutCtrl',
-            function ($tastypie, $ionicLoading, logout,
-                      $state, UserData) {
+    .controller('LogoutCtrl', ['$tastypie', '$ionicLoading', 'logout',
+                '$state', 'UserData',
+        function ($tastypie, $ionicLoading, logout, $state, UserData) {
             "use strict";
             $ionicLoading.show({template: "Déconnection"});
             logout();
             $state.go('connect');
             $ionicLoading.hide();
-        })
+        }])
 
-    .controller('CheckauthCtrl',
-        function ($scope, $rootScope, $cordovaPush, $tastypie, $ionicLoading,
+    .controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService',
+                'sortContacts', '$cordovaDevice', '$state', 'UserData',
+                'pushNotifReg', '$ionicHistory', 
+        function ($tastypie, $ionicLoading,
                   AuthService, sortContacts, $cordovaDevice,
                   $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
@@ -48,9 +50,11 @@ angular.module('starter.controllers',
                     $state.go('connect');
                     $ionicLoading.hide();
                 });
-        })
+        }])
 
-    .controller('ConnectCtrl',
+    .controller('ConnectCtrl', ['$tastypie', '$ionicPopup', 'AuthService',
+                'sortContacts', '$scope', '$state', 'UserData', 'pushNotifReg',
+                '$ionicHistory',
         function ($tastypie, $ionicPopup, AuthService, sortContacts,
                   $scope, $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
@@ -82,9 +86,11 @@ angular.module('starter.controllers',
                     console.log(obj);
                 });
             };
-        })
+        }])
 
-    .controller('RegisterCtrl',
+    .controller('RegisterCtrl', ['$tastypie', '$ionicPopup', '$ionicLoading',
+                'AuthService', 'sortContacts', '$scope', '$state', 'UserData',
+                'pushNotifReg', '$ionicHistory',
         function ($tastypie, $ionicPopup, $ionicLoading, AuthService,
                   sortContacts, $scope, $state, UserData, pushNotifReg,
                   $ionicHistory) {
@@ -131,9 +137,11 @@ angular.module('starter.controllers',
                         $ionicLoading.hide();
                     });
             };
-        })
+        }])
 
-    .controller('LoginCtrl',
+    .controller('LoginCtrl', ['$tastypie', '$ionicLoading', 'AuthService',
+                '$ionicPopup', 'sortContacts', '$scope', '$state',' UserData',
+                'pushNotifReg', 'resetPassword', '$ionicHistory',
         function ($tastypie, $ionicLoading, AuthService, $ionicPopup,
                   sortContacts, $scope, $state, UserData, pushNotifReg,
                   resetPassword, $ionicHistory) {
@@ -187,11 +195,14 @@ angular.module('starter.controllers',
                 });
                 myPopup.then(function(res) {});
             }
-        })
+        }])
 
-    .controller('PictureCtrl',
+    .controller('PictureCtrl', ['$tastypieResource', '$cordovaCamera',
+                '$ionicLoading', '$scope', '$state', '$ionicActionSheet',
+                'AuthService', 'UserData', 'setpicture', 'setprofile',
+                '$ionicPlatform', '$ionicHistory',
         function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
-                  $state, $ionicActionSheet, $timeout, AuthService,
+                  $state, $ionicActionSheet, AuthService,
                   UserData, setpicture, setprofile, $ionicPlatform,
                   $ionicHistory) {
             "use strict";
@@ -302,9 +313,10 @@ angular.module('starter.controllers',
                 deregister();
                 $ionicLoading.hide();
             };
-        })
+        }])
 
-    .controller('ProfileCtrl',
+    .controller('ProfileCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
+                'AuthService', 'UserData', 'setprofile', '$state',
         function ($tastypieResource, $ionicLoading, $scope,
                   AuthService, UserData, setprofile, $state) {
             "use strict";
@@ -342,9 +354,10 @@ angular.module('starter.controllers',
                 });
                 $ionicLoading.hide();
             };
-        })
+        }])
 
-    .controller('WhatCtrl',
+    .controller('WhatCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
+                '$state', 'EventData', 'AuthService',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   EventData, AuthService) {
             "use strict";
@@ -365,7 +378,8 @@ angular.module('starter.controllers',
                 $scope.types.objects.$get({id: typeId}).then(
                     function (result) {
                         EventData.setWhat(result);
-                        $state.go('when', {}, { reload: true });
+                        $state.go('when');
+//                         $state.go('when', {}, { reload: true });
                         $ionicLoading.hide();
                     },
                     function (error) {
@@ -374,10 +388,10 @@ angular.module('starter.controllers',
                     }
                 );
             };
-        })
+        }])
 
-    .controller('WhenCtrl',
-        function ($tastypieResource, $scope, $state, EventData) {
+    .controller('WhenCtrl', ['$scope', '$state', 'EventData',
+        function ($scope, $state, EventData) {
             "use strict";
             $scope.when = {};
             $scope.when.date = new Date();
@@ -387,6 +401,7 @@ angular.module('starter.controllers',
             $scope.next = function () {
                 EventData.setWhen($scope.when.date);
                 $state.go('where', {}, { reload: true });
+//                 $state.go('where');
             };
 //             $scope.$watch("when.date", function (newValue, oldValue) {
 //                 newValue.setHours(0);
@@ -396,28 +411,28 @@ angular.module('starter.controllers',
 //                                                        start__gte: newValue});
 //                 $scope.events.objects.$find();
 //             });
-        })
+        }])
 
-    .controller('WhereCtrl',
-        function ($scope, $state, $filter, EventData, UserData, NgMap) {
+    .controller('WhereCtrl', ['$scope', '$log', '$state', '$filter', 'EventData',
+                'UserData', 'NgMap',
+        function ($scope, $log, $state, $filter, EventData, UserData, NgMap) {
             "use strict";
             /*global google: false */
-            $scope.backgroundUrl = EventData.getWhat().background;
-            $scope.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
             // initialize coords
-            var lat = 48.8567, long = 2.3508, vm = this,
+            $scope.$log = $log;
+            var lat = 48.8567, lng = 2.3508, vm = this,
                 geocoder = new google.maps.Geocoder,
-                setAddress = function (address, lat, lng) {
-                    var coords = '{ "type": "Point", "coordinates": ['
-                                 + lat + ', ' + lng + '] }';
-                    EventData.setAddress(address, coords);
-                },
+//                 setAddress = function (address, lat, lng) {
+//                     var coords = '{ "type": "Point", "coordinates": ['
+//                                  + lat + ', ' + lng + '] }';
+//                     EventData.setAddress(address, coords);
+//                 },
                 coordChanged = function(latLng, addr) {
                     vm.lat = latLng.lat().toString();
                     vm.lng = latLng.lng().toString();
                     if (addr) {
                         vm.where = addr;
-                        setAddress(vm.where, vm.lat, vm.lng);
+                        EventData.setAddress(vm.where, vm.lat, vm.lng);
                     } else {
                         geocoder.geocode({'location': latLng},
                                         function (results, status) {
@@ -425,20 +440,30 @@ angular.module('starter.controllers',
                                 if (results[0]) {
                                     $scope.$apply(function () {
                                         vm.where = results[0].formatted_address;
-                                        setAddress(vm.where, vm.lat, vm.lng);
+                                        EventData.setAddress(vm.where,
+                                                             vm.lat, vm.lng);
                                     });
                                 }
                             }
                         });
                     }
                 };
-            if (UserData.getWhere()) {
+            vm.$log = $log;
+            vm.backgroundUrl = EventData.getWhat().background;
+            vm.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
+            if (EventData.getWhere() && EventData.getWhere().lat && 
+                    EventData.getWhere().lng) {
+                $log.log(EventData.getWhere());
+                lat = EventData.getWhere().lat;
+                lng = EventData.getWhere().lng;
+            } else if (UserData.getWhere()) {
                 lat = UserData.getWhere().latitude;
-                long = UserData.getWhere().longitude;
+                lng = UserData.getWhere().longitude;
             }
-            var pos = new google.maps.LatLng(lat, long);
+            var pos = new google.maps.LatLng(lat, lng);
             coordChanged(pos, null);
             NgMap.getMap().then(function(map) {
+                $log.log('markers', map.markers);
                 // disable POI (to avoid info window)
                 var styles = [{
                     featureType: "poi",
@@ -450,7 +475,7 @@ angular.module('starter.controllers',
             // when autocomplete changes, center on the place,
             // show marker and set address in button
             vm.placeChanged = function() {
-                console.log(vm.place);
+                $log.log(vm.place);
                 if (vm.place.geometry) {
                     EventData.setPlace(vm.place.name, vm.place.place_id);
                     vm.map.setCenter(vm.place.geometry.location);
@@ -464,12 +489,22 @@ angular.module('starter.controllers',
                 EventData.setPlace('', '');
                 coordChanged(event.latLng);
             };
-            $scope.next = function () {
-                $state.go('done', {}, { reload: true });
+            vm.next = function () {
+                $state.go('done', {});
+                for (var key in vm.map.markers) {
+                    vm.map.markers[key].setMap(null);
+                }
             };
-        })
+            vm.back = function () {
+                $state.go('when', {});
+                for (var key in vm.map.markers) {
+                    vm.map.markers[key].setMap(null);
+                }
+            };
+        }])
 
-    .controller('DoneCtrl',
+    .controller('DoneCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
+                '$state', 'EventData', 'AuthService',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   EventData, AuthService) {
             "use strict";
@@ -484,7 +519,10 @@ angular.module('starter.controllers',
             $scope.event.start.setMinutes(0);
             $scope.next = function () {
                 $ionicLoading.show({template: "Création du rendez-vous"});
-                var event = new $tastypieResource('events/mine');
+                var event = new $tastypieResource('events/mine'),
+                    coords = '{ "type": "Point", "coordinates": ['
+                                 + $scope.event.where.lat + ', '
+                                 + $scope.event.where.lng + '] }';
                 event.objects.$create({
                     name: $scope.event.title,
                     start: $scope.event.start,
@@ -492,7 +530,7 @@ angular.module('starter.controllers',
                     location_name: $scope.event.where.name,
                     location_address: $scope.event.where.address,
                     location_id: $scope.event.where.id,
-                    location_coords: $scope.event.where.coords
+                    location_coords: coords
                 }).$save().then(
                     function () {
                         $state.go('events.agenda', {}, { reload: true });
@@ -507,9 +545,15 @@ angular.module('starter.controllers',
                     }
                 );
             };
-        })
+            $scope.where = function () {
+//                 $state.go('where');
+                $state.go('where', {}, { reload: true });
+            };
+        }])
 
-    .controller('EventsCtrl',
+    .controller('EventsCtrl', ['$tastypieResource', '$cordovaGeolocation',
+                '$ionicPopup', '$scope', '$state', 'setlast', 'UserData',
+                'AuthService', 
         function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
                   $scope, $state, setlast, UserData, AuthService) {
             "use strict";
@@ -550,9 +594,10 @@ angular.module('starter.controllers',
             $scope.home = function () {
                 $state.go('events.agenda');
             };
-        })
+        }])
 
-    .controller('FriendsEventsCtrl',
+    .controller('FriendsEventsCtrl', ['$scope', '$state', '$tastypieResource',
+                '$ionicLoading', 'AuthService',
         function ($scope, $state, $tastypieResource, $ionicLoading,
                   AuthService) {
             "use strict";
@@ -602,8 +647,9 @@ angular.module('starter.controllers',
                 $state.go('events.agenda');
             };
             $ionicLoading.hide();
-        })
-    .controller('AgendaEventsCtrl',
+        }])
+    .controller('AgendaEventsCtrl', ['$scope', '$state', '$tastypieResource',
+                '$ionicLoading', 'AuthService',
         function ($scope, $state, $tastypieResource, $ionicLoading,
                   AuthService) {
             "use strict";
@@ -650,8 +696,9 @@ angular.module('starter.controllers',
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             };
-        })
-    .controller('EventCtrl',
+        }])
+    .controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams',
+                '$tastypieResource', 'join', 'leave', 'UserData', 'AuthService',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
                   join, leave, UserData, AuthService) {
             "use strict";
@@ -702,8 +749,8 @@ angular.module('starter.controllers',
             $scope.home = function () {
                 $state.go('events.agenda');
             };
-        })
-    .controller('FriendsCtrl',
+        }])
+    .controller('FriendsCtrl', ['$scope', '$state', '$tastypieResource',
         function ($scope, $state, $tastypieResource) {
             "use strict";
             var newFriends = new $tastypieResource('friends/new'),
@@ -730,8 +777,10 @@ angular.module('starter.controllers',
             $scope.new = {title: "Ajouter des amis", badge: 0};
             $scope.pending = {title: "Invitations en attente", badge: 0};
             $scope.home = function () { $state.go('events.agenda'); };
-        })
-    .controller('NewFriendsCtrl',
+        }])
+    .controller('NewFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q',
+                '$scope', '$state', 'sendInvite', 'ignoreInvite', 'inviteFriend',
+                'ignoreFriend',
         function ($tastypieResource, $ionicLoading, $q, $scope, $state,
                   sendInvite, ignoreInvite, inviteFriend, ignoreFriend) {
             "use strict";
@@ -792,8 +841,9 @@ angular.module('starter.controllers',
             $scope.home = function () {
                 $state.go('events.agenda');
             };
-        })
-    .controller('MyFriendsCtrl',
+        }])
+    .controller('MyFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
+                '$state', 'AuthService',
         function ($tastypieResource, $ionicLoading, $scope, $state, AuthService) {
             "use strict";
             $ionicLoading.show({template: "Chargement"});
@@ -833,8 +883,9 @@ angular.module('starter.controllers',
             $scope.home = function () {
                 $state.go('events.agenda');
             };
-        })
-    .controller('PendingFriendsCtrl',
+        }])
+    .controller('PendingFriendsCtrl', ['$tastypieResource', '$ionicLoading',
+                'acceptFriend', 'rejectFriend', '$scope', '$state', 'AuthService',
         function ($tastypieResource, $ionicLoading, acceptFriend, rejectFriend,
                   $scope, $state, AuthService) {
             "use strict";
@@ -883,7 +934,7 @@ angular.module('starter.controllers',
             $scope.home = function () {
                 $state.go('events.agenda');
             };
-        });
+        }]);
 
     
 findContacts = function(sortContacts) {

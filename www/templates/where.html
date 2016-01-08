@@ -1,22 +1,25 @@
-<ion-view view-title={{title}} class="withBg"
-          ng-style="{'background-image': 'url({{backgroundUrl}})'}">
+<ion-view view-title={{vm.title}} class="withBg" ng-controller="WhereCtrl as vm"
+          ng-style="{'background-image': 'url({{vm.backgroundUrl}})'}">
     <ion-nav-bar class="bar-dark">
-        <ion-nav-back-button class="button-clear icon-left ion-chevron-left">
-            retour
-        </ion-nav-back-button>
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon-left ion-chevron-left"
+                    ng-click="vm.back()">
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content ng-controller="WhereCtrl as vm">
+    <ion-content>
         <input g-places-autocomplete class="controls map-input" type="text"
                placeholder="Entrez une adresse ou cliquez sur la carte"
                ng-model="vm.place" ng-change="vm.placeChanged()"/>
-        <ng-map class="map" zoom="18" center="current"
+        <ng-map class="map" zoom="17" center="[{{vm.lat}}, {{vm.lng}}]"
                 on-click="vm.onClick()" data-tap-disabled="true"
                 disable-default-u-i="true">
             <marker position="[{{vm.lat}}, {{vm.lng}}]" title="marker"
                     centered="true" animation="Animation.DROP"></marker>
+<!--                 <marker ng-repeat="pos in vm.positions" position="{{pos.lat}}, {{pos.lng}}"></marker> -->
         </ng-map>    
         <button class="button icon-right ion-chevron-right button-balanced button-down"
-                ng-click="next()">
+                ng-click="vm.next()">
             {{vm.where}}
         </button>
     </ion-content>

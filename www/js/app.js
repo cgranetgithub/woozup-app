@@ -8,7 +8,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova',
+angular.module('woozup', ['ionic', 'ngCordova',
                             'starter.controllers', 'starter.services'])
 
     .run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg,
@@ -114,55 +114,55 @@ angular.module('starter', ['ionic', 'ngCordova',
         $stateProvider
 
             .state('logout', {
-                cache: false,
+//                 cache: false,
                 url: '/logout',
                 templateUrl: 'templates/checkauth.html',
                 controller: 'LogoutCtrl'
             })
             .state('checkauth', {
-                cache: false,
+//                 cache: false,
                 url: '/checkauth',
                 templateUrl: 'templates/checkauth.html',
                 controller: 'CheckauthCtrl'
             })
             .state('connect', {
-                cache: false,
+//                 cache: false,
                 url: '/connect',
                 templateUrl: 'templates/connect.html',
                 controller: 'ConnectCtrl'
             })
             .state('login', {
-                cache: false,
+//                 cache: false,
                 url: '/login',
                 templateUrl: 'templates/login.html',
                 controller: 'LoginCtrl'
             })
             .state('register', {
-                cache: false,
+//                 cache: false,
                 url: '/register',
                 templateUrl: 'templates/register.html',
                 controller: 'RegisterCtrl'
             })
             .state('picture', {
-                cache: false,
+//                 cache: false,
                 url: '/picture',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
             })
             .state('profile', {
-                cache: false,
+//                 cache: false,
                 url: '/profile',
                 templateUrl: 'templates/profile.html',
                 controller: 'ProfileCtrl'
             })
             .state('what', {
-                cache: false,
+//                 cache: false,
                 url: "/what",
                 templateUrl: "templates/what.html",
                 controller: 'WhatCtrl'
             })
             .state('when', {
-                cache: false,
+//                 cache: false,
                 url: '/when',
                 templateUrl: 'templates/when.html',
                 controller: 'WhenCtrl'
@@ -171,10 +171,10 @@ angular.module('starter', ['ionic', 'ngCordova',
                 cache: false,
                 url: '/where',
                 templateUrl: 'templates/where.html',
-                controller: 'WhereCtrl'
+//                 controller: 'WhereCtrl'
             })
             .state('done', {
-                cache: false,
+//                 cache: false,
                 url: '/done',
                 templateUrl: 'templates/done.html',
                 controller: 'DoneCtrl'
@@ -254,32 +254,32 @@ angular.module('starter', ['ionic', 'ngCordova',
     });
 
 /* DEBUG STUFF : */
-function fb_init() {
-    'use strict';
-    if (window.cordova === undefined) {
+// function fb_init() {
+//     'use strict';
+//     if (window.cordova === undefined) {
         /* browser stuff: we must wait that FB is properly set before trying using Facebook API */
-        setTimeout(fb_init, 500);
-        return;
-    }
-    if (window.cordova.platformId === "browser") {
-        if (typeof (FB) !== "undefined") {
-            console.log("FB init");
-            window.facebookConnectPlugin.browserInit("948253448566545");
-        } else {
-            setTimeout(fb_init, 500);
-            return;
-        }
-    }
-    facebookConnectPlugin.getLoginStatus(
-        function (obj) {
-            console.log('Connected');
-        },
-        function (obj) {
-        }
-    );
-}
-
-(function () {
-    'use strict';
-    setTimeout(fb_init, 1000);
-})();
+//         setTimeout(fb_init, 500);
+//         return;
+//     }
+//     if (window.cordova.platformId === "browser") {
+//         if (typeof (FB) !== "undefined") {
+//             console.log("FB init");
+//             window.facebookConnectPlugin.browserInit("948253448566545");
+//         } else {
+//             setTimeout(fb_init, 500);
+//             return;
+//         }
+//     }
+//     facebookConnectPlugin.getLoginStatus(
+//         function (obj) {
+//             console.log('Connected');
+//         },
+//         function (obj) {
+//         }
+//     );
+// }
+// 
+// (function () {
+//     'use strict';
+//     setTimeout(fb_init, 1000);
+// })();

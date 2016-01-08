@@ -2,7 +2,7 @@
 /*global angular, cordova, StatusBar*/
 
 angular.module('starter.services', [])
-    .config(function ($provide, $tastypieProvider) {
+    .config(['$provide', '$tastypieProvider', function ($provide, $tastypieProvider) {
         "use strict";
         var hostname = 'http://geoevent.herokuapp.com/',
             apiUrl = hostname + 'api/v1/';
@@ -14,7 +14,7 @@ angular.module('starter.services', [])
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
         $tastypieProvider.setResourceUrl(apiUrl);
-    })
+    }])
     .factory('setlast', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -32,7 +32,8 @@ angular.module('starter.services', [])
                 });
             };
         }])
-    .factory('setprofile', function ($http, apiUrl, UserData) {
+    .factory('setprofile', ['$http', 'apiUrl', 'UserData',
+        function ($http, apiUrl, UserData) {
             "use strict";
             return function (profileData) {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
@@ -47,7 +48,7 @@ angular.module('starter.services', [])
                     console.log(response);
                 });
             };
-        })
+        }])
     .factory('setpicture', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -144,12 +145,13 @@ angular.module('starter.services', [])
                 $http.post(apiUrl + 'user/push_notif_reg/', data);
             };
         }])
-    .factory('resetPassword', function ($http, apiUrl) {
+    .factory('resetPassword', ['$http', 'apiUrl',
+        function ($http, apiUrl) {
             "use strict";
             return function (data) {
                 $http.post(apiUrl + 'auth/reset_password/', data);
             };
-        })
+        }])
     .factory('EventData', function () {
         "use strict";
         var data = {};
@@ -170,15 +172,18 @@ angular.module('starter.services', [])
                 data.location_name = name;
                 data.location_id = id;
             },
-            setAddress: function (address, coords) {
+            setAddress: function (address, lat, lng) {
                 data.location_address = address;
-                data.location_coords = coords;
+                data.location_lat = lat;
+                data.location_lng = lng;
             },
             getWhere: function () {
                 return {'name' : data.location_name,
                         'address': data.location_address,
                         'id': data.location_id,
-                        'coords': data.location_coords};
+                        'lat': data.location_lat,
+                        'lng': data.location_lng
+                };
             }
         };
     })
@@ -242,8 +247,8 @@ angular.module('starter.services', [])
             }
         };
     }])
-    .service('AuthService',
-             function ($q, $http, $localstorage, apiUrl, UserData) {
+    .service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData', 
+        function ($q, $http, $localstorage, apiUrl, UserData) {
             "use strict";
             return {
                 checkUserAuth: function () {
@@ -339,7 +344,7 @@ angular.module('starter.services', [])
                     return promise;
                 }
             };
-        });
+        }]);
     // Race condition found when trying to use $ionicPlatform.ready in app.js and calling register to display id in AppCtrl.
     // Implementing it here as a factory with promises to ensure register function is called before trying to display the id.
 //     .factory(("ionPlatform"), function( $q ){

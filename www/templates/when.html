@@ -1,9 +1,11 @@
 <ion-view view-title={{title}} class="withBg"
           ng-style="{'background-image': 'url({{backgroundUrl}})'}">
     <ion-nav-bar class="bar-dark">
-        <ion-nav-back-button class="button-clear icon-left ion-chevron-left">
-            retour
-        </ion-nav-back-button>
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon-left ion-chevron-left"
+                    ui-sref="what">
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content>
         <uib-datepicker id="dtpick" ng-model="when.date" show-weeks="false"
