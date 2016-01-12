@@ -360,7 +360,7 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   EventData, AuthService) {
             "use strict";
-            $scope.title = "Sélectionnez l'activité"
+            $scope.title = "Nouveau rendez-vous"
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
             $scope.types.objects.$find().then(
@@ -556,6 +556,9 @@ angular.module('starter.controllers',
         function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
                   $scope, $state, setlast, UserData, AuthService) {
             "use strict";
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.FriendsTitle = "Mes amis";
             $scope.agendaTitle = "Mon agenda";
@@ -600,6 +603,9 @@ angular.module('starter.controllers',
         function ($scope, $state, $tastypieResource, $ionicLoading,
                   AuthService) {
             "use strict";
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -652,6 +658,9 @@ angular.module('starter.controllers',
         function ($scope, $state, $tastypieResource, $ionicLoading,
                   AuthService) {
             "use strict";
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -792,10 +801,13 @@ angular.module('starter.controllers',
         }])
     .controller('NewFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q',
                 '$scope', '$state', 'sendInvite', 'ignoreInvite', 'inviteFriend',
-                'ignoreFriend',
-        function ($tastypieResource, $ionicLoading, $q, $scope, $state,
-                  sendInvite, ignoreInvite, inviteFriend, ignoreFriend) {
+                'ignoreFriend', 'AuthService',
+        function ($tastypieResource, $ionicLoading, $q, $scope, $state, sendInvite,
+                  ignoreInvite, inviteFriend, ignoreFriend, AuthService) {
             "use strict";
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -858,6 +870,9 @@ angular.module('starter.controllers',
                 '$state', 'AuthService',
         function ($tastypieResource, $ionicLoading, $scope, $state, AuthService) {
             "use strict";
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = false;
@@ -901,6 +916,9 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, acceptFriend, rejectFriend,
                   $scope, $state, AuthService) {
             "use strict";
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('connect');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;

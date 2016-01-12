@@ -74,7 +74,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                 navigator.notification.confirm(
                     data.message,            // message
                     onConfirm,               // callback to invoke with index of button pressed
-                    data.additionalData.ttl, // title
+                    data.title, // title
                     ['Fermer','Voir']        // buttonLabels (1, 2)
                 );
             });
@@ -84,12 +84,12 @@ angular.module('starter', ['ionic', 'ngCordova',
             var alertDismissed = function () {},
                 onOffline = function () {
                     navigator.notification.alert(
-                        'La connection à Internet a été perdu', //message
+                        'La connexion à Internet a été perdue', //message
                         alertDismissed,         // callback
-                        'Perte de connection',  // title
+                        'Problème de connexion',  // title
                         'OK'                    // buttonName
                     )
-                    $state.go('checkauth');
+                    $state.go('connect');
                 };
             document.addEventListener("offline", onOffline, false);
         });
