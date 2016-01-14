@@ -5,6 +5,12 @@
 .woozup-green {
     color: #ACFFC4;
 }
+.canceled-title {
+    text-decoration:line-through;
+}
+.canceled-message {
+    color: red;
+}
 .item {
     opacity: 0.6;
 }

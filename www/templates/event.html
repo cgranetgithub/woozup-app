@@ -7,11 +7,12 @@
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content>
+    <ion-content class="padding">
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
                 <img ng-src="{{event.event_type.icon}}">
-                <h1>{{event.name}}</h1>
+                <h1 ng-if=!event.canceled>{{event.name}}</h1>
+                <h1 ng-if=event.canceled><s>{{event.name}}</s> (annulé)</h1>
                 <h2>{{event.start | date : 'EEEE d MMMM à H:mm'}}</h2>
             </ion-item>
             <ion-item class="item event-descr">
@@ -30,11 +31,16 @@
                 </ion-item>
             </ion-list>
         </ion-list>
+        <br>
+        <button ng-if=!event.canceled class="button button-block button-balanced"
+                ng-click="buttonAction(event.id)">
+            {{buttonTitle}}
+        </button>
     </ion-content>
 <!--<ion-footer-bar>
     <button class="button button-energized footer-button" ng-click="buttonAction(event.id)">{{buttonTitle}}</button>
 </ion-footer-bar>    -->
-    <ion-footer-bar class="bar-balanced" ng-click="buttonAction(event.id)">
+<!--    <ion-footer-bar class="bar-balanced" ng-click="buttonAction(event.id)">
         <h1 class="title">{{buttonTitle}}</h1>
-    </ion-footer-bar>
+    </ion-footer-bar>-->
 </ion-view>

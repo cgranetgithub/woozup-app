@@ -7,7 +7,7 @@
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content>
+    <ion-content class="padding">
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
                 <img ng-src="{{event.type.icon}}">
@@ -26,8 +26,12 @@
                 </label>
             </form>
         </ion-list>
+        <br>
+        <button class="button button-block button-balanced" ng-click="next()">
+            C'est parti !
+        </button>
     </ion-content>
-    <ion-footer-bar class="bar-balanced" ng-click="next()">
+<!--    <ion-footer-bar class="bar-balanced" ng-click="next()">
         <h1 class="title">C'est parti !</h1>
-    </ion-footer-bar>
+    </ion-footer-bar>-->
 </ion-view>

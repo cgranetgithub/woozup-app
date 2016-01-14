@@ -4,8 +4,9 @@
             <ion-item class="item event-item" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">
                 <img class="event-item-avatar" ng-src="{{event.owner.image}}">
                 <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}>
-                <h2>{{event.name}}</h2>
-                <p>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+                <h2 ng-if=!event.canceled>{{event.name}}</h2>
+                <h2 ng-if=event.canceled class="canceled-title">{{event.name}}</h2>
+                <p><b ng-if=event.canceled  class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
                 <p>avec {{event.owner.name}}</p>
             </ion-item>
         </ion-list>

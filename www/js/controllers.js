@@ -235,10 +235,10 @@ angular.module('starter.controllers',
                 },
                 function (error) {
                     console.log(error);
+                    $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});
-                    $ionicLoading.hide();
                 }
             );
             $scope.photoFromCamera = function () {
@@ -336,10 +336,10 @@ angular.module('starter.controllers',
                 },
                 function (error) {
                     console.log(error);
+                    $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});
-                    $ionicLoading.hide();
                 }
             );
             $scope.save = function () {
@@ -365,11 +365,12 @@ angular.module('starter.controllers',
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
             $scope.types.objects.$find().then(
                 function () { $ionicLoading.hide(); },
-                function () {
+                function (error) {
+                    console.log(error);
+                    $ionicLoading.hide();                    
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});
-                    $ionicLoading.hide();                    
                 }
             );
             $scope.next = function (typeId) {
@@ -537,10 +538,10 @@ angular.module('starter.controllers',
                     },
                     function (error) {
                         console.log(error);
+                        $ionicLoading.hide();
                         // verify authentication
                         AuthService.checkUserAuth().success()
                             .error(function () {$state.go('connect');});
-                        $ionicLoading.hide();
                     }
                 );
             };
@@ -629,6 +630,7 @@ angular.module('starter.controllers',
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 }, function (error) {
                     console.log(error);
+                    $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});
@@ -684,6 +686,7 @@ angular.module('starter.controllers',
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 }, function (error) {
                     console.log(error);
+                    $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});
@@ -723,31 +726,33 @@ angular.module('starter.controllers',
                                 index,
                                 participants = result.participants,
                                 found = false;
-                            if (my_id === result.owner.user.id) {
-                                $scope.buttonTitle = "J'annule";
-                                $scope.buttonAction = function (eventId) {
-                                    var myevent = new $tastypieResource('events/mine');
-                                    myevent.objects.$delete({id: eventId});
-                                    $state.go('events.agenda', {}, { reload: true });
-                                };
-                            } else {
-                                for (index = 0; index < participants.length; index += 1) {
-                                    if (my_id === participants[index].user.id) {
-                                        found = true;
-                                    }
-                                }
-                                if (found) {
+                            if (!result.canceled) {
+                                if (my_id === result.owner.user.id) {
                                     $scope.buttonTitle = "J'annule";
                                     $scope.buttonAction = function (eventId) {
-                                        leaveAndReload(eventId);
-        //                                 $window.location.reload(true);
+                                        var myevent = new $tastypieResource('events/mine');
+                                        myevent.objects.$delete({id: eventId});
+                                        $state.go('events.agenda', {}, { reload: true });
                                     };
                                 } else {
-                                    $scope.buttonTitle = "Je participe";
-                                    $scope.buttonAction = function (eventId) {
-                                        joinAndReload(eventId);
-        //                                 $window.location.reload(true);
-                                    };
+                                    for (index = 0; index < participants.length; index += 1) {
+                                        if (my_id === participants[index].user.id) {
+                                            found = true;
+                                        }
+                                    }
+                                    if (found) {
+                                        $scope.buttonTitle = "J'annule";
+                                        $scope.buttonAction = function (eventId) {
+                                            leaveAndReload(eventId);
+            //                                 $window.location.reload(true);
+                                        };
+                                    } else {
+                                        $scope.buttonTitle = "Je participe";
+                                        $scope.buttonAction = function (eventId) {
+                                            joinAndReload(eventId);
+            //                                 $window.location.reload(true);
+                                        };
+                                    }
                                 }
                             }
                         }, function (error) {
@@ -818,21 +823,29 @@ angular.module('starter.controllers',
                 friendsResource = new $tastypieResource('friends/new',
                                                         {order_by: 'user__first_name'}),
                 nextPages = function (invitePage, friendsPage) {
-                    $q.all([invitePage, friendsPage]).then(function (arrayOfResults) {
-                        var i;
-                        if (arrayOfResults[0]) {
-                            for (i = 0; i < arrayOfResults[0].objects.length; i += 1) {
-                                $scope.invites.push(arrayOfResults[0].objects[i]);
+                    $q.all([invitePage, friendsPage]).then(
+                        function (arrayOfResults) {
+                            var i;
+                            if (arrayOfResults[0]) {
+                                for (i = 0; i < arrayOfResults[0].objects.length; i += 1) {
+                                    $scope.invites.push(arrayOfResults[0].objects[i]);
+                                }
                             }
-                        }
-                        if (arrayOfResults[1]) {
-                            for (i = 0; i < arrayOfResults[1].objects.length; i += 1) {
-                                $scope.friends.push(arrayOfResults[1].objects[i]);
+                            if (arrayOfResults[1]) {
+                                for (i = 0; i < arrayOfResults[1].objects.length; i += 1) {
+                                    $scope.friends.push(arrayOfResults[1].objects[i]);
+                                }
                             }
+                            $ionicLoading.hide();
+                            $scope.$broadcast('scroll.infiniteScrollComplete');
+                        }, function (arrayOfErrors) {
+                            console.log(arrayOfErrors);
+                            $ionicLoading.hide();
+                            // verify authentication
+                            AuthService.checkUserAuth().success()
+                                .error(function () {$state.go('connect');});
                         }
-                        $ionicLoading.hide();
-                        $scope.$broadcast('scroll.infiniteScrollComplete');
-                    });
+                    );
                 };
             nextPages(invitesResource.objects.$find(), friendsResource.objects.$find());
             $scope.loadMore = function () {
@@ -895,6 +908,7 @@ angular.module('starter.controllers',
                 }, function (error) {
                     console.log(error);
                     // verify authentication
+                    $ionicLoading.hide();
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});
                 }
@@ -940,6 +954,7 @@ angular.module('starter.controllers',
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 }, function (error) {
                     console.log(error);
+                    $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('connect');});

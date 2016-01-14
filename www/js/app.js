@@ -48,7 +48,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                             $state.go('event', {'eventId': data.additionalData.id});
                             break;
                         case 'eventcanceled':
-                            $state.go('events.agenda');
+                            $state.go('event', {'eventId': data.additionalData.id});
                             break;
                         case 'newevent':
                             $state.go('event', {'eventId': data.additionalData.id});
