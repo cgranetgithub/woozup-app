@@ -2,11 +2,20 @@
           ng-style="{'background-image': 'url({{vm.backgroundUrl}})'}">
     <ion-nav-bar class="bar-dark">
         <ion-nav-buttons side="left">
+            <button class="button back-button buttons button-clear header-item"
+                    ng-click="$ionicGoBack()">
+                <i class="icon ion-chevron-left"></i>
+                <span class="back-text"></span>
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+<!--    <ion-nav-bar class="bar-dark">
+        <ion-nav-buttons side="left">
             <button class="button button-icon icon-left ion-chevron-left"
                     ng-click="vm.back()">
             </button>
         </ion-nav-buttons>
-    </ion-nav-bar>
+    </ion-nav-bar>-->
     <ion-content>
         <input g-places-autocomplete class="controls map-input" type="text"
                placeholder="Entrez une adresse ou cliquez sur la carte"

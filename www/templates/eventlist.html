@@ -11,9 +11,10 @@
             </ion-item>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
-        <button class="button button-positive bottom-right-button"
-                ui-sref="friends.pending">
-            <i class="icon ion-ios-people"></i>
-        </button>
     </ion-content>
+<!--     must be out of the content -->
+    <button class="button button-positive bottom-right-button"
+            ui-sref="menu.friends.new">
+        <i class="icon ion-ios-people"></i>
+    </button>
 </ion-view>

@@ -149,12 +149,6 @@ angular.module('starter', ['ionic', 'ngCordova',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
             })
-            .state('profile', {
-//                 cache: false,
-                url: '/profile',
-                templateUrl: 'templates/profile.html',
-                controller: 'ProfileCtrl'
-            })
             .state('when', {
 //                 cache: false,
                 url: '/when',
@@ -173,14 +167,35 @@ angular.module('starter', ['ionic', 'ngCordova',
                 templateUrl: 'templates/done.html',
                 controller: 'DoneCtrl'
             })
-            .state('events', {
-                cache: false,
+            .state('menu', {
+//                 cache: false,
+                url: '/menu',
+                abstract: true,
+                templateUrl: 'templates/menu.html',
+                controller: 'MenuCtrl'
+            })
+            .state('menu.profile', {
+//                 cache: false,
+                url: '/profile',
+                views: {
+                    'with-menu': {
+                        templateUrl: 'templates/profile.html',
+                        controller: 'ProfileCtrl'
+                    }
+                }
+            })
+            .state('menu.events', {
+//                 cache: false,
                 url: '/events',
                 abstract: true,
-                templateUrl: 'templates/events.html',
-                controller: 'EventsCtrl'
+                views: {
+                    'with-menu': {
+                        templateUrl: 'templates/events.html',
+                        controller: 'EventsCtrl'
+                    }
+                }
             })
-            .state('events.new', {
+            .state('menu.events.new', {
 //                 cache: false,
                 url: "/new",
                 views: {
@@ -190,7 +205,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                     }
                 }
             })
-            .state('events.friends', {
+            .state('menu.events.friends', {
                 cache: false,
                 url: '/friends',
                 views: {
@@ -200,7 +215,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                     }
                 }
             })
-            .state('events.agenda', {
+            .state('menu.events.agenda', {
                 cache: false,
                 url: '/agenda',
                 views: {
@@ -210,20 +225,18 @@ angular.module('starter', ['ionic', 'ngCordova',
                     }
                 }
             })
-            .state('event', {
-                cache: false,
-                url: '/event/:eventId',
-                templateUrl: 'templates/event.html',
-                controller: 'EventCtrl'
-            })
-            .state('friends', {
-                cache: false,
+            .state('menu.friends', {
+//                 cache: false,
                 url: '/friends',
                 abstract: true,
-                templateUrl: 'templates/friends.html',
-                controller: 'FriendsCtrl'
+                views: {
+                    'with-menu': {
+                        templateUrl: 'templates/friends.html',
+                        controller: 'FriendsCtrl'
+                    }
+                }
             })
-            .state('friends.new', {
+            .state('menu.friends.new', {
                 cache: false,
                 url: '/new',
                 views: {
@@ -233,7 +246,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                     }
                 }
             })
-            .state('friends.my', {
+            .state('menu.friends.my', {
                 cache: false,
                 url: '/my',
                 views: {
@@ -243,7 +256,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                     }
                 }
             })
-            .state('friends.pending', {
+            .state('menu.friends.pending', {
                 cache: false,
                 url: '/pending',
                 views: {
@@ -252,6 +265,12 @@ angular.module('starter', ['ionic', 'ngCordova',
                         controller: 'PendingFriendsCtrl'
                     }
                 }
+            })
+            .state('event', {
+                cache: false,
+                url: '/event/:eventId',
+                templateUrl: 'templates/event.html',
+                controller: 'EventCtrl'
             });
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/checkauth');

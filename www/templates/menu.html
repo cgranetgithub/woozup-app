@@ -1,0 +1,55 @@
+<ion-side-menus>
+
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+        <ion-side-menu-content edge-drag-threshold="true" drag-content="true">
+            <a class="item">
+                <img src='img/icon.png' class="icon"><img>
+            </a>
+            <a href="#/menu/events/new" class="item">
+                <i class="icon ion-plus-circled"></i>
+                {{new}}
+            </a>
+            <a href="#/menu/events/agenda" class="item">
+                <i class="icon ion-ios-calendar"></i>
+                {{agenda}}
+            </a>
+            <a href="#/menu/events/friends" class="item">
+                <i class="icon ion-ios-help"></i>
+                {{friendsEvents}}
+            </a>
+            <a href="#/menu/friends/new" class="item">
+                <i class="icon ion-person-add"></i>
+                {{invinteFriends}}
+            </a>
+            <a href="#/menu/friends/pending" class="item">
+                <i class="icon ion-person-stalker"></i>
+                {{pendingFriends}}
+            </a>
+            <a href="#/menu/friends/my" class="item">
+                <i class="icon ion-ios-people"></i>
+                {{myFriends}}
+            </a>
+            <a href="#/menu/profile" class="item">
+                <i class="icon ion-person"></i>
+                {{profile}}
+            </a>
+            <a href="#/logout" class="item">
+                <i class="icon ion-log-out"></i>
+                Se d&#xE9;connecter
+            </a>
+        </ion-side-menu-content>
+    </ion-side-menu>
+
+    <!-- Main content, usually <ion-nav-view> -->
+    <ion-side-menu-content>
+        <!-- The nav bar that will be updated as we navigate -->
+        <ion-nav-bar class="bar-dark">
+            <ion-nav-buttons side="left">
+                <!-- Toggle left side menu -->
+                <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-nav-view name="with-menu"></ion-nav-view>
+    </ion-side-menu-content>
+</ion-side-menus>

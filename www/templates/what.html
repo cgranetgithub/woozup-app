@@ -1,5 +1,6 @@
 <ion-view view-title={{title}} class="bgim">
     <ion-content class="gallery">
+        <br>
         <span class="item-tile" ng-repeat="type in types.page.objects"
               ng-style={{type.style}} ng-click="next(type.id)">
             <img class="category" ng-src="{{type.icon}}">
@@ -7,6 +8,11 @@
                 <p class="category-title">{{type.short_name}}</p>
             </div>
         </span>
-        <hr>
+        <br>
     </ion-content>
+<!--     must be out of the content -->
+    <button class="button button-positive bottom-right-button"
+            ui-sref="menu.friends.new">
+        <i class="icon ion-ios-people"></i>
+    </button>
 </ion-view>

@@ -42,7 +42,7 @@ angular.module('starter.controllers',
                                       UserData.getApiKey());
                     pushNotifReg(UserData.getNotifData());
                     findContacts(sortContacts);
-                    $state.go('events.new');
+                    $state.go('menu.events.new');
                     $ionicLoading.hide();
                 })
                 .error(function () {
@@ -74,7 +74,7 @@ angular.module('starter.controllers',
                             $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                             pushNotifReg(UserData.getNotifData());
                             findContacts(sortContacts);
-                            $state.go('friends.new');
+                            $state.go('menu.events.new');
                         }).error(function () {
                             $ionicPopup.alert({
                                 title: "Problème lors de la création du compte",
@@ -159,7 +159,7 @@ angular.module('starter.controllers',
                         $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
                         pushNotifReg(UserData.getNotifData());
                         findContacts(sortContacts);
-                        $state.go('friends.new');
+                        $state.go('menu.events.new');
                         $ionicLoading.hide();
                     }).error(function () {
                         $ionicLoading.hide();
@@ -307,13 +307,23 @@ angular.module('starter.controllers',
                     };
                 setprofile({'first_name': $scope.data.first_name});
                 setpicture(file_field);
-                $state.go('friends.new');
+                $state.go('menu.events.new');
                 // enable back button again
                 deregister();
                 $ionicLoading.hide();
             };
         }])
 
+    .controller('MenuCtrl', ['$scope', function($scope) {
+            $scope.new = "Nouveau rendez-vous";
+            $scope.agenda = "Mon agenda";
+            $scope.friendsEvents = "Ce que mes amis ont prévu";
+            $scope.invinteFriends = "Ajouter des amis";
+            $scope.pendingFriends = "Invitations en attente";
+            $scope.myFriends = "Mes amis";
+            $scope.profile = "Mon profil";
+    }])
+    
     .controller('ProfileCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
                 'AuthService', 'UserData', 'setprofile', '$state',
         function ($tastypieResource, $ionicLoading, $scope,
@@ -405,7 +415,7 @@ angular.module('starter.controllers',
 //                 $state.go('where');
                 };
             } else {
-                $state.go('events.new');
+                $state.go('menu.events.new');
             }
 //             $scope.$watch("when.date", function (newValue, oldValue) {
 //                 newValue.setHours(0);
@@ -537,7 +547,7 @@ angular.module('starter.controllers',
                     location_coords: coords
                 }).$save().then(
                     function () {
-                        $state.go('events.agenda', {}, { reload: true });
+                        $state.go('menu.events.agenda', {}, { reload: true });
                         $ionicLoading.hide();
                     },
                     function (error) {
@@ -565,12 +575,8 @@ angular.module('starter.controllers',
             AuthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
-            $scope.friendsTitle = "Mes amis";
             $scope.newTitle = "Nouveau rendez-vous";
             $scope.agendaTitle = "Mon agenda";
-            $scope.my = {title: "Mes amis"};
-            $scope.new = {title: "Ajouter des amis"};
-            $scope.pending = {title: "Invitations en attente"};
             if (gps_in_progress) {
                 return;
             }
@@ -712,13 +718,21 @@ angular.module('starter.controllers',
         }])
     .controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams',
                 '$tastypieResource', 'join', 'leave', 'UserData', 'AuthService',
+                '$ionicHistory',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
-                  join, leave, UserData, AuthService) {
+                  join, leave, UserData, AuthService, $ionicHistory) {
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
                 .error(function () {$state.go('connect');});
             $scope.buttonTitle = "Chargement";
+            $scope.goBackAction = function() {
+                if ($ionicHistory.viewHistory().backView) {
+                    $ionicHistory.goBack();
+                } else {
+                    $state.go('menu.events.agenda');
+                }
+            }
             var event = new $tastypieResource('events/all'),
                 updateEvent = function () {
                     event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
@@ -734,7 +748,7 @@ angular.module('starter.controllers',
                                     $scope.buttonAction = function (eventId) {
                                         var myevent = new $tastypieResource('events/mine');
                                         myevent.objects.$delete({id: eventId});
-                                        $state.go('events.agenda', {}, { reload: true });
+                                        $state.go('menu.events.agenda', {}, { reload: true });
                                     };
                                 } else {
                                     for (index = 0; index < participants.length; index += 1) {

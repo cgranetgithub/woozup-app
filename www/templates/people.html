@@ -39,9 +39,10 @@
             </ion-item>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
-        <button class="button button-royal bottom-right-button"
-                ui-sref="events.agenda">
-            <i class="icon ion-ios-calendar"></i>
-        </button>
     </ion-content>
+<!--     must be out of the content -->
+    <button class="button button-royal bottom-right-button"
+            ui-sref="menu.events.new">
+        <i class="icon ion-ios-calendar"></i>
+    </button>
 </ion-view>

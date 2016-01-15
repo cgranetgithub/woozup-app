@@ -1,12 +1,14 @@
+<ion-nav-bar class="bar-dark">
+    <ion-nav-buttons side="left">
+        <button class="button back-button buttons button-clear header-item"
+                ng-click="goBackAction()">
+            <i class="icon ion-chevron-left"></i>
+            <span class="back-text"></span>
+        </button>
+    </ion-nav-buttons>
+</ion-nav-bar>
 <ion-view view-title={{event.event_type.name}} class="withBg"
-          ng-style="{'background-image': 'url(' + event.event_type.background + ')'}">
-    <ion-nav-bar class="bar-dark">
-        <ion-nav-buttons side="left">
-            <button class="button button-icon icon-left ion-ios-home"
-                    ui-sref="events.agenda">
-            </button>
-        </ion-nav-buttons>
-    </ion-nav-bar>
+        ng-style="{'background-image': 'url(' + event.event_type.background + ')'}">
     <ion-content class="padding">
         <ion-list>
             <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
@@ -25,7 +27,7 @@
             </ion-item>
             <ion-list>
                 <ion-item class="item item-avatar-left"
-                          ng-repeat="participant in event.participants">
+                        ng-repeat="participant in event.participants">
                     <img ng-src="{{participant.image}}">
                     <h3>{{participant.name}}</h3>
                 </ion-item>
