@@ -1,0 +1,15 @@
+https://angular.github.io/protractor/#/
+
+Install
+-------
+npm install -g protractor
+webdriver-manager update
+
+Run
+---
+protractor conf.js
+
+Notes:
+- `ionic serve --nobrowser` must be launched to serve the app...
+- conf.js is in [BASEDIR]/tests/
+- if you get the following error "undefined:119", try `n stable`

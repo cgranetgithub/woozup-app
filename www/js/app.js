@@ -26,61 +26,62 @@ angular.module('starter', ['ionic', 'ngCordova',
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
-            // won't work in browser, normal (cordova)
-            var push = PushNotification.init({
-                "android": {"senderID": "496829276290"},
-                "ios": {"alert": "true", "badge": "true", "sound": "true"},
-                "windows": {}
-            } );
-            push.on('registration', function(data) {
-                UserData.setNotifData(data.registrationId,
-                                     $cordovaDevice.getModel(),
-                                     $cordovaDevice.getUUID(),
-                                     ionic.Platform.platform()
-                                     );
-                pushNotifReg(UserData.getNotifData()); // !!! important
-            });
-            push.on('notification', function(data) {
-                function onConfirm(buttonIndex) {
-                    if (buttonIndex == '2') {
-                        switch(data.additionalData.reason) {
-                        case 'eventchanged':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'eventcanceled':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'newevent':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'joinevent':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'leftevent':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'friendrequest':
-                            $state.go('friends.pending');
-                            break;
-                        case 'friendaccept':
-                            $state.go('friends.my');
-                            break;
-                        default:
-                            $state.go('checkauth');
+            if (!ionic.Platform.is('linux')) {
+                var push = PushNotification.init({
+                    "android": {"senderID": "496829276290"},
+                    "ios": {"alert": "true", "badge": "true", "sound": "true"},
+                    "windows": {}
+                } );
+                push.on('registration', function(data) {
+                    UserData.setNotifData(data.registrationId,
+                                        $cordovaDevice.getModel(),
+                                        $cordovaDevice.getUUID(),
+                                        ionic.Platform.platform()
+                                        );
+                    pushNotifReg(UserData.getNotifData()); // !!! important
+                });
+                push.on('notification', function(data) {
+                    function onConfirm(buttonIndex) {
+                        if (buttonIndex == '2') {
+                            switch(data.additionalData.reason) {
+                            case 'eventchanged':
+                                $state.go('event', {'eventId': data.additionalData.id});
+                                break;
+                            case 'eventcanceled':
+                                $state.go('event', {'eventId': data.additionalData.id});
+                                break;
+                            case 'newevent':
+                                $state.go('event', {'eventId': data.additionalData.id});
+                                break;
+                            case 'joinevent':
+                                $state.go('event', {'eventId': data.additionalData.id});
+                                break;
+                            case 'leftevent':
+                                $state.go('event', {'eventId': data.additionalData.id});
+                                break;
+                            case 'friendrequest':
+                                $state.go('friends.pending');
+                                break;
+                            case 'friendaccept':
+                                $state.go('friends.my');
+                                break;
+                            default:
+                                $state.go('checkauth');
+                            }
                         }
                     }
-                }
 
-                navigator.notification.confirm(
-                    data.message,            // message
-                    onConfirm,               // callback to invoke with index of button pressed
-                    data.title, // title
-                    ['Fermer','Voir']        // buttonLabels (1, 2)
-                );
-            });
-            push.on('error', function(e) {
-                console.error(e.message);
-            });
+                    navigator.notification.confirm(
+                        data.message,            // message
+                        onConfirm,               // callback to invoke with index of button pressed
+                        data.title, // title
+                        ['Fermer','Voir']        // buttonLabels (1, 2)
+                    );
+                });
+                push.on('error', function(e) {
+                    console.error(e.message);
+                });
+            }
             var alertDismissed = function () {},
                 onOffline = function () {
                     navigator.notification.alert(

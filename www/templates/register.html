@@ -11,18 +11,18 @@
             <label class="item item-input">
                 <span class="input-label">Email</span>
                 <input type="email" autocapitalize="off" autocorrect="off"
-                       ng-model="data.email" name="login">
+                       ng-model="data.email" name="login-input">
 <!--                        ng-pattern="regex_username"> -->
             </label>
             <label class="item item-input">
                 <span class="input-label">Mot de passe</span>
                 <input type="password" placeholder="(6 caractères minimum)"
-                       ng-model="data.password" name="password"
+                       ng-model="data.password" name="password-input"
                        ng-pattern="regex_password">
             </label>
         </div>
         <button class="button button-block button-balanced"
-                ng-click="register()"
+                ng-click="register()" name="create-button"
                 ng-disabled="!data.email || !data.password">
                 Créer mon compte
         </button>
