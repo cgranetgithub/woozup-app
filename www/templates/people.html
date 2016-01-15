@@ -1,4 +1,4 @@
-<ion-view view-title={{title}} class="bgim">
+<ion-view view-title={{title}} class="blue-bgim">
     <ion-content>
         <ion-list>
             <ion-item class="item item-avatar item-button-right"
@@ -39,5 +39,9 @@
             </ion-item>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+        <button class="button button-royal bottom-right-button"
+                ui-sref="events.agenda">
+            <i class="icon ion-ios-calendar"></i>
+        </button>
     </ion-content>
 </ion-view>

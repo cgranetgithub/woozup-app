@@ -3,17 +3,32 @@
     <!-- Left menu -->
     <ion-side-menu side="left">
         <ion-side-menu-content edge-drag-threshold="true" drag-content="true">
-            <a menu-close="" href="#/what" class="item">
+            <a class="item">
+                <img src='../img/icon.png' class="icon"><img>
+            </a>
+            <a menu-close="" href="#/events/new" class="item">
                 <i class="icon ion-plus-circled"></i>
                 Nouveau rendez-vous
             </a>
             <a menu-close="" href="#/events/agenda" class="item">
                 <i class="icon ion-ios-calendar"></i>
-                Mes sorties
+                {{agendaTitle}}
+            </a>
+            <a menu-close="" href="#/events/friends" class="item">
+                <i class="icon ion-ios-help"></i>
+                {{friendsEventTitle}}
             </a>
             <a menu-close="" href="#/friends/new" class="item">
+                <i class="icon ion-person-add"></i>
+                {{new.title}}
+            </a>
+            <a menu-close="" href="#/friends/pending" class="item">
                 <i class="icon ion-person-stalker"></i>
-                Mes amis
+                {{pending.title}}
+            </a>
+            <a menu-close="" href="#/friends/my" class="item">
+                <i class="icon ion-ios-people"></i>
+                {{my.title}}
             </a>
             <a menu-close="" href="#/profile" class="item">
                 <i class="icon ion-person"></i>
@@ -37,22 +52,22 @@
         </ion-nav-bar>
         <!-- tabs -->
         <ion-tabs class="tabs-icon-top tabs-dark">
-            <ion-tab title={{new.title}} ui-sref="friends.new"
+<!--            <ion-tab title={{agendaTitle}} href="#/events/agenda"
+                    icon="ion-ios-calendar" class="woozup-pink">
+                <ion-nav-view name="agendaevents"></ion-nav-view>-->
+            </ion-tab>
+            <ion-tab title={{new.title}} href="#/friends/new"
                     icon="ion-person-add" badge="new.badge"
                     badge-style="badge-energized">
                 <ion-nav-view name="newfriends"></ion-nav-view>
             </ion-tab>
-            <ion-tab title={{pending.title}} ui-sref="friends.pending"
+            <ion-tab title={{pending.title}} href="#/friends/pending"
                     icon="ion-person-stalker" badge="pending.badge"
                     badge-style="badge-energized">
                 <ion-nav-view name="pendingfriends"></ion-nav-view>
             </ion-tab>
-            <ion-tab title={{my.title}} ui-sref="friends.my" icon="ion-ios-people">
+            <ion-tab title={{my.title}} href="#/friends/my" icon="ion-ios-people">
                 <ion-nav-view name="myfriends"></ion-nav-view>
-            </ion-tab>
-            <ion-tab title={{agendaTitle}} ui-sref="events.agenda"
-                    icon="ion-ios-calendar" class="woozup-green">
-                <ion-nav-view name="agendaevents"></ion-nav-view>
             </ion-tab>
         </ion-tabs>
     </ion-side-menu-content>

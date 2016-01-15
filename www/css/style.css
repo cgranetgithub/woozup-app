@@ -5,6 +5,12 @@
 .woozup-green {
     color: #ACFFC4;
 }
+.woozup-blue {
+    color: #00129C;
+}
+.woozup-pink {
+    color: #740066;
+}
 .canceled-title {
     text-decoration:line-through;
 }
@@ -183,11 +189,19 @@ input[type="text"].controls {
     height: 50px;
     width: 50px;
 }
-.bottomright {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+.bottom-right-button {
+    border-radius: 100% 0 0 0;
+    bottom: 0px;
     box-shadow: 2px 2px 20px #545454;
+    height: 100px;
+    opacity: 0.7;
+    padding: 20px 0 0 30px;
+    position: absolute;
+    right: 0px;
+    width: 110px;
+}
+.bottom-right-button .icon::before {
+    font-size: 80px;
 }
 .cropArea {
     background: url('../img/plus_bg.png') no-repeat center center;
@@ -205,6 +219,13 @@ input[type="text"].controls {
 }
 .bgim {
     background: url('../img/splash.png') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.blue-bgim {
+    background: url('../img/splash-blue.png') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -242,7 +263,10 @@ input[type="text"].controls {
 input.ng-invalid-pattern {
     color: red;
 }
-
+.icon {
+    width: 30%;
+    margin: auto;
+}
 
 /*
 #ng-dirty ng-valid-parse ng-touched ng-invalid ng-invalid-pattern

@@ -155,12 +155,6 @@ angular.module('starter', ['ionic', 'ngCordova',
                 templateUrl: 'templates/profile.html',
                 controller: 'ProfileCtrl'
             })
-            .state('what', {
-//                 cache: false,
-                url: "/what",
-                templateUrl: "templates/what.html",
-                controller: 'WhatCtrl'
-            })
             .state('when', {
 //                 cache: false,
                 url: '/when',
@@ -185,6 +179,16 @@ angular.module('starter', ['ionic', 'ngCordova',
                 abstract: true,
                 templateUrl: 'templates/events.html',
                 controller: 'EventsCtrl'
+            })
+            .state('events.new', {
+//                 cache: false,
+                url: "/new",
+                views: {
+                    'newevents': {
+                        templateUrl: "templates/what.html",
+                        controller: 'WhatCtrl'
+                    }
+                }
             })
             .state('events.friends', {
                 cache: false,

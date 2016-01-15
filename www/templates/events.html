@@ -3,17 +3,32 @@
     <!-- Left menu -->
     <ion-side-menu side="left">
         <ion-side-menu-content edge-drag-threshold="true" drag-content="true">
-            <a menu-close="" href="#/what" class="item">
+            <a class="item">
+                <img src='../img/icon.png' class="icon"><img>
+            </a>
+            <a menu-close="" href="#/events/new" class="item">
                 <i class="icon ion-plus-circled"></i>
                 Nouveau rendez-vous
             </a>
             <a menu-close="" href="#/events/agenda" class="item">
                 <i class="icon ion-ios-calendar"></i>
-                Mes sorties
+                {{agendaTitle}}
+            </a>
+            <a menu-close="" href="#/events/friends" class="item">
+                <i class="icon ion-ios-help"></i>
+                {{friendsEventTitle}}
             </a>
             <a menu-close="" href="#/friends/new" class="item">
+                <i class="icon ion-person-add"></i>
+                {{new.title}}
+            </a>
+            <a menu-close="" href="#/friends/pending" class="item">
                 <i class="icon ion-person-stalker"></i>
-                Mes amis
+                {{pending.title}}
+            </a>
+            <a menu-close="" href="#/friends/my" class="item">
+                <i class="icon ion-ios-people"></i>
+                {{my.title}}
             </a>
             <a menu-close="" href="#/profile" class="item">
                 <i class="icon ion-person"></i>
@@ -37,16 +52,22 @@
         </ion-nav-bar>
         <!-- tabs -->
         <ion-tabs class="tabs-icon-top tabs-dark">
-            <ion-tab title={{agendaTitle}} ui-sref="events.agenda" icon="ion-ios-calendar">
+            <ion-tab title={{newTitle}} href="#/events/new"
+                     icon="ion-plus-circled">
+                <ion-nav-view name="newevents"></ion-nav-view>
+            </ion-tab>
+            <ion-tab title={{agendaTitle}} href="#/events/agenda"
+                     icon="ion-ios-calendar">
                 <ion-nav-view name="agendaevents"></ion-nav-view>
             </ion-tab>
-            <ion-tab title={{friendsEventTitle}}  ui-sref="events.friends" icon="ion-ios-help">
+            <ion-tab title={{friendsEventTitle}} href="#/events/friends"
+                     icon="ion-ios-help">
                 <ion-nav-view name="friendsevents"></ion-nav-view>
             </ion-tab>
-            <ion-tab title={{FriendsTitle}}  ui-sref="friends.new"
-                    icon="ion-ios-people" class="woozup-green">
+<!--            <ion-tab title={{friendsTitle}}  href="#/friends/new"
+                     icon="ion-ios-people" class="woozup-blue">
                 <ion-nav-view name="newfriends"></ion-nav-view>
-            </ion-tab>
+            </ion-tab>-->
         </ion-tabs>
     </ion-side-menu-content>
 </ion-side-menus>
