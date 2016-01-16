@@ -115,13 +115,13 @@ angular.module('starter', ['ionic', 'ngCordova',
         $stateProvider
 
             .state('logout', {
-//                 cache: false,
+                cache: false,
                 url: '/logout',
                 templateUrl: 'templates/checkauth.html',
                 controller: 'LogoutCtrl'
             })
             .state('checkauth', {
-//                 cache: false,
+                cache: false,
                 url: '/checkauth',
                 templateUrl: 'templates/checkauth.html',
                 controller: 'CheckauthCtrl'
@@ -145,7 +145,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                 controller: 'RegisterCtrl'
             })
             .state('picture', {
-//                 cache: false,
+                cache: false,
                 url: '/picture',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
@@ -176,7 +176,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                 controller: 'MenuCtrl'
             })
             .state('menu.profile', {
-//                 cache: false,
+                cache: false,
                 url: '/profile',
                 views: {
                     'with-menu': {
