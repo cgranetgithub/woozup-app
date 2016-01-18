@@ -204,12 +204,16 @@ input[type="text"].controls {
     font-size: 80px;
 }
 .cropArea {
-    background: url('../img/plus_bg.png') no-repeat center center;
-    background-size: 100% auto;
-    overflow: hidden;
+    background: url('../img/silhouette78.png') no-repeat center center;
+    background-color: #DDD;
+    background-size: 70% auto;
+    border-radius: 10%;
     margin: auto;
 /*     width:300px; */
     height:50%;
+    opacity: 0.9;
+    padding: 2px;
+    overflow: hidden;
 }
 .photoButton{
     margin: -10px 10px 10px 10px;

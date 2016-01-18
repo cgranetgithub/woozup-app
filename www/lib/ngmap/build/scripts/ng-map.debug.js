@@ -2417,7 +2417,7 @@ angular.module('ngMap', []);
         }
         for (var key in output) { //jshint ignore:line
           var arr = output[key];
-          if (key == "anchor" || key == "origin") {
+          if (key == "anchor" || key == "origin" || key == "labelOrigin") {
             output[key] = new google.maps.Point(arr[0], arr[1]);
           } else if (key == "size" || key == "scaledSize") {
             output[key] = new google.maps.Size(arr[0], arr[1]);
@@ -2764,7 +2764,7 @@ angular.module('ngMap', []);
    * @desc map instance pool
    */
   var mapInstances = [];
-  var $window, $document;
+  var $window, $document, $timeout;
 
   var add = function(el) {
     var mapDiv = $document.createElement("div");
@@ -2800,6 +2800,11 @@ angular.module('ngMap', []);
     var map = find(el);
     if (!map) {
       map = add(el);
+    } else {
+      /* firing map idle event, which is used by map controller */
+      $timeout(function() {
+        google.maps.event.trigger(map, 'idle');
+      }, 100);
     }
     map.inUse = true;
     return map;
@@ -2816,8 +2821,8 @@ angular.module('ngMap', []);
     map.inUse = false;
   };
 
-  var NgMapPool = function(_$document_, _$window_) {
-    $document = _$document_[0], $window = _$window_;
+  var NgMapPool = function(_$document_, _$window_, _$timeout_) {
+    $document = _$document_[0], $window = _$window_, $timeout = _$timeout_;
 
     return {
       mapInstances: mapInstances,
@@ -2825,7 +2830,7 @@ angular.module('ngMap', []);
       returnMapInstance: returnMapInstance
     };
   };
-  NgMapPool.$inject = [ '$document', '$window' ];
+  NgMapPool.$inject = [ '$document', '$window', '$timeout'];
 
   angular.module('ngMap').factory('NgMapPool', NgMapPool);
 
@@ -2923,7 +2928,7 @@ angular.module('ngMap', []);
     var mapId = mapCtrl.map.id || len;
     if (mapCtrl.map) {
       for (var eventName in mapCtrl.mapEvents) {
-        $log.debug('clearing map events', eventName);
+        console.log('clearing map events', eventName);
         google.maps.event.clearListeners(mapCtrl.map, eventName);
       }
       if (mapCtrl.map.controls) {
@@ -2932,6 +2937,14 @@ angular.module('ngMap', []);
         });
       }
     }
+
+    //Remove Heatmap Layers
+    if (mapCtrl.map.heatmapLayers) {
+      Object.keys(mapCtrl.map.heatmapLayers).forEach(function (layer) {
+        mapCtrl.deleteObject('heatmapLayers', mapCtrl.map.heatmapLayers[layer]);
+      });
+    }
+
     delete mapControllers[mapId];
   };
 

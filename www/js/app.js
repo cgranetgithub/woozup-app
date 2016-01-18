@@ -96,17 +96,23 @@ angular.module('starter', ['ionic', 'ngCordova',
         });
     })
 
-    .config(function ($ionicConfigProvider) {
-        "use strict";
-        $ionicConfigProvider.tabs.style('standard');
+    .config(['$ionicConfigProvider', function ($ionicConfigProvider) {
         $ionicConfigProvider.tabs.position('top');
+        $ionicConfigProvider.tabs.style('standard');
+        $ionicConfigProvider.views.maxCache(0);
         $ionicConfigProvider.views.transition('none');
         $ionicConfigProvider.navBar.alignTitle('center');
         $ionicConfigProvider.navBar.positionPrimaryButtons('left');
         $ionicConfigProvider.navBar.positionSecondaryButtons('right');
-    })
+    }])
+    
+    .config(['$compileProvider', function($compileProvider) {
+        "use strict";
+        $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|content):|data:image\//);
+    }])
 
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', '$urlRouterProvider',
+            function ($stateProvider, $urlRouterProvider) {
         "use strict";
         // Ionic uses AngularUI Router which uses the concept of states
         // Learn more here: https://github.com/angular-ui/ui-router
@@ -275,7 +281,7 @@ angular.module('starter', ['ionic', 'ngCordova',
             });
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/checkauth');
-    });
+    }]);
 
 /* DEBUG STUFF : */
 // function fb_init() {

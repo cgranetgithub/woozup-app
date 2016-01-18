@@ -211,6 +211,7 @@ angular.module('starter.controllers',
             });
             // disable back button
             var deregister = $ionicPlatform.registerBackButtonAction(function () {}, 101);
+            //
             $ionicLoading.show({template: "Chargement"});
             $scope.data = {'first_name': UserData.getUserName()};
             $scope.myImage = '';
@@ -256,8 +257,10 @@ angular.module('starter.controllers',
                 };
                 $cordovaCamera.getPicture(options).then(function (imageURI) {
                     $scope.myImage = imageURI;
+                    $ionicLoading.hide();
                 }, function (err) {
                     console.log(err);
+                    $ionicLoading.hide();
                 });
     //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
             };
@@ -270,8 +273,10 @@ angular.module('starter.controllers',
                 };
                 $cordovaCamera.getPicture(options).then(function (imageURI) {
                     $scope.myImage = imageURI;
+                    $ionicLoading.hide();
                 }, function (err) {
                     console.log(err);
+                    $ionicLoading.hide();
                 });
             };
             $scope.photoFromFB = function () {
@@ -288,9 +293,11 @@ angular.module('starter.controllers',
                     buttonClicked: function(index) {
                         switch (index) {
                         case 0:
+                            $ionicLoading.show({template: "Chargement de la photo"});
                             $scope.photoFromCamera();
                             break;
                         case 1:
+                            $ionicLoading.show({template: "Chargement de la photo"});
                             $scope.photoFromGallery()
                             break;
                         }
@@ -477,7 +484,7 @@ angular.module('starter.controllers',
             var pos = new google.maps.LatLng(lat, lng);
             coordChanged(pos, null);
             NgMap.getMap().then(function(map) {
-                $log.log('markers', map.markers);
+//                 $log.log('markers', map.markers);
                 // disable POI (to avoid info window)
                 var styles = [{
                     featureType: "poi",
@@ -504,16 +511,16 @@ angular.module('starter.controllers',
                 coordChanged(event.latLng);
             };
             vm.next = function () {
-                $state.go('done', {});
-                for (var key in vm.map.markers) {
-                    vm.map.markers[key].setMap(null);
-                }
+                $state.go('done');
+//                 for (var key in vm.map.markers) {
+//                     vm.map.markers[key].setMap(null);
+//                 }
             };
             vm.back = function () {
-                $state.go('when', {});
-                for (var key in vm.map.markers) {
-                    vm.map.markers[key].setMap(null);
-                }
+                $state.go('when');
+//                 for (var key in vm.map.markers) {
+//                     vm.map.markers[key].setMap(null);
+//                 }
             };
         }])
 
@@ -560,8 +567,8 @@ angular.module('starter.controllers',
                 );
             };
             $scope.where = function () {
-//                 $state.go('where');
-                $state.go('where', {}, { reload: true });
+                $state.go('where');
+//                 $state.go('where', {}, { reload: true });
             };
         }])
 

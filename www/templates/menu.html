@@ -1,4 +1,4 @@
-<ion-side-menus>
+<ion-side-menus enable-menu-with-back-views="false">
 
     <!-- Left menu -->
     <ion-side-menu side="left">
@@ -6,35 +6,35 @@
             <a class="item">
                 <img src='img/icon.png' class="icon"><img>
             </a>
-            <a href="#/menu/events/new" class="item">
+            <a menu-close href="#/menu/events/new" class="item">
                 <i class="icon ion-plus-circled"></i>
                 {{new}}
             </a>
-            <a href="#/menu/events/agenda" class="item">
+            <a menu-close href="#/menu/events/agenda" class="item">
                 <i class="icon ion-ios-calendar"></i>
                 {{agenda}}
             </a>
-            <a href="#/menu/events/friends" class="item">
+            <a menu-close href="#/menu/events/friends" class="item">
                 <i class="icon ion-ios-help"></i>
                 {{friendsEvents}}
             </a>
-            <a href="#/menu/friends/new" class="item">
+            <a menu-close href="#/menu/friends/new" class="item">
                 <i class="icon ion-person-add"></i>
                 {{invinteFriends}}
             </a>
-            <a href="#/menu/friends/pending" class="item">
+            <a menu-close href="#/menu/friends/pending" class="item">
                 <i class="icon ion-person-stalker"></i>
                 {{pendingFriends}}
             </a>
-            <a href="#/menu/friends/my" class="item">
+            <a menu-close href="#/menu/friends/my" class="item">
                 <i class="icon ion-ios-people"></i>
                 {{myFriends}}
             </a>
-            <a href="#/menu/profile" class="item">
+            <a menu-close href="#/menu/profile" class="item">
                 <i class="icon ion-person"></i>
                 {{profile}}
             </a>
-            <a href="#/logout" class="item">
+            <a menu-close href="#/logout" class="item">
                 <i class="icon ion-log-out"></i>
                 Se d&#xE9;connecter
             </a>

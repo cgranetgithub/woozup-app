@@ -22,7 +22,8 @@
             </ion-item>
             <ion-item class="item item-avatar item-button-right"
                       ng-repeat="invite in invites track by $index">
-                <img ng-src="{{invite.photo}}">
+                <img ng-if="invite.photo" ng-src={{invite.photo}}>
+                <img ng-if="!invite.photo" src="img/person-grey.png">
                 <h2>{{invite.name}}</h2>
                 <p>{{invite.numbers}}</p>
                 <p>{{invite.emails}}</p>
