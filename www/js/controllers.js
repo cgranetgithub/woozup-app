@@ -196,14 +196,13 @@ angular.module('starter.controllers',
             }
         }])
 
-    .controller('PictureCtrl', ['$tastypieResource', '$cordovaCamera',
-                '$ionicLoading', '$scope', '$state', '$ionicActionSheet',
-                'AuthService', 'UserData', 'setpicture', 'setprofile',
+    .controller('PictureCtrl', ['$tastypieResource', 'CameraService',
+                '$ionicLoading', '$scope', '$state', 'AuthService',
+                'UserData', 'PictureService', 'setprofile', '$ionicModal',
                 '$ionicPlatform', '$ionicHistory',
-        function ($tastypieResource, $cordovaCamera, $ionicLoading, $scope,
-                  $state, $ionicActionSheet, AuthService,
-                  UserData, setpicture, setprofile, $ionicPlatform,
-                  $ionicHistory) {
+        function ($tastypieResource, CameraService, $ionicLoading, $scope,
+                  $state, AuthService, UserData, PictureService, setprofile,
+                  $ionicModal, $ionicPlatform, $ionicHistory) {
             "use strict";
             $ionicHistory.nextViewOptions({
                 disableAnimate: true,
@@ -214,20 +213,6 @@ angular.module('starter.controllers',
             //
             $ionicLoading.show({template: "Chargement"});
             $scope.data = {'first_name': UserData.getUserName()};
-            $scope.myImage = '';
-            $scope.myCroppedImage = '';
-
-            var handleFileSelect = function (evt) {
-                var file = evt.currentTarget.files[0],
-                    reader = new FileReader();
-                reader.onload = function (evt) {
-                    $scope.$apply(function ($scope) {
-                        $scope.myImage = evt.target.result;
-                    });
-                };
-                reader.readAsDataURL(file);
-            };
-
             $scope.userprofile = new $tastypieResource('userprofile', {});
             $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
                 function (result) {
@@ -242,82 +227,68 @@ angular.module('starter.controllers',
                         .error(function () {$state.go('connect');});
                 }
             );
+            // modal window
+            $ionicModal.fromTemplateUrl('templates/imgcropmodal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modal = modal
+            })  
+            $scope.openModal = function() {
+                $scope.modal.show()
+            }
+            $scope.closeModal = function() {
+                $scope.modal.hide();
+            };
+            $scope.$on('$destroy', function() {
+                $scope.modal.remove();
+            });
+            // camera
+            $scope.myImage = '';
+            $scope.myCroppedImage = '';
             $scope.photoFromCamera = function () {
-                var options = {
-                    quality: 75,
-                    destinationType: Camera.DestinationType.FILE_URI,
-                    sourceType: Camera.PictureSourceType.CAMERA,
-                //       allowEdit: true,
-                    encodingType: Camera.EncodingType.JPEG, //important for orientation
-                //       targetWidth: 300,
-                //       targetHeight: 300,
-                //       popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false,
-                    correctOrientation: true
-                };
-                $cordovaCamera.getPicture(options).then(function (imageURI) {
-                    $scope.myImage = imageURI;
-                    $ionicLoading.hide();
-                }, function (err) {
-                    console.log(err);
-                    $ionicLoading.hide();
-                });
-    //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
+                $ionicLoading.show({template: "Chargement de la photo"});
+                CameraService.photoFromCamera().then(
+                    function (imageURI) {
+                        $scope.myImage = imageURI;
+                        $ionicLoading.hide();
+                    }, function (err) {
+                        console.log(err);
+                        $ionicLoading.hide();
+                    }
+                );
             };
             $scope.photoFromGallery = function () {
-                var options = {
-                    destinationType: Camera.DestinationType.FILE_URI,
-                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-                    encodingType: Camera.EncodingType.PNG,
-                    mediaType: Camera.MediaType.PICTURE
-                };
-                $cordovaCamera.getPicture(options).then(function (imageURI) {
-                    $scope.myImage = imageURI;
-                    $ionicLoading.hide();
-                }, function (err) {
-                    console.log(err);
-                    $ionicLoading.hide();
-                });
-            };
-            $scope.photoFromFB = function () {
-                $scope.myImage = 'http://localhost:8100/img/logo.png';
-            };
-            // ActionSheet (present picture selection methods to user)
-            $scope.pictureMethods = function() {
-                var hideSheet = $ionicActionSheet.show({
-                    buttons: [
-                        { text: "Prendre une photo" },
-                        { text: 'Choisir dans la galerie' }
-                    ],
-                    titleText: '<b>Choisir une photo pour mon profil</b>',
-                    buttonClicked: function(index) {
-                        switch (index) {
-                        case 0:
-                            $ionicLoading.show({template: "Chargement de la photo"});
-                            $scope.photoFromCamera();
-                            break;
-                        case 1:
-                            $ionicLoading.show({template: "Chargement de la photo"});
-                            $scope.photoFromGallery()
-                            break;
-                        }
-                        return true;
+                $ionicLoading.show({template: "Chargement de la photo"});
+                CameraService.photoFromGallery().then(
+                    function (imageURI) {
+                        $scope.myImage = imageURI;
+                        $ionicLoading.hide();
+                    }, function (err) {
+                        console.log(err);
+                        $ionicLoading.hide();
                     }
-                });
+                );
             };
-            $scope.next = function (croppedImage) {
+            $scope.savePicture = function (croppedImage) {
                 $ionicLoading.show({template: "Sauvegarde du profil"});
+                $scope.myCroppedImage = croppedImage;
                 var b64 = croppedImage.split(',')[1],
                     file_field = {
                         "name": "myfile.png",
                         "file": b64,
                     };
                 setprofile({'first_name': $scope.data.first_name});
-                setpicture(file_field);
+                PictureService.setpicture(file_field).then(
+                    function (res) {$ionicLoading.hide();},
+                    function (err) {$ionicLoading.hide();}
+                );
+                $scope.closeModal();
+            }
+            $scope.next = function () {
                 $state.go('menu.events.new');
                 // enable back button again
                 deregister();
-                $ionicLoading.hide();
             };
         }])
 
@@ -332,34 +303,102 @@ angular.module('starter.controllers',
     }])
     
     .controller('ProfileCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
-                'AuthService', 'UserData', 'setprofile', '$state',
-        function ($tastypieResource, $ionicLoading, $scope,
-                  AuthService, UserData, setprofile, $state) {
+                'AuthService', 'UserData', 'setprofile', 'PictureService',
+                '$state', '$ionicModal', 'CameraService',
+        function ($tastypieResource, $ionicLoading, $scope, AuthService,
+                  UserData, setprofile, PictureService, $state,
+                  $ionicModal, CameraService) {
             "use strict";
-            $ionicLoading.show({template: "Chargement"});
-            $scope.title = UserData.getUserName();
+//             $scope.title = UserData.getUserName();
             $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
-                        'number' : '', 'gender' : ''};
-            $scope.userprofile = new $tastypieResource('userprofile', {});
-            $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
-                function (result) {
-                    $scope.profile = result;
-                    $scope.data.first_name = result.user.first_name;
-                    $scope.data.last_name = result.user.last_name;
-                    $scope.data.email = result.user.email;
-                    $scope.data.number = result.phone_number;
-                    $scope.data.gender = result.gender;
-                    $ionicLoading.hide();
-                },
-                function (error) {
-                    console.log(error);
-                    $ionicLoading.hide();
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
-                }
-            );
-            $scope.save = function () {
+                           'number' : '', 'gender' : ''};
+            $scope.loadProfile = function() {
+                $ionicLoading.show({template: "Chargement"});
+                $scope.userprofile = new $tastypieResource('userprofile', {});
+                $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
+                    function (result) {
+                        $scope.profile = result;
+                        $scope.data.first_name = result.user.first_name;
+                        $scope.title = result.user.first_name;
+                        $scope.data.last_name = result.user.last_name;
+                        $scope.data.email = result.user.email;
+                        $scope.data.number = result.phone_number;
+                        $scope.data.gender = result.gender;
+                        $ionicLoading.hide();
+                    },
+                    function (error) {
+                        console.log(error);
+                        $ionicLoading.hide();
+                        // verify authentication
+                        AuthService.checkUserAuth().success()
+                            .error(function () {$state.go('connect');});
+                    }
+                );
+            }
+            $scope.loadProfile();
+            // modal window
+            $ionicModal.fromTemplateUrl('templates/imgcropmodal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modal = modal
+            })  
+            $scope.openModal = function() {
+                $scope.modal.show()
+            }
+            $scope.closeModal = function() {
+                $scope.modal.hide();
+            };
+            $scope.$on('$destroy', function() {
+                $scope.modal.remove();
+            });
+            // camera
+            $scope.myImage = '';
+            $scope.myCroppedImage = '';
+            $scope.photoFromCamera = function () {
+                $ionicLoading.show({template: "Chargement de la photo"});
+                CameraService.photoFromCamera().then(
+                    function (imageURI) {
+                        $scope.myImage = imageURI;
+                        $ionicLoading.hide();
+                    }, function (err) {
+                        console.log(err);
+                        $ionicLoading.hide();
+                    }
+                );
+            };
+            $scope.photoFromGallery = function () {
+                $ionicLoading.show({template: "Chargement de la photo"});
+                CameraService.photoFromGallery().then(
+                    function (imageURI) {
+                        $scope.myImage = imageURI;
+                        $ionicLoading.hide();
+                    }, function (err) {
+                        console.log(err);
+                        $ionicLoading.hide();
+                    }
+                );
+            };
+            $scope.savePicture = function (croppedImage) {
+                $ionicLoading.show({template: "Sauvegarde du profil"});
+                var b64 = croppedImage.split(',')[1],
+                    file_field = {
+                        "name": "myfile.png",
+                        "file": b64,
+                    };
+                PictureService.setpicture(file_field).then(
+                    function (res) {
+                        $scope.loadProfile();
+                        $ionicLoading.hide();
+                    },
+                    function (err) {
+                        console.log(err);
+                        $ionicLoading.hide();
+                    }
+                );
+                $scope.closeModal();
+            };
+            $scope.saveProfile = function () {
                 $ionicLoading.show({template: "Mise à jour du profil"});
                 setprofile({
                     'first_name': $scope.data.first_name,
@@ -368,6 +407,7 @@ angular.module('starter.controllers',
                     'number': $scope.data.number,
                     'gender': $scope.data.gender
                 });
+                $scope.loadProfile();
                 $ionicLoading.hide();
             };
         }])
@@ -741,7 +781,7 @@ angular.module('starter.controllers',
                 }
             }
             var event = new $tastypieResource('events/all'),
-                updateEvent = function () {
+                loadEvent = function () {
                     event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                         function (result) {
                             $scope.event = result;
@@ -788,13 +828,13 @@ angular.module('starter.controllers',
                 },
                leaveAndReload = function (eventId) {
                     leave(eventId);
-                    updateEvent();
+                    loadEvent();
                 },
                joinAndReload = function (eventId) {
                     join(eventId);
-                    updateEvent();
+                    loadEvent();
                 };
-            updateEvent();
+            loadEvent();
         }])
     .controller('FriendsCtrl', ['$scope', '$state', '$tastypieResource',
         function ($scope, $state, $tastypieResource) {

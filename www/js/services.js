@@ -49,14 +49,14 @@ angular.module('starter.services', [])
                 });
             };
         }])
-    .factory('setpicture', ['$http', 'apiUrl', 'UserData',
-        function ($http, apiUrl, UserData) {
-            "use strict";
-            return function (b64file) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'userprofile/setpicture/', b64file);
-            };
-        }])
+//     .factory('setpicture', ['$http', 'apiUrl', 'UserData',
+//         function ($http, apiUrl, UserData) {
+//             "use strict";
+//             return function (b64file) {
+//                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+//                 $http.post(apiUrl + 'userprofile/setpicture/', b64file);
+//             };
+//         }])
     .factory('sendInvite', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -246,6 +246,103 @@ angular.module('starter.services', [])
                 return JSON.parse($window.localStorage[key] || '{}');
             }
         };
+    }])
+    .service('PictureService', ['$q', '$http', '$localstorage', 'apiUrl',
+        function ($q, $http, $localstorage, apiUrl) {
+            "use strict";
+            return {
+                setpicture: function (b64file) {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        userName = $localstorage.get('username'),
+                        apiKey   = $localstorage.get('apikey');
+                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+                    $http.post(apiUrl + 'userprofile/setpicture/', b64file)
+                        .then(function () {
+                            deferred.resolve('succeeded');
+                        }, function (error) {
+                            console.log(error);
+                            deferred.reject('failed');
+                        });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                }
+            }
+    }])
+    .service('CameraService', ['$q', '$cordovaCamera',
+        function ($q, $cordovaCamera) {
+            "use strict";
+            return {
+                photoFromCamera: function () {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        options = {
+                            quality: 75,
+                            destinationType: Camera.DestinationType.FILE_URI,
+                            sourceType: Camera.PictureSourceType.CAMERA,
+                        //       allowEdit: true,
+                            encodingType: Camera.EncodingType.JPEG, //important for orientation
+                        //       targetWidth: 300,
+                        //       targetHeight: 300,
+                        //       popoverOptions: CameraPopoverOptions,
+                            saveToPhotoAlbum: false,
+                            correctOrientation: true
+                        };
+                    $cordovaCamera.getPicture(options).then(
+                        function (imageURI) {
+//                             $scope.myImage = imageURI;
+                            deferred.resolve(imageURI);
+                        }, function (err) {
+                            console.log(err);
+                            deferred.reject('failed');
+                        });
+    //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
+                photoFromGallery: function () {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        options = {
+                            destinationType: Camera.DestinationType.FILE_URI,
+                            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                            encodingType: Camera.EncodingType.PNG,
+                            mediaType: Camera.MediaType.PICTURE
+                        };
+                    $cordovaCamera.getPicture(options).then(
+                        function (imageURI) {
+//                             $scope.myImage = imageURI;
+                            deferred.resolve(imageURI);
+                        }, function (err) {
+                            console.log(err);
+                            deferred.reject('failed');
+                        });
+    //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                }
+            }
     }])
     .service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData', 
         function ($q, $http, $localstorage, apiUrl, UserData) {

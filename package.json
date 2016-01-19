@@ -22,14 +22,10 @@
     "cordova-plugin-geolocation",
     "cordova-plugin-contacts",
     "cordova-plugin-console",
-    "cordova-plugin-camera",
     "cordova-plugin-dialogs",
-    "phonegap-plugin-push",
-    {
-      "locator": "https://github.com/tsubik/cordova-plugin-start-on-boot.git",
-      "id": "com.tsubik.cordova.start_on_boot"
-    },
-    "cordova-plugin-network-information"
+    "cordova-plugin-network-information",
+    "cordova-plugin-camera",
+    "phonegap-plugin-push"
   ],
   "cordovaPlatforms": [
     "ios",

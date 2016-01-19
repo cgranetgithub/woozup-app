@@ -204,16 +204,17 @@ input[type="text"].controls {
     font-size: 80px;
 }
 .cropArea {
-    background: url('../img/silhouette78.png') no-repeat center center;
-    background-color: #DDD;
+    background: url('../img/round58.png') no-repeat center center;
+    background-color: #EEE;
     background-size: 70% auto;
-    border-radius: 10%;
+    border-radius: 5%;
     margin: auto;
 /*     width:300px; */
+/*     min-height: 300px; */
     height:50%;
-    opacity: 0.9;
     padding: 2px;
     overflow: hidden;
+    text-align: center;
 }
 .photoButton{
     margin: -10px 10px 10px 10px;
@@ -271,7 +272,3 @@ input.ng-invalid-pattern {
     width: 30%;
     margin: auto;
 }
-
-/*
-#ng-dirty ng-valid-parse ng-touched ng-invalid ng-invalid-pattern
-*/

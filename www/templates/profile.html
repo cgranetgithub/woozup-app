@@ -10,7 +10,9 @@
 <ion-view view-title={{title}} class="bgim">
     <ion-content class="padding">
         <div class="profilePicture">
-            <img ng-src="{{profile.image}}">
+            <img ng-src="{{profile.image}}" ng-click="openModal()">
+            <img ng-if="!profile.image" src="img/round58.png"
+                 ng-click="openModal()"></img>
         </div>
         <form name="myform">
             <label class="item item-input">
@@ -27,7 +29,8 @@
             </label>
         </form>
         <br>
-        <button class="button button-block button-balanced" ng-click="save()">
+        <button class="button button-block button-balanced"
+                ng-click="saveProfile()">
             Mettre à jour
         </button>
     </ion-content>

@@ -1,0 +1,33 @@
+<!-- <script id="contact-modal.html" type="text/ng-template"> -->
+  <div class="modal">
+    <ion-header-bar>
+      <h1 class="title">Photo de profil</h1>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <div>
+            <button class="button button-block button-outline"
+                    ng-click="photoFromCamera()">
+                Prendre une photo
+            </button>
+            <button class="button button-block button-outline"
+                    ng-click="photoFromGallery()">
+                Choisir dans la galerie
+            </button>
+        </div>
+        <div class="cropArea">
+            <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+        </div>
+        <div>
+            <button class="button button-block button-balanced"
+                    ng-click="savePicture(myCroppedImage)"
+                    ng-disabled="!myImage">
+                Enregistrer
+            </button>
+            <button class="button button-block button-assertive"
+                    ng-click="closeModal()">
+                Annuler
+            </button>
+        </div>
+    </ion-content>
+  </div>
+<!-- </script> -->
