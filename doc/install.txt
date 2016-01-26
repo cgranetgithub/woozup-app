@@ -42,3 +42,10 @@ $ android update sdk --no-ui -t extra-google-m2repository,extra-android-m2reposi
 build settings
 - provisioning set to the proper account/app/cert
 - bitcode set to NO
+
+-------------------------------------------------------
+# Clean before re-intall
+npm uninstall cordova ionic
+npm cache clean -f
+npm install npm -g
+

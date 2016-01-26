@@ -382,6 +382,33 @@ angular.module('starter.services', [])
         function ($q, $http, $localstorage, apiUrl, UserData) {
             "use strict";
             return {
+                pingAuth: function () {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise;
+//                         userId   = $localstorage.get('userid'),
+//                         userName = $localstorage.get('username'),
+//                         apiKey   = $localstorage.get('apikey');
+//                     $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+                    $http.get(apiUrl + 'auth/ping/')
+                        .then(function () {
+//                             UserData.setUserName(userName);
+//                             UserData.setApiKey(apiKey);
+//                             UserData.setUserId(userId);
+                            deferred.resolve('success');
+                        }, function (error) {
+                            console.log(error);
+                            deferred.reject('error!');
+                        });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
                 checkUserAuth: function () {
                     var deferred = $q.defer(),
                         promise  = deferred.promise,

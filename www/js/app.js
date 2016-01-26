@@ -126,6 +126,12 @@ angular.module('starter', ['ionic', 'ngCordova',
                 templateUrl: 'templates/checkauth.html',
                 controller: 'LogoutCtrl'
             })
+            .state('network', {
+                cache: false,
+                url: '/network',
+                templateUrl: 'templates/network.html',
+                controller: 'NetworkCtrl'
+            })
             .state('checkauth', {
                 cache: false,
                 url: '/checkauth',

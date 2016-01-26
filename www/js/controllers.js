@@ -24,10 +24,9 @@ angular.module('starter.controllers',
         }])
 
     .controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService',
-                'sortContacts', '$cordovaDevice', '$state', 'UserData',
-                'pushNotifReg', '$ionicHistory', 
-        function ($tastypie, $ionicLoading,
-                  AuthService, sortContacts, $cordovaDevice,
+                'sortContacts', '$state', 'UserData', 'pushNotifReg',
+                '$ionicHistory', 
+        function ($tastypie, $ionicLoading, AuthService, sortContacts,
                   $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
             $ionicLoading.show({template: "Vérification de l'identité"});
@@ -49,6 +48,29 @@ angular.module('starter.controllers',
                     $state.go('connect');
                     $ionicLoading.hide();
                 });
+        }])
+
+    .controller('NetworkCtrl', ['$ionicLoading', 'AuthService', '$state',
+                '$ionicHistory', '$scope', '$window',
+        function ($ionicLoading, AuthService, $state, $ionicHistory,
+                  $scope, $window) {
+            "use strict";
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true
+            });
+            $scope.retry = function () {
+                $ionicLoading.show({template: "Tentative de connexion"});
+                AuthService.pingAuth()
+                    .success(function () {
+                        $state.go('checkauth');
+                        $ionicLoading.hide();
+                    })
+                    .error(function () {
+                        $window.location.reload(true);
+                        $ionicLoading.hide();
+                    });
+            };
         }])
 
     .controller('ConnectCtrl', ['$tastypie', '$ionicPopup', 'AuthService',
@@ -103,36 +125,47 @@ angular.module('starter.controllers',
             $scope.regex_password = new RegExp("^.{6,20}$");
 
             $scope.register = function () {
-                $ionicLoading.show({template: "Création du compte"});
-                var authData = {'email': $scope.data.email,
-                                'password': $scope.data.password,
-                        };
-                AuthService.registerUser(authData, false)
+                // check connection
+                $ionicLoading.show({template: "Vérification de la connexion"});
+                AuthService.pingAuth()
                     .success(function () {
-                        $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        pushNotifReg(UserData.getNotifData());
-                        findContacts(sortContacts);
-                        $state.go('picture');
                         $ionicLoading.hide();
-                    }).error(function (err) {
-                        var message;
-                        switch (err) {
-                        case '10':
-                            message = "Saisir un nom d'utilisateur et un mot de passe";
-                            break;
-                        case '200':
-                            message = "Désolé, ce nom d'utilisateur est déjà pris.";
-                            break;
-                        case '150':
-                            message = "Cet utilisateur a été désactivé. Contactez Woozup.";
-                            break;
-                        default:
-                            message = "Problème lors de la création du compte. Veuillez réessayez plus tard.";
-                        }
-                        $ionicPopup.alert({
-                            title: "Problème lors de la création du compte",
-                            template: message
-                        });
+                        // create user account
+                        $ionicLoading.show({template: "Création du compte"});
+                        var authData = {'email': $scope.data.email,
+                                        'password': $scope.data.password,
+                                };
+                        AuthService.registerUser(authData, false)
+                            .success(function () {
+                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                pushNotifReg(UserData.getNotifData());
+                                findContacts(sortContacts);
+                                $state.go('picture');
+                                $ionicLoading.hide();
+                            }).error(function (err) {
+                                var message;
+                                switch (err) {
+                                case '10':
+                                    message = "Saisir un nom d'utilisateur et un mot de passe";
+                                    break;
+                                case '200':
+                                    message = "Désolé, ce nom d'utilisateur est déjà pris.";
+                                    break;
+                                case '150':
+                                    message = "Cet utilisateur a été désactivé. Contactez Woozup.";
+                                    break;
+                                default:
+                                    message = "Problème lors de la création du compte. Veuillez réessayez plus tard.";
+                                }
+                                $ionicPopup.alert({
+                                    title: "Problème lors de la création du compte",
+                                    template: message
+                                });
+                                $ionicLoading.hide();
+                            });
+                    })
+                    .error(function () {
+                        $state.go('network');
                         $ionicLoading.hide();
                     });
             };
@@ -151,22 +184,33 @@ angular.module('starter.controllers',
             });
             $scope.data = {};
             $scope.login = function () {
-                $ionicLoading.show({template: "Connexion"});
-                var authData = {'login': $scope.data.login,
-                                'password': $scope.data.password};
-                AuthService.loginUser(authData, false)
+                // check connection
+                $ionicLoading.show({template: "Vérification de la connexion"});
+                AuthService.pingAuth()
                     .success(function () {
-                        $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
-                        pushNotifReg(UserData.getNotifData());
-                        findContacts(sortContacts);
-                        $state.go('menu.events.new');
                         $ionicLoading.hide();
-                    }).error(function () {
+                        // login
+                        $ionicLoading.show({template: "Connexion"});
+                        var authData = {'login': $scope.data.login,
+                                        'password': $scope.data.password};
+                        AuthService.loginUser(authData, false)
+                            .success(function () {
+                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                pushNotifReg(UserData.getNotifData());
+                                findContacts(sortContacts);
+                                $state.go('menu.events.new');
+                                $ionicLoading.hide();
+                            }).error(function () {
+                                $ionicLoading.hide();
+                                var alertPopup = $ionicPopup.alert({
+                                    title: "Erreur d'identification",
+                                    template: "Vérifiez votre login / mot de passe"
+                                });
+                            });
+                    })
+                    .error(function () {
+                        $state.go('network');
                         $ionicLoading.hide();
-                        var alertPopup = $ionicPopup.alert({
-                            title: "Erreur d'identification",
-                            template: "Vérifiez votre login / mot de passe"
-                        });
                     });
             };
             $scope.reset = function () {
@@ -224,7 +268,7 @@ angular.module('starter.controllers',
                     $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
+                        .error(function () {$state.go('network');});
                 }
             );
             // modal window
@@ -278,7 +322,6 @@ angular.module('starter.controllers',
                         "name": "myfile.png",
                         "file": b64,
                     };
-                setprofile({'first_name': $scope.data.first_name});
                 ProfileService.setpicture(file_field).then(
                     function (res) {$ionicLoading.hide();},
                     function (err) {$ionicLoading.hide();}
@@ -286,6 +329,7 @@ angular.module('starter.controllers',
                 $scope.closeModal();
             }
             $scope.next = function () {
+                ProfileService.setprofile({'first_name': $scope.data.first_name});
                 $state.go('menu.events.new');
                 // enable back button again
                 deregister();
@@ -297,7 +341,7 @@ angular.module('starter.controllers',
             $scope.agenda = "Mon agenda";
             $scope.friendsEvents = "Ce que mes amis ont prévu";
             $scope.invinteFriends = "Ajouter des amis";
-            $scope.pendingFriends = "Invitations en attente";
+            $scope.pendingFriends = "Invitations reçues";
             $scope.myFriends = "Mes amis";
             $scope.profile = "Mon profil";
     }])
@@ -330,7 +374,7 @@ angular.module('starter.controllers',
                         $ionicLoading.hide();
                         // verify authentication
                         AuthService.checkUserAuth().success()
-                            .error(function () {$state.go('connect');});
+                            .error(function () {$state.go('network');});
                     }
                 );
             }
@@ -430,7 +474,7 @@ angular.module('starter.controllers',
                     $ionicLoading.hide();                    
                     // verify authentication
                     AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
+                        .error(function () {$state.go('network');});
                 }
             );
             $scope.next = function (typeId) {
@@ -605,7 +649,7 @@ angular.module('starter.controllers',
                         $ionicLoading.hide();
                         // verify authentication
                         AuthService.checkUserAuth().success()
-                            .error(function () {$state.go('connect');});
+                            .error(function () {$state.go('network');});
                     }
                 );
             };
@@ -623,7 +667,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $scope.friendsEventTitle = "Ce que mes amis ont prévu";
             $scope.newTitle = "Nouveau rendez-vous";
             $scope.agendaTitle = "Mon agenda";
@@ -650,7 +694,7 @@ angular.module('starter.controllers',
                             console.log(error);
                             // verify authentication
                             AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('connect');});
+                                .error(function () {$state.go('network');});
                         }
                     );
                     var alertPopup = $ionicPopup.alert({
@@ -667,7 +711,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -694,7 +738,7 @@ angular.module('starter.controllers',
                     $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
+                        .error(function () {$state.go('network');});
                 }
             );
             $scope.loadMore = function () {
@@ -706,7 +750,7 @@ angular.module('starter.controllers',
                             console.log(error);
                             // verify authentication
                             AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('connect');});
+                                .error(function () {$state.go('network');});
                         });
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
@@ -720,7 +764,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes sorties";
             $scope.events = [];
@@ -747,7 +791,7 @@ angular.module('starter.controllers',
                     $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
+                        .error(function () {$state.go('network');});
                 }
             );
             $scope.loadMore = function () {
@@ -759,7 +803,7 @@ angular.module('starter.controllers',
                             console.log(error);
                             // verify authentication
                             AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('connect');});
+                                .error(function () {$state.go('network');});
                         }
                     );
                 }
@@ -775,7 +819,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $scope.buttonTitle = "Chargement";
             $scope.goBackAction = function() {
                 if ($ionicHistory.viewHistory().backView) {
@@ -826,7 +870,7 @@ angular.module('starter.controllers',
                             console.log(error);
                             // verify authentication
                             AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('connect');});
+                                .error(function () {$state.go('network');});
                             $scope.buttonTitle = "Erreur de chargement";
                         })
                 },
@@ -885,7 +929,7 @@ angular.module('starter.controllers',
             $scope.agendaTitle = "Mon agenda";
             $scope.my = {title: "Mes amis"};
             $scope.new = {title: "Ajouter des amis", badge: 0};
-            $scope.pending = {title: "Invitations en attente", badge: 0};
+            $scope.pending = {title: "Invitations reçues", badge: 0};
         }])
     .controller('NewFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q',
                 '$scope', '$state', 'sendInvite', 'ignoreInvite', 'inviteFriend',
@@ -895,7 +939,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -926,7 +970,7 @@ angular.module('starter.controllers',
                             $ionicLoading.hide();
                             // verify authentication
                             AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('connect');});
+                                .error(function () {$state.go('network');});
                         }
                     );
                 };
@@ -965,7 +1009,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = false;
@@ -990,7 +1034,7 @@ angular.module('starter.controllers',
                     // verify authentication
                     $ionicLoading.hide();
                     AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
+                        .error(function () {$state.go('network');});
                 }
             );
             $scope.loadMore = function () {
@@ -1009,7 +1053,7 @@ angular.module('starter.controllers',
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
-                .error(function () {$state.go('connect');});
+                .error(function () {$state.go('network');});
             $ionicLoading.show({template: "Chargement"});
             $scope.title = "Mes amis";
             $scope.displayButton = true;
@@ -1034,7 +1078,7 @@ angular.module('starter.controllers',
                     $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('connect');});
+                        .error(function () {$state.go('network');});
                 }
             );
             $scope.loadMore = function () {
