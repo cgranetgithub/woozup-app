@@ -20,11 +20,12 @@
                 <h2>{{event.where.address}}</h2>
             </ion-item>
             <uib-timepicker id="tmpick" ng-model="event.start" minute-step="15"
-                        show-meridian="false"></uib-timepicker>
+                            show-meridian="false"></uib-timepicker>
             <form name="myform">
                 <label class="item item-input">
                     <span class="input-label">Titre</span>
-                    <input ng-model="event.title" type="text" placeholder="Titre">
+                    <input ng-model="event.title" type="text" placeholder="Titre"
+                           maxlength="49">
                 </label>
             </form>
         </ion-list>

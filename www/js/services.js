@@ -32,31 +32,6 @@ angular.module('starter.services', [])
                 });
             };
         }])
-    .factory('setprofile', ['$http', 'apiUrl', 'UserData',
-        function ($http, apiUrl, UserData) {
-            "use strict";
-            return function (profileData) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http({
-                    method: 'POST',
-                    url: apiUrl + 'userprofile/setprofile/',
-                    data: profileData,
-                    timeout: 5000
-                }).then(function successCallback(response) {
-                    console.log(response);
-                }, function errorCallback(response) {
-                    console.log(response);
-                });
-            };
-        }])
-//     .factory('setpicture', ['$http', 'apiUrl', 'UserData',
-//         function ($http, apiUrl, UserData) {
-//             "use strict";
-//             return function (b64file) {
-//                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-//                 $http.post(apiUrl + 'userprofile/setpicture/', b64file);
-//             };
-//         }])
     .factory('sendInvite', ['$http', 'apiUrl', 'UserData',
         function ($http, apiUrl, UserData) {
             "use strict";
@@ -103,22 +78,6 @@ angular.module('starter.services', [])
             return function (userId) {
                 $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/reject/' + userId + '/');
-            };
-        }])
-    .factory('join', ['$http', 'apiUrl', 'UserData',
-        function ($http, apiUrl, UserData) {
-            "use strict";
-            return function (eventId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'events/friends/join/' + eventId + '/');
-            };
-        }])
-    .factory('leave', ['$http', 'apiUrl', 'UserData',
-        function ($http, apiUrl, UserData) {
-            "use strict";
-            return function (eventId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
-                $http.post(apiUrl + 'events/friends/leave/' + eventId + '/');
             };
         }])
     .factory('sortContacts', ['$http', 'apiUrl', 'UserData',
@@ -247,7 +206,59 @@ angular.module('starter.services', [])
             }
         };
     }])
-    .service('PictureService', ['$q', '$http', '$localstorage', 'apiUrl',
+    .service('InviteService', ['$q', '$http', '$localstorage', 'apiUrl',
+        function ($q, $http, $localstorage, apiUrl) {
+            "use strict";
+            return {
+                join: function (eventId) {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        userName = $localstorage.get('username'),
+                        apiKey   = $localstorage.get('apikey');
+                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+                    $http.post(apiUrl + 'events/friends/join/' + eventId + '/')
+                        .then(function () {
+                            deferred.resolve('succeeded');
+                        }, function (error) {
+                            console.log(error);
+                            deferred.reject('failed');
+                        });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
+                leave: function (eventId) {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        userName = $localstorage.get('username'),
+                        apiKey   = $localstorage.get('apikey');
+                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+                    $http.post(apiUrl + 'events/friends/leave/' + eventId + '/')
+                        .then(function () {
+                            deferred.resolve('succeeded');
+                        }, function (error) {
+                            console.log(error);
+                            deferred.reject('failed');
+                        });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                }
+            };
+    }])
+    .service('ProfileService', ['$q', '$http', '$localstorage', 'apiUrl',
         function ($q, $http, $localstorage, apiUrl) {
             "use strict";
             return {
@@ -258,6 +269,29 @@ angular.module('starter.services', [])
                         apiKey   = $localstorage.get('apikey');
                     $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
                     $http.post(apiUrl + 'userprofile/setpicture/', b64file)
+                        .then(function () {
+                            deferred.resolve('succeeded');
+                        }, function (error) {
+                            console.log(error);
+                            deferred.reject('failed');
+                        });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
+                setprofile: function (profileData) {
+                    var deferred = $q.defer(),
+                        promise  = deferred.promise,
+                        userName = $localstorage.get('username'),
+                        apiKey   = $localstorage.get('apikey');
+                    $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+                    $http.post(apiUrl + 'userprofile/setprofile/', profileData)
                         .then(function () {
                             deferred.resolve('succeeded');
                         }, function (error) {

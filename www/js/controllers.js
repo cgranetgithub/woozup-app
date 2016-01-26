@@ -198,10 +198,10 @@ angular.module('starter.controllers',
 
     .controller('PictureCtrl', ['$tastypieResource', 'CameraService',
                 '$ionicLoading', '$scope', '$state', 'AuthService',
-                'UserData', 'PictureService', 'setprofile', '$ionicModal',
+                'UserData', 'ProfileService', '$ionicModal',
                 '$ionicPlatform', '$ionicHistory',
         function ($tastypieResource, CameraService, $ionicLoading, $scope,
-                  $state, AuthService, UserData, PictureService, setprofile,
+                  $state, AuthService, UserData, ProfileService,
                   $ionicModal, $ionicPlatform, $ionicHistory) {
             "use strict";
             $ionicHistory.nextViewOptions({
@@ -279,7 +279,7 @@ angular.module('starter.controllers',
                         "file": b64,
                     };
                 setprofile({'first_name': $scope.data.first_name});
-                PictureService.setpicture(file_field).then(
+                ProfileService.setpicture(file_field).then(
                     function (res) {$ionicLoading.hide();},
                     function (err) {$ionicLoading.hide();}
                 );
@@ -302,12 +302,11 @@ angular.module('starter.controllers',
             $scope.profile = "Mon profil";
     }])
     
-    .controller('ProfileCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
-                'AuthService', 'UserData', 'setprofile', 'PictureService',
+    .controller('ProfileCtrl', ['$tastypieResource', '$ionicLoading',
+                '$scope', 'AuthService', 'UserData', 'ProfileService',
                 '$state', '$ionicModal', 'CameraService',
         function ($tastypieResource, $ionicLoading, $scope, AuthService,
-                  UserData, setprofile, PictureService, $state,
-                  $ionicModal, CameraService) {
+                  UserData, ProfileService, $state, $ionicModal, CameraService) {
             "use strict";
 //             $scope.title = UserData.getUserName();
             $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
@@ -386,7 +385,7 @@ angular.module('starter.controllers',
                         "name": "myfile.png",
                         "file": b64,
                     };
-                PictureService.setpicture(file_field).then(
+                ProfileService.setpicture(file_field).then(
                     function (res) {
                         $scope.loadProfile();
                         $ionicLoading.hide();
@@ -400,15 +399,19 @@ angular.module('starter.controllers',
             };
             $scope.saveProfile = function () {
                 $ionicLoading.show({template: "Mise à jour du profil"});
-                setprofile({
+                ProfileService.setprofile({
                     'first_name': $scope.data.first_name,
                     'last_name': $scope.data.last_name,
                     'email': $scope.data.email,
                     'number': $scope.data.number,
                     'gender': $scope.data.gender
+                }).then(function () {
+                    $scope.loadProfile();
+                    $ionicLoading.hide();
+                }, function (error) {
+                    $scope.loadProfile();
+                    $ionicLoading.hide();
                 });
-                $scope.loadProfile();
-                $ionicLoading.hide();
             };
         }])
 
@@ -764,10 +767,11 @@ angular.module('starter.controllers',
             };
         }])
     .controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams',
-                '$tastypieResource', 'join', 'leave', 'UserData', 'AuthService',
-                '$ionicHistory',
+                '$tastypieResource', 'InviteService', 'UserData', 'AuthService',
+                '$ionicHistory', '$ionicLoading',
         function ($window, $state, $scope, $stateParams, $tastypieResource,
-                  join, leave, UserData, AuthService, $ionicHistory) {
+                  InviteService, UserData, AuthService, $ionicHistory,
+                  $ionicLoading) {
             "use strict";
             // verify authentication
             AuthService.checkUserAuth().success()
@@ -827,12 +831,30 @@ angular.module('starter.controllers',
                         })
                 },
                leaveAndReload = function (eventId) {
-                    leave(eventId);
-                    loadEvent();
+                    $ionicLoading.show({template: "Chargement"});
+                    InviteService.leave(eventId).then(
+                        function () {
+                            $ionicLoading.hide();
+                            loadEvent();
+                        },
+                        function (error) {
+                            $ionicLoading.hide();
+                            loadEvent();
+                        }
+                    );
                 },
                joinAndReload = function (eventId) {
-                    join(eventId);
-                    loadEvent();
+                    $ionicLoading.show({template: "Chargement"});
+                    InviteService.join(eventId).then(
+                        function () {
+                            $ionicLoading.hide();
+                            loadEvent();
+                        },
+                        function (error) {
+                            $ionicLoading.hide();
+                            loadEvent();
+                        }
+                    );
                 };
             loadEvent();
         }])
