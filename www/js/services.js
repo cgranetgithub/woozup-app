@@ -4,12 +4,12 @@
 angular.module('starter.services', [])
     .config(['$provide', '$tastypieProvider', function ($provide, $tastypieProvider) {
         "use strict";
-        var hostname = 'http://geoevent.herokuapp.com/',
+        var hostname = 'http://www.woozup.social/',
             apiUrl = hostname + 'api/v1/';
 // #### for debug
-//      var hostname = 'http://192.168.1.18:8000/',
+    //  var hostname = 'http://192.168.1.10:8000/',
 //          hostname = 'http://localhost:8000/',
-//          apiUrl = hostname + 'api/v1/';
+        //  apiUrl = hostname + 'api/v1/';
 // #########
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -378,7 +378,7 @@ angular.module('starter.services', [])
                 }
             }
     }])
-    .service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData', 
+    .service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData',
         function ($q, $http, $localstorage, apiUrl, UserData) {
             "use strict";
             return {
@@ -507,11 +507,11 @@ angular.module('starter.services', [])
     // Implementing it here as a factory with promises to ensure register function is called before trying to display the id.
 //     .factory(("ionPlatform"), function( $q ){
 //         var ready = $q.defer();
-// 
+//
 //         ionic.Platform.ready(function( device ){
 //             ready.resolve( device );
 //         });
-// 
+//
 //         return {
 //             ready: ready.promise
 //         }

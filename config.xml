@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.varioware.woozup" version="0.0.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.varioware.woozup" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Woozup</name>
   <description>
-        Le meilleur moyen de voir vos amis !
+        Le meilleur moyen de voir tes amis !
     </description>
-  <author email="charles@varioware.com">
+  <author email="contact@woozup.social">
       CG MB
     </author>
   <content src="index.html"/>

@@ -25,11 +25,11 @@ angular.module('starter.controllers',
 
     .controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService',
                 'sortContacts', '$state', 'UserData', 'pushNotifReg',
-                '$ionicHistory', 
+                '$ionicHistory',
         function ($tastypie, $ionicLoading, AuthService, sortContacts,
                   $state, UserData, pushNotifReg, $ionicHistory) {
             "use strict";
-            $ionicLoading.show({template: "Vérification de l'identité"});
+            $ionicLoading.show({template: "Vérification de ton compte"});
             $ionicHistory.nextViewOptions({
                 disableAnimate: true,
                 disableBack: true
@@ -100,7 +100,7 @@ angular.module('starter.controllers',
                         }).error(function () {
                             $ionicPopup.alert({
                                 title: "Problème lors de la création du compte",
-                                template: "Veuillez réssayer"
+                                template: "Réessaie plus tard"
                             });
                         });
                 }, function (obj) {
@@ -131,7 +131,7 @@ angular.module('starter.controllers',
                     .success(function () {
                         $ionicLoading.hide();
                         // create user account
-                        $ionicLoading.show({template: "Création du compte"});
+                        $ionicLoading.show({template: "Création de ton compte"});
                         var authData = {'email': $scope.data.email,
                                         'password': $scope.data.password,
                                 };
@@ -152,13 +152,13 @@ angular.module('starter.controllers',
                                     message = "Désolé, ce nom d'utilisateur est déjà pris.";
                                     break;
                                 case '150':
-                                    message = "Cet utilisateur a été désactivé. Contactez Woozup.";
+                                    message = "Cet utilisateur a été désactivé. Contacte Woozup pour plus d'info.";
                                     break;
                                 default:
-                                    message = "Problème lors de la création du compte. Veuillez réessayez plus tard.";
+                                    message = "Problème lors de la création de ton compte.";
                                 }
                                 $ionicPopup.alert({
-                                    title: "Problème lors de la création du compte",
+                                    title: "Problème lors de la création de ton compte",
                                     template: message
                                 });
                                 $ionicLoading.hide();
@@ -203,8 +203,8 @@ angular.module('starter.controllers',
                             }).error(function () {
                                 $ionicLoading.hide();
                                 var alertPopup = $ionicPopup.alert({
-                                    title: "Erreur d'identification",
-                                    template: "Vérifiez votre login / mot de passe"
+                                    title: "Problème de connexion",
+                                    template: "Vérifie ton login / mot de passe"
                                 });
                             });
                     })
@@ -217,8 +217,8 @@ angular.module('starter.controllers',
                 $scope.data = {};
                 var myPopup = $ionicPopup.show({
                     template: '<input type="email" ng-model="data.email">',
-                    title: 'Entrez votre adresse email',
-                    subTitle: 'Un email va vous être envoyé à cette adresse pour changer votre mot de passe',
+                    title: 'Saisie ton adresse email',
+                    subTitle: "Un email va t'être envoyé avec un lien pour changer ton mot de passe",
                     scope: $scope,
                     buttons: [
                         { text: 'Annuler' },
@@ -277,7 +277,7 @@ angular.module('starter.controllers',
                 animation: 'slide-in-up'
             }).then(function(modal) {
                 $scope.modal = modal
-            })  
+            })
             $scope.openModal = function() {
                 $scope.modal.show()
             }
@@ -345,7 +345,7 @@ angular.module('starter.controllers',
             $scope.myFriends = "Mes amis";
             $scope.profile = "Mon profil";
     }])
-    
+
     .controller('ProfileCtrl', ['$tastypieResource', '$ionicLoading',
                 '$scope', 'AuthService', 'UserData', 'ProfileService',
                 '$state', '$ionicModal', 'CameraService',
@@ -385,7 +385,7 @@ angular.module('starter.controllers',
                 animation: 'slide-in-up'
             }).then(function(modal) {
                 $scope.modal = modal
-            })  
+            })
             $scope.openModal = function() {
                 $scope.modal.show()
             }
@@ -471,7 +471,7 @@ angular.module('starter.controllers',
                 function () { $ionicLoading.hide(); },
                 function (error) {
                     console.log(error);
-                    $ionicLoading.hide();                    
+                    $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('network');});
@@ -559,7 +559,7 @@ angular.module('starter.controllers',
             vm.$log = $log;
             vm.backgroundUrl = EventData.getWhat().background;
             vm.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
-            if (EventData.getWhere() && EventData.getWhere().lat && 
+            if (EventData.getWhere() && EventData.getWhere().lat &&
                     EventData.getWhere().lng) {
                 $log.log(EventData.getWhere());
                 lat = EventData.getWhere().lat;
@@ -575,7 +575,7 @@ angular.module('starter.controllers',
                 // disable POI (to avoid info window)
                 var styles = [{
                     featureType: "poi",
-                    stylers: [{ visibility: "off" }]   
+                    stylers: [{ visibility: "off" }]
                 }];
                 map.setOptions({styles: styles});
                 vm.map = map;
@@ -661,7 +661,7 @@ angular.module('starter.controllers',
 
     .controller('EventsCtrl', ['$tastypieResource', '$cordovaGeolocation',
                 '$ionicPopup', '$scope', '$state', 'setlast', 'UserData',
-                'AuthService', 
+                'AuthService',
         function ($tastypieResource, $cordovaGeolocation, $ionicPopup,
                   $scope, $state, setlast, UserData, AuthService) {
             "use strict";
@@ -698,8 +698,8 @@ angular.module('starter.controllers',
                         }
                     );
                     var alertPopup = $ionicPopup.alert({
-                        title: "Erreur de géolocalisation",
-                        template: "Je n'arrive pas à vous localiser. Merci d'activer le GPS et le wifi."
+                        title: "Problème de géolocalisation",
+                        template: "Je n'arrive pas à te localiser. J'ai besoin du GPS et du wifi pour trouver les rendez-vous proches de toi."
                     });
                 });
         }])
@@ -1099,7 +1099,7 @@ angular.module('starter.controllers',
             };
         }]);
 
-    
+
 findContacts = function(sortContacts) {
     var options,
         filter = ["displayName", "name"],
