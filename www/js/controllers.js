@@ -1,7 +1,8 @@
-/*jslint browser: true, devel: true*/
+/*jslint browser: true, devel: true, maxerr: 999, white: true, vars: true, newcap: true*/
 /*global angular, cordova, StatusBar, ContactFindOptions, facebookConnectPlugin*/
 
 var gps_in_progress = false;
+var findContacts = null;
 
 angular.module('starter.controllers',
                ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
@@ -237,7 +238,7 @@ angular.module('starter.controllers',
                     ]
                 });
                 myPopup.then(function(res) {});
-            }
+            };
         }])
 
     .controller('PictureCtrl', ['$tastypieResource', 'CameraService',
@@ -276,11 +277,11 @@ angular.module('starter.controllers',
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {
-                $scope.modal = modal
-            })
+                $scope.modal = modal;
+            });
             $scope.openModal = function() {
-                $scope.modal.show()
-            }
+                $scope.modal.show();
+            };
             $scope.closeModal = function() {
                 $scope.modal.hide();
             };
@@ -327,7 +328,7 @@ angular.module('starter.controllers',
                     function (err) {$ionicLoading.hide();}
                 );
                 $scope.closeModal();
-            }
+            };
             $scope.next = function () {
                 ProfileService.setprofile({'first_name': $scope.data.first_name});
                 $state.go('menu.events.new');
@@ -337,6 +338,7 @@ angular.module('starter.controllers',
         }])
 
     .controller('MenuCtrl', ['$scope', function($scope) {
+            "use strict";
             $scope.new = "Nouveau rendez-vous";
             $scope.agenda = "Mon agenda";
             $scope.friendsEvents = "Ce que mes amis ont prévu";
@@ -377,18 +379,18 @@ angular.module('starter.controllers',
                             .error(function () {$state.go('network');});
                     }
                 );
-            }
+            };
             $scope.loadProfile();
             // modal window
             $ionicModal.fromTemplateUrl('templates/imgcropmodal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {
-                $scope.modal = modal
-            })
+                $scope.modal = modal;
+            });
             $scope.openModal = function() {
-                $scope.modal.show()
-            }
+                $scope.modal.show();
+            };
             $scope.closeModal = function() {
                 $scope.modal.hide();
             };
@@ -464,7 +466,7 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope, $state,
                   EventData, AuthService) {
             "use strict";
-            $scope.title = "Nouveau rendez-vous"
+            $scope.title = "Nouveau rendez-vous";
             $ionicLoading.show({template: "Chargement"});
             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
             $scope.types.objects.$find().then(
@@ -529,7 +531,7 @@ angular.module('starter.controllers',
             // initialize coords
             $scope.$log = $log;
             var lat = 48.8567, lng = 2.3508, vm = this,
-                geocoder = new google.maps.Geocoder,
+                geocoder = new google.maps.Geocoder(),
 //                 setAddress = function (address, lat, lng) {
 //                     var coords = '{ "type": "Point", "coordinates": ['
 //                                  + lat + ', ' + lng + '] }';
@@ -591,7 +593,7 @@ angular.module('starter.controllers',
                                 vm.place.formatted_address
                     );
                 }
-            }
+            };
             // on click event, show marker and set address in button
             vm.onClick= function(event) {
                 EventData.setPlace('', '');
@@ -779,7 +781,7 @@ angular.module('starter.controllers',
                     };
             today.setHours(0);
             today.setMinutes(0);
-            var eventsResource = new $tastypieResource('events/agenda',
+            eventsResource = new $tastypieResource('events/agenda',
                                         {order_by: 'start', start__gte: today});
             eventsResource.objects.$find().then(
                 function (result) {
@@ -827,7 +829,7 @@ angular.module('starter.controllers',
                 } else {
                     $state.go('menu.events.agenda');
                 }
-            }
+            };
             var event = new $tastypieResource('events/all'),
                 loadEvent = function () {
                     event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
@@ -872,7 +874,7 @@ angular.module('starter.controllers',
                             AuthService.checkUserAuth().success()
                                 .error(function () {$state.go('network');});
                             $scope.buttonTitle = "Erreur de chargement";
-                        })
+                        });
                 },
                leaveAndReload = function (eventId) {
                     $ionicLoading.show({template: "Chargement"});
@@ -1101,6 +1103,7 @@ angular.module('starter.controllers',
 
 
 findContacts = function(sortContacts) {
+    "use strict";
     var options,
         filter = ["displayName", "name"],
         lastCheck, //window.localStorage.contact_sync,
