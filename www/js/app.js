@@ -39,7 +39,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                             alertDismissed,         // callback
                             'Problème de connexion',  // title
                             'OK'                    // buttonName
-                        )
+                        );
                         $state.go('connect');
                     };
                 document.addEventListener("offline", onOffline, false);

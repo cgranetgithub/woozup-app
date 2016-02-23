@@ -831,6 +831,8 @@ angular.module('starter.controllers',
                 }
             };
             var event = new $tastypieResource('events/all'),
+                loadEvent, leaveAndReload, joinAndReload;
+
                 loadEvent = function () {
                     event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                         function (result) {
@@ -875,7 +877,7 @@ angular.module('starter.controllers',
                                 .error(function () {$state.go('network');});
                             $scope.buttonTitle = "Erreur de chargement";
                         });
-                },
+                };
                leaveAndReload = function (eventId) {
                     $ionicLoading.show({template: "Chargement"});
                     InviteService.leave(eventId).then(
@@ -888,7 +890,7 @@ angular.module('starter.controllers',
                             loadEvent();
                         }
                     );
-                },
+                };
                joinAndReload = function (eventId) {
                     $ionicLoading.show({template: "Chargement"});
                     InviteService.join(eventId).then(
