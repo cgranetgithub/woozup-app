@@ -1,5 +1,5 @@
-/*jslint browser: true*/
-/*global angular, cordova, StatusBar*/
+/*jslint browser: true, white: true*/
+/*global angular, cordova, StatusBar, ionic, PushNotification*/
 
 // Ionic Starter App
 
@@ -53,7 +53,7 @@ angular.module('starter', ['ionic', 'ngCordova',
                 });
                 push.on('notification', function(data) {
                     function onConfirm(buttonIndex) {
-                        if (buttonIndex == '2') {
+                        if (buttonIndex === '2') {
                             switch(data.additionalData.reason) {
                             case 'eventchanged':
                                 $state.go('event', {'eventId': data.additionalData.id});
@@ -97,6 +97,7 @@ angular.module('starter', ['ionic', 'ngCordova',
     })
 
     .config(['$ionicConfigProvider', function ($ionicConfigProvider) {
+        "use strict";
         $ionicConfigProvider.tabs.position('top');
         $ionicConfigProvider.tabs.style('standard');
         $ionicConfigProvider.views.maxCache(0);

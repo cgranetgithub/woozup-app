@@ -1,5 +1,5 @@
-/*jslint browser: true*/
-/*global angular, cordova, StatusBar*/
+/*jslint browser: true, white: true*/
+/*global angular, cordova, StatusBar, Camera*/
 
 angular.module('starter.services', [])
     .config(['$provide', '$tastypieProvider', function ($provide, $tastypieProvider) {
@@ -175,10 +175,10 @@ angular.module('starter.services', [])
                 return data.apiKey;
             },
             setNotifData: function (regid, devName, devId, platform) {
-                data.registrationId = regid,
-                data.deviceName = devName,
-                data.deviceId = devId,
-                data.platform = platform
+                data.registrationId = regid;
+                data.deviceName = devName;
+                data.deviceId = devId;
+                data.platform = platform;
             },
             getNotifData: function () {
                 return {'registration_id' : data.registrationId,
@@ -308,7 +308,7 @@ angular.module('starter.services', [])
                     };
                     return promise;
                 }
-            }
+            };
     }])
     .service('CameraService', ['$q', '$cordovaCamera',
         function ($q, $cordovaCamera) {
@@ -376,7 +376,7 @@ angular.module('starter.services', [])
                     };
                     return promise;
                 }
-            }
+            };
     }])
     .service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData',
         function ($q, $http, $localstorage, apiUrl, UserData) {
