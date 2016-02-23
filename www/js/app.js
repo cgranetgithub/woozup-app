@@ -26,12 +26,23 @@ angular.module('starter', ['ionic', 'ngCordova',
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
-            if (!ionic.Platform.is('linux')) {
+            if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
                 var push = PushNotification.init({
                     "android": {"senderID": "496829276290"},
                     "ios": {"alert": "true", "badge": "true", "sound": "true"},
                     "windows": {}
-                } );
+                } ),
+                    alertDismissed = function () {},
+                    onOffline = function () {
+                        navigator.notification.alert(
+                            'La connexion à Internet a été perdue', //message
+                            alertDismissed,         // callback
+                            'Problème de connexion',  // title
+                            'OK'                    // buttonName
+                        )
+                        $state.go('connect');
+                    };
+                document.addEventListener("offline", onOffline, false);
                 push.on('registration', function(data) {
                     UserData.setNotifData(data.registrationId,
                                         $cordovaDevice.getModel(),
@@ -82,17 +93,6 @@ angular.module('starter', ['ionic', 'ngCordova',
                     console.error(e.message);
                 });
             }
-            var alertDismissed = function () {},
-                onOffline = function () {
-                    navigator.notification.alert(
-                        'La connexion à Internet a été perdue', //message
-                        alertDismissed,         // callback
-                        'Problème de connexion',  // title
-                        'OK'                    // buttonName
-                    )
-                    $state.go('connect');
-                };
-            document.addEventListener("offline", onOffline, false);
         });
     })
 
@@ -105,7 +105,7 @@ angular.module('starter', ['ionic', 'ngCordova',
         $ionicConfigProvider.navBar.positionPrimaryButtons('left');
         $ionicConfigProvider.navBar.positionSecondaryButtons('right');
     }])
-    
+
     .config(['$compileProvider', function($compileProvider) {
         "use strict";
         $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|content):|data:image\//);
@@ -314,7 +314,7 @@ angular.module('starter', ['ionic', 'ngCordova',
 //         }
 //     );
 // }
-// 
+//
 // (function () {
 //     'use strict';
 //     setTimeout(fb_init, 1000);

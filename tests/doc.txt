@@ -4,9 +4,11 @@ Install
 -------
 npm install -g protractor
 webdriver-manager update
+install chrome
 
 Run
 ---
+webdriver-manager start --standalone (on Mac, seems to be auto on Linux)
 protractor conf.js
 
 Notes:

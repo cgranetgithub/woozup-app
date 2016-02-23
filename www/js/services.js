@@ -8,8 +8,8 @@ angular.module('starter.services', [])
             apiUrl = hostname + 'api/v1/';
 // #### for debug
     //  var hostname = 'http://192.168.1.10:8000/',
-//          hostname = 'http://localhost:8000/',
-        //  apiUrl = hostname + 'api/v1/';
+    //      hostname = 'http://localhost:8000/',
+    //      apiUrl = hostname + 'api/v1/';
 // #########
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -441,7 +441,7 @@ angular.module('starter.services', [])
                         promise = deferred.promise,
                         command = apiUrl + 'auth/login_by_email/';
                     if (social) {
-                        command = hostname + 'register-by-token/' + social + '/';
+                        command = apiUrl + 'register-by-token/' + social + '/';
                     }
                     $http.post(command, authData
                         ).then(function (response) {
