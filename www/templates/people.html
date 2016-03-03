@@ -40,6 +40,11 @@
             </ion-item>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+        <div class="card" ng-if=!userprofile.phone_number>
+            <a href="#/menu/profile" class="item item-text-wrap">
+                Pour retrouver plus de contacts, ajoute ton numéro de téléphone dans ton profil
+            </a>
+        </div>
     </ion-content>
 <!--     must be out of the content -->
     <button class="button button-royal bottom-right-button"

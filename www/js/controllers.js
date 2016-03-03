@@ -907,12 +907,19 @@ angular.module('starter.controllers',
             loadEvent();
         }])
     .controller('FriendsCtrl', ['$scope', '$state', '$tastypieResource',
-        function ($scope, $state, $tastypieResource) {
+                'UserData',
+        function ($scope, $state, $tastypieResource, UserData) {
             "use strict";
             var newFriends = new $tastypieResource('friends/new'),
                 pendingFriends = new $tastypieResource('friends/pending'),
                 invites = new $tastypieResource('invite',
-                                                {status__exact: 'NEW'});
+                                                {status__exact: 'NEW'}),
+                profile = new $tastypieResource('userprofile', {});
+            profile.objects.$get({id: UserData.getUserId()}).then(
+                function (result) {
+                    $scope.userprofile = result;
+                }
+            );
             newFriends.objects.$find().then(
                 function (result) {
                     $scope.new.badge += result.meta.total_count;
