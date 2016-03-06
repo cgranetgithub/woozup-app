@@ -1,4 +1,5 @@
 exports.config = {
-  seleniumAddress: 'http://localhost:4444/wd/hub',
+  seleniumServerJar: '/usr/lib/node_modules/protractor/selenium/selenium-server-standalone-2.51.0.jar',
+  seleniumArgs: '',
   specs: ['register.js']
 };

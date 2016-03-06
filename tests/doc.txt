@@ -8,10 +8,13 @@ install chrome
 
 Run
 ---
-webdriver-manager start --standalone (on Mac, seems to be auto on Linux)
 protractor conf.js
 
 Notes:
 - `ionic serve --nobrowser` must be launched to serve the app...
 - conf.js is in [BASEDIR]/tests/
 - if you get the following error "undefined:119", try `n stable`
+
+To play everything, just launch run.sh from top directory
+(screen is required as ionic serve require STDIN)
+
