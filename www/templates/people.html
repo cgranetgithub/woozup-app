@@ -1,5 +1,10 @@
 <ion-view view-title={{title}} class="blue-bgim">
     <ion-content>
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="search" placeholder="Recherche" ng-model="search"
+                 ng-change="onSearchChange(search)">
+        </label>
         <ion-list>
             <ion-item class="item item-avatar item-button-right"
                       ng-repeat="friend in friends track by $index">

@@ -640,7 +640,8 @@ angular.module('starter.controllers',
                     location_name: $scope.event.where.name,
                     location_address: $scope.event.where.address,
                     location_id: $scope.event.where.id,
-                    location_coords: coords
+                    location_coords: coords,
+                    invitees: ['/api/v1/userprofile/31/', '32']
                 }).$save().then(
                     function () {
                         $state.go('menu.events.agenda', {}, { reload: true });
@@ -956,10 +957,8 @@ angular.module('starter.controllers',
             $scope.displayButton = true;
             $scope.invites = [];
             $scope.friends = [];
-            var invitesResource = new $tastypieResource('invite',
-                                            {status__exact: 'NEW', order_by: 'name'}),
-                friendsResource = new $tastypieResource('friends/new',
-                                                        {order_by: 'user__first_name'}),
+            $scope.search = '';
+            var invitesResource, friendsResource,
                 nextPages = function (invitePage, friendsPage) {
                     $q.all([invitePage, friendsPage]).then(
                         function (arrayOfResults) {
@@ -985,7 +984,20 @@ angular.module('starter.controllers',
                         }
                     );
                 };
-            nextPages(invitesResource.objects.$find(), friendsResource.objects.$find());
+            $scope.onSearchChange = function (word) {
+                invitesResource = new $tastypieResource('invite', {
+                                    status__exact: 'NEW', order_by: 'name',
+                                    name__icontains: word
+                });
+                friendsResource = new $tastypieResource('friends/new', {
+                                    order_by: 'user__first_name',
+                                    user__first_name__icontains: word
+                });
+                $scope.invites = [];
+                $scope.friends = [];
+                nextPages(invitesResource.objects.$find(), friendsResource.objects.$find());
+            };
+            $scope.onSearchChange('');
             $scope.loadMore = function () {
                 var nextInvitePage = null,
                     nextFriendPage = null;
@@ -1025,29 +1037,37 @@ angular.module('starter.controllers',
             $scope.title = "Mes amis";
             $scope.displayButton = false;
             $scope.friends = [];
-            var friendsResource = new $tastypieResource('friends/mine',
-                                                        {order_by: 'user__first_name'}),
+            $scope.search = '';
+            var friendsResource,
                 nextPages = function (result) {
-                        var i;
-                        if (result) {
-                            for (i = 0; i < result.objects.length; i += 1) {
-                                $scope.friends.push(result.objects[i]);
-                            }
+                    var i;
+                    if (result) {
+                        for (i = 0; i < result.objects.length; i += 1) {
+                            $scope.friends.push(result.objects[i]);
                         }
-                    };
-            friendsResource.objects.$find().then(
-                function (result) {
-                    nextPages(result);
-                    $ionicLoading.hide();
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                }, function (error) {
-                    console.log(error);
-                    // verify authentication
-                    $ionicLoading.hide();
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            );
+                    }
+                };
+            $scope.onSearchChange = function (word) {
+                friendsResource = new $tastypieResource('friends/mine', {
+                                        order_by: 'user__first_name',
+                                        user__first_name__icontains: word
+                });
+                $scope.friends = [];
+                friendsResource.objects.$find().then(
+                    function (result) {
+                        nextPages(result);
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    }, function (error) {
+                        console.log(error);
+                        // verify authentication
+                        $ionicLoading.hide();
+                        AuthService.checkUserAuth().success()
+                            .error(function () {$state.go('network');});
+                    }
+                );
+            };
+            $scope.onSearchChange('');
             $scope.loadMore = function () {
                 if (friendsResource.page.meta && friendsResource.page.meta.next) {
                     friendsResource.page.next().then(function (result) {
@@ -1069,29 +1089,37 @@ angular.module('starter.controllers',
             $scope.title = "Mes amis";
             $scope.displayButton = true;
             $scope.friends = [];
-            var friendsResource = new $tastypieResource('friends/pending',
-                                                        {order_by: 'user__first_name'}),
+            $scope.search = '';
+            var friendsResource,
                 nextPages = function (result) {
-                        var i;
-                        if (result) {
-                            for (i = 0; i < result.objects.length; i += 1) {
-                                $scope.friends.push(result.objects[i]);
-                            }
+                    var i;
+                    if (result) {
+                        for (i = 0; i < result.objects.length; i += 1) {
+                            $scope.friends.push(result.objects[i]);
                         }
-                    };
-            friendsResource.objects.$find().then(
-                function (result) {
-                    nextPages(result);
-                    $ionicLoading.hide();
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                }, function (error) {
-                    console.log(error);
-                    $ionicLoading.hide();
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            );
+                    }
+                };
+            $scope.onSearchChange = function (word) {
+                friendsResource = new $tastypieResource('friends/pending', {
+                                        order_by: 'user__first_name',
+                                        user__first_name__icontains: word
+                });
+                $scope.friends = [];
+                friendsResource.objects.$find().then(
+                    function (result) {
+                        nextPages(result);
+                        $ionicLoading.hide();
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    }, function (error) {
+                        console.log(error);
+                        $ionicLoading.hide();
+                        // verify authentication
+                        AuthService.checkUserAuth().success()
+                            .error(function () {$state.go('network');});
+                    }
+                );
+            };
+            $scope.onSearchChange('');
             $scope.loadMore = function () {
                 if (friendsResource.page.meta && friendsResource.page.meta.next) {
                     friendsResource.page.next().then(function (result) {

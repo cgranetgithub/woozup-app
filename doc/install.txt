@@ -15,11 +15,15 @@ sudo npm -g install js-beautify jslint cordova ionic
 # use reset to download dependencies from package.json
 $ ionic state reset
 
+# use bower to install dependencies from bower.json
+$ bower install
+
+-------------------------------------------------------
 
 # install Facebook plugin
 # checkout FB plugin (outside of ionic plugin) : it is a requirement for iOS because of symlink
 $ git clone https://github.com/Wizcorp/phonegap-facebook-plugin.git
- 
+
 # install plugin in cordova with APP_ID and APP_NAME
 $ cordova -d plugin add /path/to/cloned/phonegap-facebook-plugin --variable APP_ID="123456789" --variable APP_NAME="myApplication"
 
@@ -27,6 +31,7 @@ $ cordova -d plugin add /path/to/cloned/phonegap-facebook-plugin --variable APP_
 $ keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
 Q6Tcst8iqeloTBRmsyrA5Njtt0c=
 
+-------------------------------------------------------
 
 # push notification plugin
 ionic plugin add https://github.com/phonegap-build/PushPlugin.git
@@ -44,8 +49,8 @@ build settings
 - bitcode set to NO
 
 -------------------------------------------------------
+
 # Clean before re-intall
 npm uninstall cordova ionic
 npm cache clean -f
 npm install npm -g
-
