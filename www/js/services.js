@@ -1,10 +1,10 @@
 /*jslint browser: true, white: true*/
-/*global angular, cordova, StatusBar, Camera*/
+/*global angular, cordova, StatusBar, Camera, backend_url*/
 
 angular.module('starter.services', [])
     .config(['$provide', '$tastypieProvider', function ($provide, $tastypieProvider) {
         "use strict";
-        var hostname = 'http://www.woozup.social/',
+        var hostname = backend_url,
             apiUrl = hostname + 'api/v1/';
 // #### for debug
     //  var hostname = 'http://192.168.1.10:8000/',

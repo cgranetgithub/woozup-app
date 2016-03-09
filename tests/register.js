@@ -1,3 +1,5 @@
+/*global describe, it, element, browser, expect, by*/
+
 describe('register', function() {
   it('should click on create button', function() {
     browser.get('http://localhost:8100');
