@@ -18,18 +18,26 @@
     "cordova-plugin-device",
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
-    "com.ionic.keyboard",
+    "ionic-plugin-keyboard",
     "cordova-plugin-geolocation",
     "cordova-plugin-contacts",
     "cordova-plugin-console",
     "cordova-plugin-dialogs",
     "cordova-plugin-network-information",
     "cordova-plugin-camera",
-    "phonegap-plugin-push"
+    {
+        "variables": {
+            "SENDER_ID": "496829276290"
+        },
+        "locator": "phonegap-plugin-push"
+    }
   ],
   "cordovaPlatforms": [
     "ios",
     "browser",
     "android"
+  ],
+  "cordovaPluginsRemoved": [
+    "com.ionic.keyboard"
   ]
 }
