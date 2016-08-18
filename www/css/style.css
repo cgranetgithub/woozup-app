@@ -19,12 +19,16 @@
 }
 .item {
     opacity: 0.8;
+    min-height: 38px;
 }
 .item-avatar {
     padding-left: 55px;
 }
 .item-avatar > img:first-child {
     left: 5px;
+}
+.item-avatar-right, .item-avatar-right .item-content {
+    min-height: 38px;
 }
 .item-button-right .buttons {
     right: 5px;
@@ -79,7 +83,7 @@
 }
 .category-title {
     color: white;
-}       
+}
 .category {
     height: 50px;
 }
@@ -186,6 +190,7 @@ input[type="text"].controls {
     width: 96%;
     bottom: 1%;
     position: absolute;
+    z-index: 10;
 }
 .roundbutton {
     border-radius: 50%;
@@ -227,14 +232,14 @@ input[type="text"].controls {
     height: 100%;
 }
 .bgim {
-    background: url('../img/splash.png') no-repeat center center fixed; 
+    background: url('../img/splash.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
 }
 .blue-bgim {
-    background: url('../img/splash-blue.png') no-repeat center center fixed; 
+    background: url('../img/splash-blue.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

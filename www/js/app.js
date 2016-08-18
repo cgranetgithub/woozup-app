@@ -175,6 +175,12 @@ angular.module('starter', ['ionic', 'ngCordova',
                 templateUrl: 'templates/where.html',
 //                 controller: 'WhereCtrl'
             })
+            .state('who', {
+//                 cache: false,
+                url: '/who',
+                templateUrl: 'templates/who.html',
+                controller: 'WhoCtrl'
+            })
             .state('done', {
 //                 cache: false,
                 url: '/done',

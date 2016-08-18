@@ -7,9 +7,9 @@ angular.module('starter.services', [])
         var hostname = backend_url,
             apiUrl = hostname + 'api/v1/';
 // #### for debug
-    //  var hostname = 'http://192.168.1.10:8000/',
-    //      hostname = 'http://localhost:8000/',
-    //      apiUrl = hostname + 'api/v1/';
+     var hostname = 'http://192.168.1.10:8000/',
+         hostname = 'http://localhost:8000/',
+         apiUrl = hostname + 'api/v1/';
 // #########
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -126,6 +126,12 @@ angular.module('starter.services', [])
             },
             getWhen: function () {
                 return data.when;
+            },
+            setWho: function (invitees) {
+                data.who = invitees;
+            },
+            getWho: function () {
+                return data.who;
             },
             setPlace: function (name, id) {
                 data.location_name = name;

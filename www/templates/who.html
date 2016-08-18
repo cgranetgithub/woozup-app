@@ -1,0 +1,37 @@
+<ion-view view-title={{title}} class="withBg"
+          ng-style="{'background-image': 'url({{backgroundUrl}})'}">
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-buttons side="left">
+            <button class="button back-button buttons button-clear header-item"
+                    ng-click="$ionicGoBack()">
+                <i class="icon ion-chevron-left"></i>
+                <span class="back-text"></span>
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content>
+        <ion-list>
+            <ion-checkbox ng-model="all.checked"
+                          ng-change="allChanged()">
+              Tous mes amis
+            </ion-checkbox>
+            <ion-checkbox class="item item-avatar-right" ng-change="itemChanged()"
+                          ng-repeat="friend in friends track by $index"
+                          ng-model=friend.checked ng-checked="friend.checked">
+                <img ng-src="{{friend.image}}">
+                <h2>{{friend.name}}</h2>
+            </ion-checkbox>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </ion-list>
+        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+    </ion-content>
+    <button class="button icon-right ion-chevron-right
+                   button-balanced button-down"
+            ng-click="next()" name="next-button">
+        OK
+    </button>
+</ion-view>

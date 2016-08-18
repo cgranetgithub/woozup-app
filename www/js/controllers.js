@@ -600,7 +600,7 @@ angular.module('starter.controllers',
                 coordChanged(event.latLng);
             };
             vm.next = function () {
-                $state.go('done');
+                $state.go('who');
 //                 for (var key in vm.map.markers) {
 //                     vm.map.markers[key].setMap(null);
 //                 }
@@ -612,6 +612,94 @@ angular.module('starter.controllers',
 //                 }
             };
         }])
+
+        .controller('WhoCtrl', ['$scope', '$state', '$ionicLoading',
+                    '$tastypieResource', 'EventData', 'AuthService',
+            function ($scope, $state, $ionicLoading, $tastypieResource,
+                      EventData, AuthService) {
+                "use strict";
+                // verify authentication
+                AuthService.checkUserAuth().success()
+                    .error(function () {$state.go('network');});
+                $ionicLoading.show({template: "Chargement"});
+                // $scope.title = "Mes amis";
+                // $scope.displayButton = false;
+                $scope.friends = [];
+                $scope.search = '';
+                var friendsResource,
+                    nextPages = function (result) {
+                        var i;
+                        if (result) {
+                            for (i = 0; i < result.objects.length; i += 1) {
+                                var item = result.objects[i];
+                                if ($scope.all.checked) {
+                                    item.checked = true;
+                                }
+                                $scope.friends.push(item);
+                            }
+                        }
+                    };
+                // get friends logic with pagination
+                $scope.onSearchChange = function (word) {
+                    friendsResource = new $tastypieResource('friends/mine', {
+                                            order_by: 'user__first_name',
+                                            user__first_name__icontains: word
+                    });
+                    $scope.friends = [];
+                    friendsResource.objects.$find().then(
+                        function (result) {
+                            nextPages(result);
+                            $ionicLoading.hide();
+                            $scope.$broadcast('scroll.infiniteScrollComplete');
+                        }, function (error) {
+                            console.log(error);
+                            // verify authentication
+                            $ionicLoading.hide();
+                            AuthService.checkUserAuth().success()
+                                .error(function () {$state.go('network');});
+                        }
+                    );
+                };
+                // initial request to get friends
+                $scope.onSearchChange('');
+                // pagination
+                $scope.loadMore = function () {
+                    if (friendsResource.page.meta && friendsResource.page.meta.next) {
+                        friendsResource.page.next().then(function (result) {
+                            nextPages(result);
+                        });
+                    }
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                };
+                $scope.all = {checked: false};
+                $scope.allChanged = function () {
+                    for (var i = 0; i < $scope.friends.length; i++) {
+                       $scope.friends[i].checked = $scope.all.checked;
+                    }
+                };
+                $scope.itemChanged = function () {
+                    $scope.all.checked = false;
+                };
+                // setup screen
+                if (EventData.getWhat()) {
+                    $scope.title = EventData.getWhat().name;
+                    $scope.backgroundUrl = EventData.getWhat().background;
+                    $scope.next = function () {
+                        var invitees=[];
+                        for (var i = 0; i < $scope.friends.length; i++) {
+                           var item = $scope.friends[i];
+                           if (item.checked) {
+                               invitees.push(item);
+                           }
+                       };
+                       invitees.all = $scope.all.checked;
+                       EventData.setWho(invitees);
+                       $state.go('done');
+                    };
+                } else {
+                    $state.go('menu.events.new');
+                }
+            }])
 
     .controller('DoneCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
                 '$state', 'EventData', 'AuthService',
@@ -627,12 +715,25 @@ angular.module('starter.controllers',
             $scope.event.start = EventData.getWhen();
             $scope.event.start.setHours(date.getHours() + 1);
             $scope.event.start.setMinutes(0);
+
+            var invitees = EventData.getWho(),
+                displayInvitees = [], apiInvitees = [];
+            for (var i = 0; i < invitees.length; i++) {
+                displayInvitees.push(invitees[i].name);
+                if (!invitees.all) {
+                    apiInvitees.push(invitees[i].resource_uri);
+                }
+            }
+            console.log(displayInvitees, apiInvitees);
+            $scope.event.invitees = EventData.getWho();
             $scope.next = function () {
                 $ionicLoading.show({template: "Création du rendez-vous"});
                 var event = new $tastypieResource('events/mine'),
                     coords = '{ "type": "Point", "coordinates": ['
                                  + $scope.event.where.lat + ', '
                                  + $scope.event.where.lng + '] }';
+                console.log(apiInvitees);
+
                 event.objects.$create({
                     name: $scope.event.title,
                     start: $scope.event.start,
@@ -641,7 +742,7 @@ angular.module('starter.controllers',
                     location_address: $scope.event.where.address,
                     location_id: $scope.event.where.id,
                     location_coords: coords,
-                    invitees: ['/api/v1/userprofile/31/', '32']
+                    invitees: apiInvitees
                 }).$save().then(
                     function () {
                         $state.go('menu.events.agenda', {}, { reload: true });
