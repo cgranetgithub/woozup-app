@@ -5,25 +5,23 @@
             <h1 class="woozup-green" style="font-size: 60px">Woozup</h1>
             <hr>
             <br>
-            <h3 style="color:#FFF;">Saisis ton email et ton mot de passe</h3>
+            <h3 style="color:#FFF;">Saisis ton numéro et un mot de passe</h3>
         </div>
         <div class="list list-inset">
             <label class="item item-input">
-                <span class="input-label">Email</span>
-                <input type="email" autocapitalize="off" autocorrect="off"
-                       ng-model="data.email">
+                <span class="input-label">Numéro</span>
+                <input type="tel" autocapitalize="off" autocorrect="off" ng-model="data.login">
 <!--                        ng-pattern="regex_username"> -->
             </label>
             <label class="item item-input">
                 <span class="input-label">Mot de passe</span>
                 <input type="password" placeholder="(6 caractères minimum)"
-                       ng-model="data.password"
-                       ng-pattern="regex_password">
+                       ng-model="data.password" ng-pattern="regex_password">
             </label>
         </div>
         <button class="button button-block button-balanced"
                 ng-click="register()" name="create-button"
-                ng-disabled="!data.email || !data.password">
+                ng-disabled="!data.login || !data.password">
                 Créer mon compte
         </button>
         <br>

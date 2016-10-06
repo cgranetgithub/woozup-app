@@ -21,7 +21,7 @@ angular.module('starter.services', [])
             return function (position) {
                 var where = '{ "type": "Point", "coordinates": ['
                             + position.coords.latitude + ', ' + position.coords.longitude + '] }';
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http({
                     method: 'POST',
                     url: apiUrl + 'userposition/setlast/',
@@ -36,7 +36,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (inviteId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'invite/send/' + inviteId + '/');
             };
         }])
@@ -44,7 +44,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (inviteId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'invite/ignore/' + inviteId + '/');
             };
         }])
@@ -52,7 +52,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/invite/' + userId + '/');
             };
         }])
@@ -60,7 +60,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/ignore/' + userId + '/');
             };
         }])
@@ -68,7 +68,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/accept/' + userId + '/');
             };
         }])
@@ -76,7 +76,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (userId) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/reject/' + userId + '/');
             };
         }])
@@ -84,7 +84,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (contacts) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'contact/sort/', contacts);
             };
         }])
@@ -92,7 +92,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function () {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.get(apiUrl + 'user/logout/');
             };
         }])
@@ -100,7 +100,7 @@ angular.module('starter.services', [])
         function ($http, apiUrl, UserData) {
             "use strict";
             return function (data) {
-                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUserName(), ':', UserData.getApiKey());
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
                 $http.post(apiUrl + 'user/push_notif_reg/', data);
             };
         }])
@@ -171,7 +171,7 @@ angular.module('starter.services', [])
             setUserName: function (userName) {
                 data.userName = userName;
             },
-            getUserName: function () {
+            getUsername: function () {
                 return data.userName;
             },
             setApiKey: function (apiKey) {
@@ -445,7 +445,8 @@ angular.module('starter.services', [])
                 loginUser: function (authData, social) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
-                        command = apiUrl + 'auth/login_by_email/';
+//                         command = apiUrl + 'auth/login_by_email/';
+                        command = apiUrl + 'auth/login/';
                     if (social) {
                         command = apiUrl + 'register-by-token/' + social + '/';
                     }
@@ -475,7 +476,7 @@ angular.module('starter.services', [])
                 registerUser: function (authData) {
                     var deferred = $q.defer(),
                         promise = deferred.promise,
-                        command = 'auth/register_by_email/';
+                        command = 'auth/register/';
                     $http.post(apiUrl + command, authData
                         ).then(function (response) {
                         $localstorage.set('userid', response.data.userid);

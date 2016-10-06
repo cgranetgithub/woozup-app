@@ -38,7 +38,7 @@ angular.module('starter.controllers',
             // verify authentication
             AuthService.checkUserAuth()
                 .success(function () {
-                    $tastypie.setAuth(UserData.getUserName(),
+                    $tastypie.setAuth(UserData.getUsername(),
                                       UserData.getApiKey());
                     pushNotifReg(UserData.getNotifData());
                     findContacts(sortContacts);
@@ -94,7 +94,7 @@ angular.module('starter.controllers',
                     /* we have to call registerbyToken from service AuthService */
                     AuthService.loginUser(authData, "facebook")
                         .success(function () {
-                            $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                            $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
                             pushNotifReg(UserData.getNotifData());
                             findContacts(sortContacts);
                             $state.go('menu.events.new');
@@ -122,7 +122,7 @@ angular.module('starter.controllers',
                 disableBack: true
             });
             $scope.data = {};
-            $scope.regex_username = new RegExp("^[0-9A-Za-z-_@+.]{4,30}$");
+//             $scope.regex_username = new RegExp("^[0-9A-Za-z-_@+.]{4,30}$");
             $scope.regex_password = new RegExp("^.{6,20}$");
 
             $scope.register = function () {
@@ -133,12 +133,12 @@ angular.module('starter.controllers',
                         $ionicLoading.hide();
                         // create user account
                         $ionicLoading.show({template: "Création de ton compte"});
-                        var authData = {'email': $scope.data.email,
+                        var authData = {'username': $scope.data.login,
                                         'password': $scope.data.password,
                                 };
                         AuthService.registerUser(authData, false)
                             .success(function () {
-                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
                                 pushNotifReg(UserData.getNotifData());
                                 findContacts(sortContacts);
                                 $state.go('picture');
@@ -192,11 +192,11 @@ angular.module('starter.controllers',
                         $ionicLoading.hide();
                         // login
                         $ionicLoading.show({template: "Connexion"});
-                        var authData = {'login': $scope.data.login,
+                        var authData = {'username': $scope.data.login,
                                         'password': $scope.data.password};
                         AuthService.loginUser(authData, false)
                             .success(function () {
-                                $tastypie.setAuth(UserData.getUserName(), UserData.getApiKey());
+                                $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
                                 pushNotifReg(UserData.getNotifData());
                                 findContacts(sortContacts);
                                 $state.go('menu.events.new');
@@ -215,29 +215,29 @@ angular.module('starter.controllers',
                     });
             };
             $scope.reset = function () {
-                $scope.data = {};
-                var myPopup = $ionicPopup.show({
-                    template: '<input type="email" ng-model="data.email">',
-                    title: 'Saisie ton adresse email',
-                    subTitle: "Un email va t'être envoyé avec un lien pour changer ton mot de passe",
-                    scope: $scope,
-                    buttons: [
-                        { text: 'Annuler' },
-                        {
-                            text: "<b>Envoyer l'email</b>",
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                if (!$scope.data.email) {
-                                    //don't allow the user to close unless he enters email
-                                    e.preventDefault();
-                                } else {
-                                    resetPassword({'email': $scope.data.email});
-                                }
-                            }
-                        }
-                    ]
-                });
-                myPopup.then(function(res) {});
+//                 $scope.data = {};
+//                 var myPopup = $ionicPopup.show({
+//                     template: '<input type="email" ng-model="data.email">',
+//                     title: 'Saisie ton adresse email',
+//                     subTitle: "Un email va t'être envoyé avec un lien pour changer ton mot de passe",
+//                     scope: $scope,
+//                     buttons: [
+//                         { text: 'Annuler' },
+//                         {
+//                             text: "<b>Envoyer l'email</b>",
+//                             type: 'button-positive',
+//                             onTap: function(e) {
+//                                 if (!$scope.data.email) {
+//                                     //don't allow the user to close unless he enters email
+//                                     e.preventDefault();
+//                                 } else {
+//                                     resetPassword({'email': $scope.data.email});
+//                                 }
+//                             }
+//                         }
+//                     ]
+//                 });
+//                 myPopup.then(function(res) {});
             };
         }])
 
@@ -257,7 +257,7 @@ angular.module('starter.controllers',
             var deregister = $ionicPlatform.registerBackButtonAction(function () {}, 101);
             //
             $ionicLoading.show({template: "Chargement"});
-            $scope.data = {'first_name': UserData.getUserName()};
+            $scope.data = {'first_name': UserData.getUsername()};
             $scope.userprofile = new $tastypieResource('userprofile', {});
             $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
                 function (result) {
@@ -354,8 +354,8 @@ angular.module('starter.controllers',
         function ($tastypieResource, $ionicLoading, $scope, AuthService,
                   UserData, ProfileService, $state, $ionicModal, CameraService) {
             "use strict";
-//             $scope.title = UserData.getUserName();
-            $scope.data = {'first_name' : '', 'last_name' : '', 'email' : '',
+//             $scope.title = UserData.getUsername();
+            $scope.data = {'first_name' : '', 'last_name' : '',
                            'number' : '', 'gender' : ''};
             $scope.loadProfile = function() {
                 $ionicLoading.show({template: "Chargement"});
@@ -366,7 +366,7 @@ angular.module('starter.controllers',
                         $scope.data.first_name = result.user.first_name;
                         $scope.title = result.user.first_name;
                         $scope.data.last_name = result.user.last_name;
-                        $scope.data.email = result.user.email;
+//                         $scope.data.email = result.user.email;
                         $scope.data.number = result.phone_number;
                         $scope.data.gender = result.gender;
                         $ionicLoading.hide();
@@ -448,7 +448,7 @@ angular.module('starter.controllers',
                 ProfileService.setprofile({
                     'first_name': $scope.data.first_name,
                     'last_name': $scope.data.last_name,
-                    'email': $scope.data.email,
+//                     'email': $scope.data.email,
                     'number': $scope.data.number,
                     'gender': $scope.data.gender
                 }).then(function () {
@@ -1277,7 +1277,7 @@ findContacts = function(sortContacts) {
 
             stuff.push({
                 'name': entry.name.formatted,
-                'emails': helper(entry.emails).join(', '),
+//                 'emails': helper(entry.emails).join(', '),
                 'numbers': helper(entry.phoneNumbers).join(', '),
                 'photo': helper(entry.photos).join(', '),
             });
