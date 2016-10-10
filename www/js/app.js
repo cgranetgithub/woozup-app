@@ -4,12 +4,11 @@
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
+// 'woozup' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova',
-                            'starter.controllers', 'starter.services'])
+// 'woozup.services' is found in services.js
+// 'woozup.controllers' is found in controllers.js
+angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'woozup.controllers', 'woozup.services'])
 
     .run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg,
                    $cordovaDialogs, $state) {

@@ -1,7 +1,7 @@
 /*jslint browser: true, white: true*/
 /*global angular, cordova, StatusBar, Camera, backend_url*/
 
-angular.module('starter.services', [])
+angular.module('woozup.services', [])
     .config(['$provide', '$tastypieProvider', function ($provide, $tastypieProvider) {
         "use strict";
         var hostname = backend_url,
@@ -485,6 +485,64 @@ angular.module('starter.services', [])
                         UserData.setUserName(response.data.username);
                         UserData.setApiKey(response.data.api_key);
                         UserData.setUserId(response.data.userid);
+                        deferred.resolve('Welcome!');
+                    }, function (error) {
+                        console.log(error);
+                        if (error.data) {
+                            if (error.data.reason) {
+                                console.log("server return error:", error.data.reason);
+                            }
+                            if (error.data.code) {
+                                deferred.reject(error.data.code);
+                            }
+                        }
+                        deferred.reject(0);
+                    });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
+                getCode: function (authData) {
+                    var deferred = $q.defer(),
+                        promise = deferred.promise,
+                        command = 'auth/get_code/';
+                    $http.post(apiUrl + command, authData
+                        ).then(function (response) {
+                        deferred.resolve('Welcome!');
+                    }, function (error) {
+                        console.log(error);
+                        if (error.data) {
+                            if (error.data.reason) {
+                                console.log("server return error:", error.data.reason);
+                            }
+                            if (error.data.code) {
+                                deferred.reject(error.data.code);
+                            }
+                        }
+                        deferred.reject(0);
+                    });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
+                verifCode: function (authData) {
+                    var deferred = $q.defer(),
+                        promise = deferred.promise,
+                        command = 'auth/verif_code/';
+                    $http.post(apiUrl + command, authData
+                        ).then(function (response) {
                         deferred.resolve('Welcome!');
                     }, function (error) {
                         console.log(error);
