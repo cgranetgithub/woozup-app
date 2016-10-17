@@ -42,7 +42,7 @@ angular.module('woozup.controllers',
                                       UserData.getApiKey());
                     pushNotifReg(UserData.getNotifData());
                     findContacts(sortContacts);
-                    $state.go('menu.events.new');
+                    $state.go('tab.home');
                     $ionicLoading.hide();
                 })
                 .error(function () {
@@ -74,224 +74,6 @@ angular.module('woozup.controllers',
             };
         }])
 
-//     .controller('ConnectCtrl', ['$tastypie', '$ionicPopup', 'AuthService',
-//                 'sortContacts', '$scope', '$state', 'UserData', 'pushNotifReg',
-//                 '$ionicHistory',
-//         function ($tastypie, $ionicPopup, AuthService, sortContacts,
-//                   $scope, $state, UserData, pushNotifReg, $ionicHistory) {
-//             "use strict";
-//             $ionicHistory.nextViewOptions({
-//                 disableAnimate: true,
-//                 disableBack: true
-//             });
-//             $scope.data = {};
-//             $scope.newNumber = false;
-//             $scope.validCode = false;
-//             // get code
-//             $scope.get_code = function () {
-//                 AuthService.getCode({'phone_number': $scope.data.number}, false)
-//                     .success(function () {
-//                         $scope.newNumber = true;
-//                     }).error(function () {
-//                         var alertPopup = $ionicPopup.alert({
-//                             title: "Problème",
-//                             template: "Réessaie"
-//                         });
-//                     });
-//             };
-//             // verif code
-//             $scope.verif_code = function () {
-//                 AuthService.verifCode({'phone_number': $scope.data.number, 'code': $scope.data.code}, false)
-//                     .success(function () {
-//                         $scope.validCode = true;
-//                     }).error(function () {
-//                         var alertPopup = $ionicPopup.alert({
-//                             title: "Problème",
-//                             template: "Réessaie"
-//                         });
-//                     });
-//             };
-//             // password popup
-//             $scope.showPopup = function() {
-//                 var passwordPopup = $ionicPopup.show({
-//                     template: '<input type="password" ng-model="data.password">',
-//                     title: 'Choisis un mot de passe',
-//     //                 subTitle: 'Please use normal things',
-//                     scope: $scope,
-//                     buttons: [
-//                         {   text: 'Annuler' },
-//                         {   text: '<b>OK</b>',
-//                             type: 'button-positive',
-//                             onTap: function(e) {
-//                                 if (!$scope.data.password) {
-//                                     e.preventDefault();
-//                                 } else {
-//                                     return $scope.data.password;
-//                                 }
-//                             }
-//                         }
-//                     ]
-//                 });
-//                 passwordPopup.then(function(res) {
-//                     console.log('Tapped!', res);
-//                 });
-//             };
-//             // Facebook connect method
-//             $scope.fbLogin = function () {
-//                 facebookConnectPlugin.login([], function (obj) {
-//                     var authData = {
-//                         "provider": "facebook",
-//                         "access_token": obj.authResponse.accessToken
-//                     };
-//                     /* we have to call registerbyToken from service AuthService */
-//                     AuthService.loginUser(authData, "facebook")
-//                         .success(function () {
-//                             $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
-//                             pushNotifReg(UserData.getNotifData());
-//                             findContacts(sortContacts);
-//                             $state.go('menu.events.new');
-//                         }).error(function () {
-//                             $ionicPopup.alert({
-//                                 title: "Problème lors de la création du compte",
-//                                 template: "Réessaie plus tard"
-//                             });
-//                         });
-//                 }, function (obj) {
-//                     console.log(obj);
-//                 });
-//             };
-//         }])
-
-    .controller('RegisterCtrl', ['$tastypie', '$ionicPopup', '$ionicLoading',
-                'AuthService', 'sortContacts', '$scope', '$state', 'UserData',
-                'pushNotifReg', '$ionicHistory',
-        function ($tastypie, $ionicPopup, $ionicLoading, AuthService,
-                  sortContacts, $scope, $state, UserData, pushNotifReg,
-                  $ionicHistory) {
-            "use strict";
-            $ionicHistory.nextViewOptions({
-                disableAnimate: true,
-                disableBack: true
-            });
-            $scope.data = {};
-//             $scope.regex_username = new RegExp("^[0-9A-Za-z-_@+.]{4,30}$");
-            $scope.regex_password = new RegExp("^.{6,20}$");
-
-            $scope.register = function () {
-                // check connection
-                $ionicLoading.show({template: "Vérification de la connexion"});
-                AuthService.pingAuth()
-                    .success(function () {
-                        $ionicLoading.hide();
-                        // create user account
-                        $ionicLoading.show({template: "Création de ton compte"});
-                        var authData = {'username': $scope.data.login,
-                                        'password': $scope.data.password,
-                                };
-                        AuthService.registerUser(authData, false)
-                            .success(function () {
-                                $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
-                                pushNotifReg(UserData.getNotifData());
-                                findContacts(sortContacts);
-                                $state.go('picture');
-                                $ionicLoading.hide();
-                            }).error(function (err) {
-                                var message;
-                                switch (err) {
-                                case '10':
-                                    message = "Saisir un nom d'utilisateur et un mot de passe";
-                                    break;
-                                case '200':
-                                    message = "Désolé, ce nom d'utilisateur est déjà pris.";
-                                    break;
-                                case '150':
-                                    message = "Cet utilisateur a été désactivé. Contacte Woozup pour plus d'info.";
-                                    break;
-                                default:
-                                    message = "Problème lors de la création de ton compte.";
-                                }
-                                $ionicPopup.alert({
-                                    title: "Problème lors de la création de ton compte",
-                                    template: message
-                                });
-                                $ionicLoading.hide();
-                            });
-                    })
-                    .error(function () {
-                        $state.go('network');
-                        $ionicLoading.hide();
-                    });
-            };
-        }])
-
-    .controller('LoginCtrl', ['$tastypie', '$ionicLoading', 'AuthService',
-                '$ionicPopup', 'sortContacts', '$scope', '$state', 'UserData',
-                'pushNotifReg', 'resetPassword', '$ionicHistory',
-        function ($tastypie, $ionicLoading, AuthService, $ionicPopup,
-                  sortContacts, $scope, $state, UserData, pushNotifReg,
-                  resetPassword, $ionicHistory) {
-            "use strict";
-            $ionicHistory.nextViewOptions({
-                disableAnimate: true,
-                disableBack: true
-            });
-            $scope.data = {};
-            $scope.login = function () {
-                // check connection
-                $ionicLoading.show({template: "Vérification de la connexion"});
-                AuthService.pingAuth()
-                    .success(function () {
-                        $ionicLoading.hide();
-                        // login
-                        $ionicLoading.show({template: "Connexion"});
-                        var authData = {'username': $scope.data.login,
-                                        'password': $scope.data.password};
-                        AuthService.loginUser(authData, false)
-                            .success(function () {
-                                $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
-                                pushNotifReg(UserData.getNotifData());
-                                findContacts(sortContacts);
-                                $state.go('menu.events.new');
-                                $ionicLoading.hide();
-                            }).error(function () {
-                                $ionicLoading.hide();
-                                var alertPopup = $ionicPopup.alert({
-                                    title: "Problème de connexion",
-                                    template: "Vérifie ton login / mot de passe"
-                                });
-                            });
-                    })
-                    .error(function () {
-                        $state.go('network');
-                        $ionicLoading.hide();
-                    });
-            };
-            $scope.reset = function () {
-//                 $scope.data = {};
-//                 var myPopup = $ionicPopup.show({
-//                     template: '<input type="email" ng-model="data.email">',
-//                     title: 'Saisie ton adresse email',
-//                     subTitle: "Un email va t'être envoyé avec un lien pour changer ton mot de passe",
-//                     scope: $scope,
-//                     buttons: [
-//                         { text: 'Annuler' },
-//                         {
-//                             text: "<b>Envoyer l'email</b>",
-//                             type: 'button-positive',
-//                             onTap: function(e) {
-//                                 if (!$scope.data.email) {
-//                                     //don't allow the user to close unless he enters email
-//                                     e.preventDefault();
-//                                 } else {
-//                                     resetPassword({'email': $scope.data.email});
-//                                 }
-//                             }
-//                         }
-//                     ]
-//                 });
-//                 myPopup.then(function(res) {});
-            };
-        }])
 
     .controller('PictureCtrl', ['$tastypieResource', 'CameraService',
                 '$ionicLoading', '$scope', '$state', 'AuthService',
@@ -310,7 +92,7 @@ angular.module('woozup.controllers',
             //
             $ionicLoading.show({template: "Chargement"});
             $scope.data = {'first_name': UserData.getUsername()};
-            $scope.userprofile = new $tastypieResource('userprofile', {});
+            $scope.userprofile = new $tastypieResource('user', {});
             $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
                 function (result) {
                     $scope.userprofile = result;
@@ -383,7 +165,7 @@ angular.module('woozup.controllers',
             };
             $scope.next = function () {
                 ProfileService.setprofile({'first_name': $scope.data.first_name});
-                $state.go('menu.events.new');
+                $state.go('tab.home');
                 // enable back button again
                 deregister();
             };
@@ -411,13 +193,14 @@ angular.module('woozup.controllers',
                            'number' : '', 'gender' : ''};
             $scope.loadProfile = function() {
                 $ionicLoading.show({template: "Chargement"});
-                $scope.userprofile = new $tastypieResource('userprofile', {});
+                $scope.userprofile = new $tastypieResource('user', {});
                 $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
                     function (result) {
+                        console.log(result);
                         $scope.profile = result;
-                        $scope.data.first_name = result.user.first_name;
-                        $scope.title = result.user.first_name;
-                        $scope.data.last_name = result.user.last_name;
+                        $scope.data.first_name = result.first_name;
+                        $scope.title = result.first_name;
+                        $scope.data.last_name = result.last_name;
 //                         $scope.data.email = result.user.email;
                         $scope.data.number = result.phone_number;
                         $scope.data.gender = result.gender;
@@ -513,67 +296,67 @@ angular.module('woozup.controllers',
             };
         }])
 
-    .controller('WhatCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
-                '$state', 'EventData', 'AuthService',
-        function ($tastypieResource, $ionicLoading, $scope, $state,
-                  EventData, AuthService) {
-            "use strict";
-            $scope.title = "Nouveau rendez-vous";
-            $ionicLoading.show({template: "Chargement"});
-            $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
-            $scope.types.objects.$find().then(
-                function () { $ionicLoading.hide(); },
-                function (error) {
-                    console.log(error);
-                    $ionicLoading.hide();
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            );
-            $scope.next = function (typeId) {
-                $ionicLoading.show({template: "Chargement"});
-                $scope.types.objects.$get({id: typeId}).then(
-                    function (result) {
-                        EventData.setWhat(result);
-                        $state.go('when');
-//                         $state.go('when', {}, { reload: true });
-                        $ionicLoading.hide();
-                    },
-                    function (error) {
-                        console.log(error);
-                        $ionicLoading.hide();
-                    }
-                );
-            };
-        }])
+//     .controller('WhatCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
+//                 '$state', 'EventData', 'AuthService',
+//         function ($tastypieResource, $ionicLoading, $scope, $state,
+//                   EventData, AuthService) {
+//             "use strict";
+//             $scope.title = "Nouveau rendez-vous";
+//             $ionicLoading.show({template: "Chargement"});
+//             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
+//             $scope.types.objects.$find().then(
+//                 function () { $ionicLoading.hide(); },
+//                 function (error) {
+//                     console.log(error);
+//                     $ionicLoading.hide();
+//                     // verify authentication
+//                     AuthService.checkUserAuth().success()
+//                         .error(function () {$state.go('network');});
+//                 }
+//             );
+//             $scope.next = function (typeId) {
+//                 $ionicLoading.show({template: "Chargement"});
+//                 $scope.types.objects.$get({id: typeId}).then(
+//                     function (result) {
+//                         EventData.setWhat(result);
+//                         $state.go('when');
+// //                         $state.go('when', {}, { reload: true });
+//                         $ionicLoading.hide();
+//                     },
+//                     function (error) {
+//                         console.log(error);
+//                         $ionicLoading.hide();
+//                     }
+//                 );
+//             };
+//         }])
 
-    .controller('WhenCtrl', ['$scope', '$state', 'EventData',
-        function ($scope, $state, EventData) {
-            "use strict";
-            $scope.when = {};
-            $scope.when.date = new Date();
-            $scope.when.mindate = new Date();
-            if (EventData.getWhat()) {
-                $scope.title = EventData.getWhat().name;
-                $scope.backgroundUrl = EventData.getWhat().background;
-                $scope.next = function () {
-                    EventData.setWhen($scope.when.date);
-                    $state.go('where', {}, { reload: true });
-//                 $state.go('where');
-                };
-            } else {
-                $state.go('menu.events.new');
-            }
-//             $scope.$watch("when.date", function (newValue, oldValue) {
-//                 newValue.setHours(0);
-//                 newValue.setMinutes(0);
-//                 $scope.events = new $tastypieResource('events/friends',
-//                                                       {order_by: 'start',
-//                                                        start__gte: newValue});
-//                 $scope.events.objects.$find();
-//             });
-        }])
+//     .controller('WhenCtrl', ['$scope', '$state', 'EventData',
+//         function ($scope, $state, EventData) {
+//             "use strict";
+//             $scope.when = {};
+//             $scope.when.date = new Date();
+//             $scope.when.mindate = new Date();
+//             if (EventData.getWhat()) {
+//                 $scope.title = EventData.getWhat().name;
+//                 $scope.backgroundUrl = EventData.getWhat().background;
+//                 $scope.next = function () {
+//                     EventData.setWhen($scope.when.date);
+//                     $state.go('where', {}, { reload: true });
+// //                 $state.go('where');
+//                 };
+//             } else {
+//                 $state.go('tab.new');
+//             }
+// //             $scope.$watch("when.date", function (newValue, oldValue) {
+// //                 newValue.setHours(0);
+// //                 newValue.setMinutes(0);
+// //                 $scope.events = new $tastypieResource('events/friends',
+// //                                                       {order_by: 'start',
+// //                                                        start__gte: newValue});
+// //                 $scope.events.objects.$find();
+// //             });
+//         }])
 
     .controller('WhereCtrl', ['$scope', '$log', '$state', '$filter', 'EventData',
                 'UserData', 'NgMap',
@@ -665,93 +448,93 @@ angular.module('woozup.controllers',
             };
         }])
 
-        .controller('WhoCtrl', ['$scope', '$state', '$ionicLoading',
-                    '$tastypieResource', 'EventData', 'AuthService',
-            function ($scope, $state, $ionicLoading, $tastypieResource,
-                      EventData, AuthService) {
-                "use strict";
-                // verify authentication
-                AuthService.checkUserAuth().success()
-                    .error(function () {$state.go('network');});
-                $ionicLoading.show({template: "Chargement"});
-                // $scope.title = "Mes amis";
-                // $scope.displayButton = false;
-                $scope.friends = [];
-                $scope.search = '';
-                var friendsResource,
-                    nextPages = function (result) {
-                        var i;
-                        if (result) {
-                            for (i = 0; i < result.objects.length; i += 1) {
-                                var item = result.objects[i];
-                                if ($scope.all.checked) {
-                                    item.checked = true;
-                                }
-                                $scope.friends.push(item);
-                            }
-                        }
-                    };
-                // get friends logic with pagination
-                $scope.onSearchChange = function (word) {
-                    friendsResource = new $tastypieResource('friends/mine', {
-                                            order_by: 'user__first_name',
-                                            user__first_name__icontains: word
-                    });
-                    $scope.friends = [];
-                    friendsResource.objects.$find().then(
-                        function (result) {
-                            nextPages(result);
-                            $ionicLoading.hide();
-                            $scope.$broadcast('scroll.infiniteScrollComplete');
-                        }, function (error) {
-                            console.log(error);
-                            // verify authentication
-                            $ionicLoading.hide();
-                            AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('network');});
-                        }
-                    );
-                };
-                // initial request to get friends
-                $scope.onSearchChange('');
-                // pagination
-                $scope.loadMore = function () {
-                    if (friendsResource.page.meta && friendsResource.page.meta.next) {
-                        friendsResource.page.next().then(function (result) {
-                            nextPages(result);
-                        });
-                    }
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                };
-                $scope.all = {checked: false};
-                $scope.allChanged = function () {
-                    for (var i = 0; i < $scope.friends.length; i++) {
-                       $scope.friends[i].checked = $scope.all.checked;
-                    }
-                };
-                $scope.itemChanged = function () {
-                    $scope.all.checked = false;
-                };
-                // setup screen
-                if (EventData.getWhat()) {
-                    $scope.title = EventData.getWhat().name;
-                    $scope.backgroundUrl = EventData.getWhat().background;
-                    $scope.next = function () {
-                        var invitees=[];
-                        for (var i = 0; i < $scope.friends.length; i++) {
-                           var item = $scope.friends[i];
-                           if (item.checked) {
-                               invitees.push(item);
-                           }
-                       };
-                       invitees.all = $scope.all.checked;
-                       EventData.setWho(invitees);
-                       $state.go('done');
-                    };
-                } else {
-                    $state.go('menu.events.new');
-                }
-            }])
+//         .controller('WhoCtrl', ['$scope', '$state', '$ionicLoading',
+//                     '$tastypieResource', 'EventData', 'AuthService',
+//             function ($scope, $state, $ionicLoading, $tastypieResource,
+//                       EventData, AuthService) {
+//                 "use strict";
+//                 // verify authentication
+//                 AuthService.checkUserAuth().success()
+//                     .error(function () {$state.go('network');});
+//                 $ionicLoading.show({template: "Chargement"});
+//                 // $scope.title = "Mes amis";
+//                 // $scope.displayButton = false;
+//                 $scope.friends = [];
+//                 $scope.search = '';
+//                 var friendsResource,
+//                     nextPages = function (result) {
+//                         var i;
+//                         if (result) {
+//                             for (i = 0; i < result.objects.length; i += 1) {
+//                                 var item = result.objects[i];
+//                                 if ($scope.all.checked) {
+//                                     item.checked = true;
+//                                 }
+//                                 $scope.friends.push(item);
+//                             }
+//                         }
+//                     };
+//                 // get friends logic with pagination
+//                 $scope.onSearchChange = function (word) {
+//                     friendsResource = new $tastypieResource('friends/mine', {
+//                                             order_by: 'first_name',
+//                                             first_name__icontains: word
+//                     });
+//                     $scope.friends = [];
+//                     friendsResource.objects.$find().then(
+//                         function (result) {
+//                             nextPages(result);
+//                             $ionicLoading.hide();
+//                             $scope.$broadcast('scroll.infiniteScrollComplete');
+//                         }, function (error) {
+//                             console.log(error);
+//                             // verify authentication
+//                             $ionicLoading.hide();
+//                             AuthService.checkUserAuth().success()
+//                                 .error(function () {$state.go('network');});
+//                         }
+//                     );
+//                 };
+//                 // initial request to get friends
+//                 $scope.onSearchChange('');
+//                 // pagination
+//                 $scope.loadMore = function () {
+//                     if (friendsResource.page.meta && friendsResource.page.meta.next) {
+//                         friendsResource.page.next().then(function (result) {
+//                             nextPages(result);
+//                         });
+//                     }
+//                     $scope.$broadcast('scroll.infiniteScrollComplete');
+//                 };
+//                 $scope.all = {checked: false};
+//                 $scope.allChanged = function () {
+//                     for (var i = 0; i < $scope.friends.length; i++) {
+//                        $scope.friends[i].checked = $scope.all.checked;
+//                     }
+//                 };
+//                 $scope.itemChanged = function () {
+//                     $scope.all.checked = false;
+//                 };
+//                 // setup screen
+//                 if (EventData.getWhat()) {
+//                     $scope.title = EventData.getWhat().name;
+//                     $scope.backgroundUrl = EventData.getWhat().background;
+//                     $scope.next = function () {
+//                         var invitees=[];
+//                         for (var i = 0; i < $scope.friends.length; i++) {
+//                            var item = $scope.friends[i];
+//                            if (item.checked) {
+//                                invitees.push(item);
+//                            }
+//                        };
+//                        invitees.all = $scope.all.checked;
+//                        EventData.setWho(invitees);
+//                        $state.go('done');
+//                     };
+//                 } else {
+//                     $state.go('tab.new');
+//                 }
+//             }])
 
     .controller('DoneCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
                 '$state', 'EventData', 'AuthService',
@@ -860,59 +643,6 @@ angular.module('woozup.controllers',
                 });
         }])
 
-    .controller('FriendsEventsCtrl', ['$scope', '$state', '$tastypieResource',
-                '$ionicLoading', 'AuthService',
-        function ($scope, $state, $tastypieResource, $ionicLoading,
-                  AuthService) {
-            "use strict";
-            // verify authentication
-            AuthService.checkUserAuth().success()
-                .error(function () {$state.go('network');});
-            $ionicLoading.show({template: "Chargement"});
-            $scope.title = "Mes sorties";
-            $scope.events = [];
-            var today = new Date(), eventsResource,
-                nextPages = function (result) {
-                        var i;
-                        if (result) {
-                            for (i = 0; i < result.objects.length; i += 1) {
-                                $scope.events.push(result.objects[i]);
-                            }
-                        }
-                    };
-            today.setHours(0);
-            today.setMinutes(0);
-            eventsResource = new $tastypieResource('events/friends',
-                                            {order_by: 'start', start__gte: today});
-            eventsResource.objects.$find().then(
-                function (result) {
-                    nextPages(result);
-                    $ionicLoading.hide();
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                }, function (error) {
-                    console.log(error);
-                    $ionicLoading.hide();
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            );
-            $scope.loadMore = function () {
-                if (eventsResource.page.meta && eventsResource.page.meta.next) {
-                    eventsResource.page.next().then(
-                        function (result) {
-                            nextPages(result);
-                        }, function (error) {
-                            console.log(error);
-                            // verify authentication
-                            AuthService.checkUserAuth().success()
-                                .error(function () {$state.go('network');});
-                        });
-                }
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            };
-            $ionicLoading.hide();
-        }])
     .controller('AgendaEventsCtrl', ['$scope', '$state', '$tastypieResource',
                 '$ionicLoading', 'AuthService',
         function ($scope, $state, $tastypieResource, $ionicLoading,
@@ -1068,7 +798,7 @@ angular.module('woozup.controllers',
                 pendingFriends = new $tastypieResource('friends/pending'),
                 invites = new $tastypieResource('invite',
                                                 {status__exact: 'NEW'}),
-                profile = new $tastypieResource('userprofile', {});
+                profile = new $tastypieResource('user', {});
             profile.objects.$get({id: UserData.getUserId()}).then(
                 function (result) {
                     $scope.userprofile = result;
@@ -1143,8 +873,8 @@ angular.module('woozup.controllers',
                                     name__icontains: word
                 });
                 friendsResource = new $tastypieResource('friends/new', {
-                                    order_by: 'user__first_name',
-                                    user__first_name__icontains: word
+                                    order_by: 'first_name',
+                                    first_name__icontains: word
                 });
                 $scope.invites = [];
                 $scope.friends = [];
@@ -1202,8 +932,8 @@ angular.module('woozup.controllers',
                 };
             $scope.onSearchChange = function (word) {
                 friendsResource = new $tastypieResource('friends/mine', {
-                                        order_by: 'user__first_name',
-                                        user__first_name__icontains: word
+                                        order_by: 'first_name',
+                                        first_name__icontains: word
                 });
                 $scope.friends = [];
                 friendsResource.objects.$find().then(
@@ -1254,8 +984,8 @@ angular.module('woozup.controllers',
                 };
             $scope.onSearchChange = function (word) {
                 friendsResource = new $tastypieResource('friends/pending', {
-                                        order_by: 'user__first_name',
-                                        user__first_name__icontains: word
+                                        order_by: 'first_name',
+                                        first_name__icontains: word
                 });
                 $scope.friends = [];
                 friendsResource.objects.$find().then(

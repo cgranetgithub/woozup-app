@@ -1,0 +1,25 @@
+<!--<ion-view view-title={{title}} class="bgim">
+    <ion-content class="gallery">
+        <br>-->
+<ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Quoi ?</h1>
+    </ion-header-bar>
+    <ion-content>
+        <span class="item-tile" ng-repeat="type in types.page.objects"
+            ng-style={{type.style}} ng-click="setWhat(type.id)">
+<!--             <img class="category" ng-src="{{type.icon}}"> -->
+            <div>
+                <p class="category-title">{{type.short_name}}</p>
+            </div>
+        </span>
+    </ion-content>
+</ion-modal-view>
+<!-- <br> -->
+<!--     </ion-content> -->
+<!--     must be out of the content -->
+<!--    <button class="button button-positive bottom-right-button"
+            ui-sref="menu.friends.new">
+        <i class="icon ion-ios-people"></i>
+    </button>
+</ion-view>-->

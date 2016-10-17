@@ -1,4 +1,4 @@
-<ion-view view-title={{vm.title}} class="withBg" ng-controller="WhereCtrl as vm"
+<!--<ion-view view-title={{vm.title}} class="withBg" ng-controller="WhereCtrl as vm"
           ng-style="{'background-image': 'url({{vm.backgroundUrl}})'}">
     <ion-nav-bar class="bar-dark">
         <ion-nav-buttons side="left">
@@ -8,7 +8,11 @@
                 <span class="back-text"></span>
             </button>
         </ion-nav-buttons>
-    </ion-nav-bar>
+    </ion-nav-bar>-->
+<ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Où ?</h1>
+    </ion-header-bar>
     <ion-content>
         <input g-places-autocomplete class="controls map-input" type="text"
                placeholder="Entrez une adresse ou cliquez sur la carte"
@@ -20,9 +24,10 @@
                     animation="Animation.DROP"></marker>
 <!--                 <marker ng-repeat="pos in vm.positions" position="{{pos.lat}}, {{pos.lng}}"></marker> -->
         </ng-map>    
-        <button class="button icon-right ion-chevron-right button-balanced button-down"
-                ng-click="vm.next()">
+        <button class="button button-balanced button-down"
+                ng-click="vm.setWhere()">
             {{vm.where}}
         </button>
     </ion-content>
-</ion-view>
+</ion-modal-view>
+<!-- </ion-view> -->

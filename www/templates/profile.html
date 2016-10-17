@@ -1,4 +1,4 @@
-<ion-nav-bar class="bar-dark">
+<!--<ion-nav-bar>
     <ion-nav-buttons side="left">
         <button class="button back-button buttons button-clear header-item"
                 ng-click="$ionicGoBack()">
@@ -6,9 +6,10 @@
             <span class="back-text"></span>
         </button>
     </ion-nav-buttons>
-</ion-nav-bar>
-<ion-view view-title={{title}} class="bgim">
+</ion-nav-bar>-->
+<ion-view view-title="{{profile.first_name}}">
     <ion-content class="padding">
+            <img ng-src="{{profile.image}}" ng-click="openModal()">
         <div class="profilePicture">
             <img ng-src="{{profile.image}}" ng-click="openModal()">
             <img ng-if="!profile.image" src="img/round58.png"
@@ -17,11 +18,11 @@
         <form name="myform">
             <label class="item item-input">
                 <span class="input-label">Nom</span>
-                <input type="text" ng-model="data.first_name">
+                <input type="text" ng-model="profile.first_name">
             </label>
             <label class="item item-input">
                 <span class="input-label">N° de mobile</span>
-                <input type="tel" ng-model="data.number" placeholder="+33601020304">
+                <input type="tel" ng-model="profile.number" placeholder="+33601020304">
             </label>
         </form>
         <br>

@@ -1,1 +1,1 @@
-var backend_url = "http://geoevent.murlock.org/";
+var backend_url = "http://woozup.herokuapp.com/";

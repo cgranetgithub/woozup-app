@@ -7,9 +7,9 @@ angular.module('woozup.services', [])
         var hostname = backend_url,
             apiUrl = hostname + 'api/v1/';
 // #### for debug
-     var hostname = 'http://192.168.1.10:8000/',
-         hostname = 'http://localhost:8000/',
-         apiUrl = hostname + 'api/v1/';
+//      var hostname = 'http://192.168.1.25:8000/',
+//          hostname = 'http://localhost:8000/',
+//          apiUrl = hostname + 'api/v1/';
 // #########
         $provide.value('apiUrl', apiUrl);
         $provide.value('hostname', hostname);
@@ -541,6 +541,35 @@ angular.module('woozup.services', [])
                     var deferred = $q.defer(),
                         promise = deferred.promise,
                         command = 'auth/verif_code/';
+                    $http.post(apiUrl + command, authData
+                        ).then(function (response) {
+                        deferred.resolve('Welcome!');
+                    }, function (error) {
+                        console.log(error);
+                        if (error.data) {
+                            if (error.data.reason) {
+                                console.log("server return error:", error.data.reason);
+                            }
+                            if (error.data.code) {
+                                deferred.reject(error.data.code);
+                            }
+                        }
+                        deferred.reject(0);
+                    });
+                    promise.success = function (fn) {
+                        promise.then(fn);
+                        return promise;
+                    };
+                    promise.error = function (fn) {
+                        promise.then(null, fn);
+                        return promise;
+                    };
+                    return promise;
+                },
+                isRegistered: function (authData) {
+                    var deferred = $q.defer(),
+                        promise = deferred.promise,
+                        command = 'auth/is_registered/';
                     $http.post(apiUrl + command, authData
                         ).then(function (response) {
                         deferred.resolve('Welcome!');

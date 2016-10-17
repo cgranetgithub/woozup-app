@@ -1,0 +1,23 @@
+<ion-view view-title="Woozup" class="bgim">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item item-avatar" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">
+                <img ng-src="{{event.owner.profile.image}}">
+<!--                 <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}> -->
+                <h2 ng-if=!event.canceled>{{event.name}}</h2>
+                <h2 ng-if=event.canceled class="canceled-title">{{event.name}}</h2>
+                <p><b ng-if=event.canceled  class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+                <p>avec {{event.owner.name}}</p>
+                <button class="button button-clear button-stable icon ion-ios-heart-outline"></button>
+                <button class="button button-clear button-stable icon ion-ios-chatbubble-outline"></button>
+                <button class="button button-clear button-stable icon ion-ios-redo-outline"></button>
+            </ion-item>
+        </ion-list>
+        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+    </ion-content>
+<!--     must be out of the content -->
+<!--    <button class="button button-positive bottom-right-button"
+            ui-sref="menu.friends.new">
+        <i class="icon ion-ios-people"></i>
+    </button>-->
+</ion-view>

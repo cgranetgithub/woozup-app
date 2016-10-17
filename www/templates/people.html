@@ -1,4 +1,4 @@
-<ion-view view-title={{title}} class="blue-bgim">
+<ion-view view-title={{title}}>
     <ion-content>
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
@@ -9,8 +9,8 @@
             <ion-item class="item item-avatar item-button-right"
                       ng-repeat="friend in friends track by $index">
                 <img ng-src="{{friend.image}}">
-                <h2>{{friend.name}}</h2>
-                <p>{{friend.user.email}}</p>
+                <h2>{{friend.first_name}}</h2>
+<!--                 <p>{{friend.user.email}}</p> -->
                 <div class="buttons">
                     <button class="button button-outline roundbutton"
                             ng-click="ignoreFriendButton(friend)"
@@ -44,15 +44,5 @@
             </ion-item>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
-        <div class="card" ng-if=!userprofile.phone_number>
-            <a href="#/menu/profile" class="item item-text-wrap">
-                Pour retrouver plus de contacts, ajoute ton numéro de téléphone dans ton profil
-            </a>
-        </div>
     </ion-content>
-<!--     must be out of the content -->
-    <button class="button button-royal bottom-right-button"
-            ui-sref="menu.events.new">
-        <i class="icon ion-ios-calendar"></i>
-    </button>
 </ion-view>

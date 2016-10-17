@@ -1,41 +1,48 @@
 <ion-view view-title="Connexion" class="bgim" hide-nav-bar="true">
-    <ion-content class="padding">
-        <div class="logocontainer">
-            <h1 class="woozup-green" style="font-size: 60px">Woozup</h1>
+    <ion-content class="padding centered">
+        <h1 class="woozup-title">Woozup</h1>
+<!-- get number first -->
+        <div ng-if="!registered && !newNumber">
+<!--             <h3 class="centered woozup-blue">TELEPHONE</h3> -->
+            <intlpn ng-model="data.number" placeholder="Téléphone" default-country="fr" box-header-class="bar-light" box-header-title="Pays" search-placeholder="France" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
+            <button class="button button-block button-light button-large" ng-click="check_number()">Suivant</button>
         </div>
-        <div ng-if="!newNumber">
-            <h3 style="color:#FFF;">Ton numéro de mobile</h3>
-            <intlpn ng-model="data.number" placeholder="+33601234567" default-country="fr" box-header-class="bar-energized" box-header-title="Pays" search-placeholder="Pays" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
-            <button class="button button-block button-balanced button-large" name="register-button" ng-click="get_code()">OK</button>
+<!-- verify number with validation code -->
+        <div ng-if="!registered && newNumber && !validCode">
+            <h3 class="centered white">Entre le code de confirmation</h3>
+            <label class="item item-input">
+                <span class="input-label">Code</span>
+                <input type="number" ng-model="data.code">
+            </label>
+            <button class="button button-block button-light button-large" ng-click="verif_code()">Valider</button>
         </div>
-        <div ng-if="newNumber && !validCode">
-            <h3 style="color:#FFF;">Code reçu</h3>
-            <input type="number" autocorrect="off" ng-model="data.code" />
-            <button class="button button-block button-balanced button-large" name="register-button" ng-click="verif_code()">OK</button>
-        </div>
-        <div ng-if="newNumber && validCode">
-            <h3 style="color:#FFF;">Créer mon compte</h3>
+<!-- register, choices -->
+        <div ng-if="!registered && newNumber && validCode">
+            <h3 class="centered white">Créer mon compte</h3>
             <br>
             <button class="button button-block button-positive disabled" ng-click="fbLogin()">
                 avec
                 <i class="icon ion-social-facebook"></i>
                 Facebook (bientot disponible)
             </button>
-            <button class="button button-block button-calm disabled" ng-click="twLogin()">
-                avec
-                <i class="icon ion-social-twitter"></i>
-                Twitter (bientot disponible)
-            </button>
             <button class="button button-block button-assertive disabled" ng-click="glLogin()">
                 avec
                 <i class="icon ion-social-google"></i>
                 Google (bientot disponible)
             </button>
-            <button class="button button-block button-balanced" ng-click="showPopup()">
+            <button class="button button-block button-light" ng-click="showPopup()">
                 juste avec un mot de passe
             </button>
             <br>
         </div>
-        
+<!-- login -->
+        <div ng-if="registered">
+<!--             <h3 class="centered woozup-blue">Saisis ton mot de passe</h3> -->
+            <label class="item item-input">
+                <span class="input-label">Mot de passe</span>
+                <input type="password" ng-model="data.password">
+            </label>
+            <button class="button button-block button-light button-large" ng-click="login()">OK</button>
+        </div>
     </ion-content>
 </ion-view>

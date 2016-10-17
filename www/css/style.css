@@ -1,23 +1,41 @@
-.bar.bar-dark, .tabs-dark > .tabs, .tabs.tabs-dark, .bar-dark .button {
+/*.bar.bar-dark, .tabs-dark > .tabs, .tabs.tabs-dark, .bar-dark .button {
     background: transparent;
     border-color: #FFF;
+}*/
+.white {
+    color: white;
 }
-.woozup-green {
+.woozup-title {
+    color: white;
+    font-size: 60px;
+    margin: 60px 0 40px 0 !important;
+}
+.item.item-input, .item.intlpn-container {
+    border: none !important;
+    background-color: rgba(255,255,255,0.2) !important;
+}
+.input-label, .item-input input, .intlpn-container input {
+    color: white !important;
+}
+.padding {
+    padding: 30px;
+}
+/*.woozup-green {
     color: #ACFFC4;
 }
 .woozup-blue {
-    color: #00129C;
+    color: #7B81AD;
 }
 .woozup-pink {
     color: #740066;
-}
+}*/
 .canceled-title {
     text-decoration:line-through;
 }
 .canceled-message {
     color: red;
 }
-.item {
+/*.item {
     opacity: 0.8;
     min-height: 38px;
 }
@@ -29,20 +47,19 @@
 }
 .item-avatar-right, .item-avatar-right .item-content {
     min-height: 38px;
-}
+}*/
 .item-button-right .buttons {
     right: 5px;
 }
 .item-button-right {
     padding-right: 110px;
 }
-.event-item .item-content {
+/*.event-item .item-content {
     padding-left: 70px;
     padding-right: 90px;
 }
 .event-item-icon {
     background: grey;
-/*     border-radius: 50% 200% 75% 0; */
     border-radius: 0 80% 0 0;
     position: absolute;
     bottom: 0;
@@ -60,9 +77,8 @@
     right: 5px;
     height: 85%;
     margin: auto;
-/*     padding: 20px 10px 20px 5px; */
     z-index: -1;
-}
+}*/
 .gallery {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -123,16 +139,24 @@
     text-align: center;
 }
 
-#dtpick {
+.dtpickbox {
+    display: inline-block;
+    min-height: 50px;
+    width: 100%;
+}
+.uib-datepicker {
     padding: 2px;
 }
-#dtpick table {
+.uib-datepicker table {
     min-width: 90%;
     margin: auto;
 }
-#dtpick table tr, th, td {
+.uib-datepicker table tr, th, td {
     padding: 1px;
     vertical-align: middle;
+}
+.uib-timepicker {
+    margin: auto;
 }
 #tmpick {
     margin: 0 auto -5px auto;
@@ -232,18 +256,19 @@ input[type="text"].controls {
     height: 100%;
 }
 .bgim {
-    background: url('../img/splash.png') no-repeat center center fixed;
+    background: url('../img/blurred_colors.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+/*     background: linear-gradient(to bottom right, darkblue, lightblue); */
 }
 .blue-bgim {
-    background: url('../img/splash-blue.png') no-repeat center center fixed;
+/*    background: url('../img/splash-blue.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
+    background-size: cover;*/
 }
 .withBg {
     background-repeat: no-repeat;

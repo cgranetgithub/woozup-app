@@ -97,13 +97,13 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'woozup.controlle
 
     .config(['$ionicConfigProvider', function ($ionicConfigProvider) {
         "use strict";
-        $ionicConfigProvider.tabs.position('top');
-        $ionicConfigProvider.tabs.style('standard');
-        $ionicConfigProvider.views.maxCache(0);
-        $ionicConfigProvider.views.transition('none');
-        $ionicConfigProvider.navBar.alignTitle('center');
-        $ionicConfigProvider.navBar.positionPrimaryButtons('left');
-        $ionicConfigProvider.navBar.positionSecondaryButtons('right');
+        $ionicConfigProvider.tabs.position('bottom');
+//         $ionicConfigProvider.tabs.style('standard');
+//         $ionicConfigProvider.views.maxCache(0);
+//         $ionicConfigProvider.views.transition('none');
+//         $ionicConfigProvider.navBar.alignTitle('center');
+//         $ionicConfigProvider.navBar.positionPrimaryButtons('left');
+//         $ionicConfigProvider.navBar.positionSecondaryButtons('right');
     }])
 
     .config(['$compileProvider', function($compileProvider) {
@@ -144,153 +144,157 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'woozup.controlle
                 templateUrl: 'templates/connect.html',
                 controller: 'ConnectCtrl'
             })
-            .state('login', {
-//                 cache: false,
-                url: '/login',
-                templateUrl: 'templates/login.html',
-                controller: 'LoginCtrl'
-            })
-            .state('register', {
-//                 cache: false,
-                url: '/register',
-                templateUrl: 'templates/register.html',
-                controller: 'RegisterCtrl'
-            })
+//             .state('login', {
+// //                 cache: false,
+//                 url: '/login',
+//                 templateUrl: 'templates/login.html',
+//                 controller: 'LoginCtrl'
+//             })
+//             .state('register', {
+// //                 cache: false,
+//                 url: '/register',
+//                 templateUrl: 'templates/register.html',
+//                 controller: 'RegisterCtrl'
+//             })
             .state('picture', {
                 cache: false,
                 url: '/picture',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
             })
-            .state('when', {
+//             .state('when', {
+// //                 cache: false,
+//                 url: '/when',
+//                 templateUrl: 'templates/when.html',
+//                 controller: 'WhenCtrl'
+//             })
+//             .state('where', {
 //                 cache: false,
-                url: '/when',
-                templateUrl: 'templates/when.html',
-                controller: 'WhenCtrl'
-            })
-            .state('where', {
-                cache: false,
-                url: '/where',
-                templateUrl: 'templates/where.html',
-//                 controller: 'WhereCtrl'
-            })
-            .state('who', {
+//                 url: '/where',
+//                 templateUrl: 'templates/where.html',
+// //                 controller: 'WhereCtrl'
+//             })
+//             .state('who', {
+// //                 cache: false,
+//                 url: '/who',
+//                 templateUrl: 'templates/who.html',
+//                 controller: 'WhoCtrl'
+//             })
+//             .state('done', {
+// //                 cache: false,
+//                 url: '/done',
+//                 templateUrl: 'templates/done.html',
+//                 controller: 'DoneCtrl'
+//             })
+//             .state('menu', {
+// //                 cache: false,
+//                 url: '/menu',
+//                 abstract: true,
+//                 templateUrl: 'templates/menu.html',
+//                 controller: 'MenuCtrl'
+//             })
+//             .state('menu.events', {
+// //                 cache: false,
+//                 url: '/events',
+//                 abstract: true,
+//                 views: {
+//                     'with-menu': {
+//                         templateUrl: 'templates/events.html',
+//                         controller: 'EventsCtrl'
+//                     }
+//                 }
+//             })
+            .state('tab', {
 //                 cache: false,
-                url: '/who',
-                templateUrl: 'templates/who.html',
-                controller: 'WhoCtrl'
-            })
-            .state('done', {
-//                 cache: false,
-                url: '/done',
-                templateUrl: 'templates/done.html',
-                controller: 'DoneCtrl'
-            })
-            .state('menu', {
-//                 cache: false,
-                url: '/menu',
+                url: '/tab',
                 abstract: true,
-                templateUrl: 'templates/menu.html',
-                controller: 'MenuCtrl'
+                templateUrl: 'templates/tabs.html'
             })
-            .state('menu.profile', {
-                cache: false,
-                url: '/profile',
-                views: {
-                    'with-menu': {
-                        templateUrl: 'templates/profile.html',
-                        controller: 'ProfileCtrl'
-                    }
-                }
-            })
-            .state('menu.events', {
-//                 cache: false,
-                url: '/events',
-                abstract: true,
-                views: {
-                    'with-menu': {
-                        templateUrl: 'templates/events.html',
-                        controller: 'EventsCtrl'
-                    }
-                }
-            })
-            .state('menu.events.new', {
+            .state('tab.new', {
 //                 cache: false,
                 url: "/new",
                 views: {
-                    'newevents': {
-                        templateUrl: "templates/what.html",
-                        controller: 'WhatCtrl'
+                    'newevent': {
+                        templateUrl: "templates/event/creation.html",
+                        controller: 'NewEventCtrl'
                     }
                 }
             })
-            .state('menu.events.friends', {
+            .state('tab.home', {
                 cache: false,
+                url: '/home',
+                views: {
+                    'home': {
+                        templateUrl: 'templates/home.html',
+                        controller: 'HomeCtrl'
+                    }
+                }
+            })
+            .state('tab.search', {
+                cache: false,
+                url: '/search',
+                views: {
+                    'search': {
+                        templateUrl: 'templates/search.html',
+                        controller: 'SearchCtrl'
+                    }
+                }
+            })
+            .state('tab.friends', {
                 url: '/friends',
                 views: {
-                    'friendsevents': {
-                        templateUrl: 'templates/eventlist.html',
-                        controller: 'FriendsEventsCtrl'
-                    }
-                }
-            })
-            .state('menu.events.agenda', {
-                cache: false,
-                url: '/agenda',
-                views: {
-                    'agendaevents': {
-                        templateUrl: 'templates/eventlist.html',
-                        controller: 'AgendaEventsCtrl'
-                    }
-                }
-            })
-            .state('menu.friends', {
-//                 cache: false,
-                url: '/friends',
-                abstract: true,
-                views: {
-                    'with-menu': {
-                        templateUrl: 'templates/friends.html',
-                        controller: 'FriendsCtrl'
-                    }
-                }
-            })
-            .state('menu.friends.new', {
-                cache: false,
-                url: '/new',
-                views: {
-                    'newfriends': {
+                    'friends': {
                         templateUrl: 'templates/people.html',
                         controller: 'NewFriendsCtrl'
                     }
                 }
             })
-            .state('menu.friends.my', {
+            .state('tab.account', {
                 cache: false,
-                url: '/my',
+                url: '/account',
                 views: {
-                    'myfriends': {
-                        templateUrl: 'templates/people.html',
-                        controller: 'MyFriendsCtrl'
+                    'account': {
+                        templateUrl: 'templates/profile.html',
+                        controller: 'ProfileCtrl'
                     }
                 }
-            })
-            .state('menu.friends.pending', {
-                cache: false,
-                url: '/pending',
-                views: {
-                    'pendingfriends': {
-                        templateUrl: 'templates/people.html',
-                        controller: 'PendingFriendsCtrl'
-                    }
-                }
-            })
-            .state('event', {
-                cache: false,
-                url: '/event/:eventId',
-                templateUrl: 'templates/event.html',
-                controller: 'EventCtrl'
             });
+//             .state('menu.friends.new', {
+//                 cache: false,
+//                 url: '/new',
+//                 views: {
+//                     'newfriends': {
+//                         templateUrl: 'templates/people.html',
+//                         controller: 'NewFriendsCtrl'
+//                     }
+//                 }
+//             })
+//             .state('menu.friends.my', {
+//                 cache: false,
+//                 url: '/my',
+//                 views: {
+//                     'myfriends': {
+//                         templateUrl: 'templates/people.html',
+//                         controller: 'MyFriendsCtrl'
+//                     }
+//                 }
+//             })
+//             .state('menu.friends.pending', {
+//                 cache: false,
+//                 url: '/pending',
+//                 views: {
+//                     'pendingfriends': {
+//                         templateUrl: 'templates/people.html',
+//                         controller: 'PendingFriendsCtrl'
+//                     }
+//                 }
+//             })
+//             .state('event', {
+//                 cache: false,
+//                 url: '/event/:eventId',
+//                 templateUrl: 'templates/event.html',
+//                 controller: 'EventCtrl'
+//             });
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/checkauth');
     }]);
