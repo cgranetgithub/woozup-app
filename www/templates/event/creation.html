@@ -1,10 +1,10 @@
-<ion-view view-title={{title}} class="bgim">
+<ion-view view-title="Nouvel événement">
   <ion-content class="padding">
-    <button class="button button-block" ng-click="whatModal.show()">
-        Quoi ?
+    <button class="button button-block" ng-click="whatModal.show()" ng-model="what">
+        {{what.short_name}}
     </button>
-    <button class="button button-block" ng-click="whenModal.show()">
-        Quand ?
+    <button class="button button-block" ng-click="whenModal.show()" ng-model="when">
+        Le {{when | date:'EEEE d MMMM à HH:mm'}}
     </button>
     <button class="button button-block" ng-click="whereModal.show()">
         Où ?

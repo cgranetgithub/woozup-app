@@ -7,28 +7,55 @@
         </button>
     </ion-nav-buttons>
 </ion-nav-bar>-->
-<ion-view view-title="{{profile.first_name}}">
-    <ion-content class="padding">
-            <img ng-src="{{profile.image}}" ng-click="openModal()">
-        <div class="profilePicture">
-            <img ng-src="{{profile.image}}" ng-click="openModal()">
-            <img ng-if="!profile.image" src="img/round58.png"
-                 ng-click="openModal()"></img>
+<ion-view view-title="{{user.first_name}}">
+    <ion-content>
+<!--             <img ng-src="{{user.profile.image}}" ng-click="openModal()"> -->
+        <div class="row text-center profile-header no-padding-margin">
+            <div class="col col-33">
+                <img ng-src="{{user.profile.image}}">
+                <img ng-if="!user.profile.image">
+            </div>
+            <div class="col">
+                <div class="row no-padding-margin">
+                    <div class="col no-padding-margin">
+                        <p><strong>1</strong></p>
+                        <p class="grey">évènement</p>
+                    </div>
+                    <div class="col no-padding-margin">
+                        <p><strong>1</strong></p>
+                        <p class="grey">amis</p>
+                    </div>
+                    <div class="col no-padding-margin">
+                        <p><strong>1</strong></p>
+                        <p class="grey">followers</p>
+                    </div>
+                </div>
+                <div class="row no-padding-margin">
+                    <div class="col no-padding-margin">
+                        <button class="button button-small button-block">test</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <form name="myform">
+        <div class="row text-center profile-header">
+            <div class="col  col-33">
+                <p><strong>{{user.first_name}} {{user.last_name}}</strong></p>
+            </div>
+        </div>
+<!--        <form name="myform">
             <label class="item item-input">
                 <span class="input-label">Nom</span>
-                <input type="text" ng-model="profile.first_name">
+                <input type="text" ng-model="user.first_name">
             </label>
             <label class="item item-input">
                 <span class="input-label">N° de mobile</span>
-                <input type="tel" ng-model="profile.number" placeholder="+33601020304">
+                <input type="tel" ng-model="user.number.phonenumber" placeholder="+33601020304">
             </label>
         </form>
         <br>
         <button class="button button-block button-balanced"
                 ng-click="saveProfile()">
             Mettre à jour
-        </button>
+        </button>-->
     </ion-content>
 </ion-view>

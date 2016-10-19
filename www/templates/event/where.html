@@ -10,18 +10,13 @@
         </ion-nav-buttons>
     </ion-nav-bar>-->
 <ion-modal-view>
-    <ion-header-bar>
+<!--    <ion-header-bar>
       <h1 class="title">Où ?</h1>
-    </ion-header-bar>
+    </ion-header-bar>-->
     <ion-content>
-        <input g-places-autocomplete class="controls map-input" type="text"
-               placeholder="Entrez une adresse ou cliquez sur la carte"
-               ng-model="vm.place" ng-change="vm.placeChanged()"/>
-        <ng-map class="map" zoom="17" center="[{{vm.lat}}, {{vm.lng}}]"
-                on-click="vm.onClick()" data-tap-disabled="true"
-                disable-default-u-i="true">
-            <marker position="[{{vm.lat}}, {{vm.lng}}]" title="marker"
-                    animation="Animation.DROP"></marker>
+        <input g-places-autocomplete class="controls map-input" type="text" placeholder="Lieu" ng-model="vm.place" ng-change="vm.placeChanged()"/>
+        <ng-map class="map" zoom="17" center="[{{vm.lat}}, {{vm.lng}}]" on-click="vm.onClick()" data-tap-disabled="true" disable-default-u-i="true">
+            <marker position="[{{vm.lat}}, {{vm.lng}}]" title="marker" animation="Animation.DROP"></marker>
 <!--                 <marker ng-repeat="pos in vm.positions" position="{{pos.lat}}, {{pos.lng}}"></marker> -->
         </ng-map>    
         <button class="button button-balanced button-down"

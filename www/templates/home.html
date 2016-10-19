@@ -1,13 +1,12 @@
-<ion-view view-title="Woozup" class="bgim">
+<ion-view view-title="Woozup">
     <ion-content>
         <ion-list>
             <ion-item class="item item-avatar" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">
                 <img ng-src="{{event.owner.profile.image}}">
 <!--                 <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}> -->
-                <h2 ng-if=!event.canceled>{{event.name}}</h2>
-                <h2 ng-if=event.canceled class="canceled-title">{{event.name}}</h2>
-                <p><b ng-if=event.canceled  class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
-                <p>avec {{event.owner.name}}</p>
+                <h2><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}} ({{event.event_type.description}})</h2>
+<!--                <h2 ng-if=event.canceled class="canceled-title"><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}}</h2>-->
+                <p><b ng-if=event.canceled  class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}, avec {{event.owner.name}}</p>
                 <button class="button button-clear button-stable icon ion-ios-heart-outline"></button>
                 <button class="button button-clear button-stable icon ion-ios-chatbubble-outline"></button>
                 <button class="button button-clear button-stable icon ion-ios-redo-outline"></button>

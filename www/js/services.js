@@ -274,7 +274,7 @@ angular.module('woozup.services', [])
                         userName = $localstorage.get('username'),
                         apiKey   = $localstorage.get('apikey');
                     $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
-                    $http.post(apiUrl + 'userprofile/setpicture/', b64file)
+                    $http.post(apiUrl + 'profile/setpicture/', b64file)
                         .then(function () {
                             deferred.resolve('succeeded');
                         }, function (error) {
@@ -297,7 +297,7 @@ angular.module('woozup.services', [])
                         userName = $localstorage.get('username'),
                         apiKey   = $localstorage.get('apikey');
                     $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
-                    $http.post(apiUrl + 'userprofile/setprofile/', profileData)
+                    $http.post(apiUrl + 'user/setprofile/', profileData)
                         .then(function () {
                             deferred.resolve('succeeded');
                         }, function (error) {

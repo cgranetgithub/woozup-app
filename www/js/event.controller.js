@@ -1,23 +1,24 @@
 /*jslint browser: true, devel: true, maxerr: 999, white: true, vars: true, newcap: true*/
 /*global angular*/
+
 angular.module('woozup.controllers')
+
 .controller('NewEventCtrl', ['$tastypieResource', '$ionicLoading', '$ionicModal', 'AuthService', '$scope', '$state', 'UserData', 'NgMap',
     function ($tastypieResource, $ionicLoading, $ionicModal, AuthService, $scope, $state, UserData, NgMap) {
         "use strict";
-        $scope.when = {};
         var date = new Date();
         date.setHours(date.getHours() + 1);
         date.setMinutes(0);
-        $scope.when.date = date;
-//         $scope.when.time = new Date();
-        $scope.options = {minDate:new Date(), showWeeks:false, startingDay:1};
-//         $scope.when.mindate = new Date();
+        $scope.when = date;
+        $scope.options = {minDate:$scope.when, showWeeks:false, startingDay:1};
         $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
         $scope.types.objects.$find().then(
-            function () { $ionicLoading.hide(); },
+            function () {
+                console.log($scope.types);
+                $scope.what = $scope.types.page.objects[0];
+            },
             function (error) {
                 console.log(error);
-                $ionicLoading.hide();
                 // verify authentication
                 AuthService.checkUserAuth().success()
                     .error(function () {$state.go('network');});
@@ -80,21 +81,9 @@ angular.module('woozup.controllers')
             $scope.all.checked = false;
         };
         
-        $scope.setWhat = function (typeId) {
-            $ionicLoading.show({template: "Chargement"});
-            $scope.types.objects.$get({id: typeId}).then(
-                function (result) {
-//                     EventData.setWhat(result);
-                    $scope.what = result;
-                    $ionicLoading.hide();
-                    $scope.whatModal.hide();
-                },
-                function (error) {
-                    console.log(error);
-                    $ionicLoading.hide();
-                    $scope.whatModal.hide();
-                }
-            );
+        $scope.setWhat = function (type) {
+            $scope.what = type;
+            $scope.whatModal.hide();
         };
         
         // initialize coords
@@ -167,7 +156,8 @@ angular.module('woozup.controllers')
         
         
         
-        $scope.setWhen = function () {
+        $scope.setWhen = function (when) {
+            $scope.when = when;
 //             EventData.setWhen($scope.when.date);
             $scope.whenModal.hide();
         };
@@ -177,25 +167,25 @@ angular.module('woozup.controllers')
         $scope.setWho = function () {
             $scope.whoModal.hide();
         };
-        $ionicModal.fromTemplateUrl('../templates/event/what.html', {
+        $ionicModal.fromTemplateUrl('templates/event/what.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
             $scope.whatModal = modal;
         });
-        $ionicModal.fromTemplateUrl('../templates/event/when.html', {
+        $ionicModal.fromTemplateUrl('templates/event/when.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
             $scope.whenModal = modal;
         });
-        $ionicModal.fromTemplateUrl('../templates/event/where.html', {
+        $ionicModal.fromTemplateUrl('templates/event/where.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
             $scope.whereModal = modal;
         });
-        $ionicModal.fromTemplateUrl('../templates/event/who.html', {
+        $ionicModal.fromTemplateUrl('templates/event/who.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {

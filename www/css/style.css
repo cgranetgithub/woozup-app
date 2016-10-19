@@ -2,33 +2,43 @@
     background: transparent;
     border-color: #FFF;
 }*/
+.no-padding-margin {
+    padding: 0;
+    margin: 0;
+}
 .white {
     color: white;
 }
-.woozup-title {
-    color: white;
-    font-size: 60px;
-    margin: 60px 0 40px 0 !important;
+.grey {
+    color: grey;
 }
-.item.item-input, .item.intlpn-container {
+.registration {
+    padding: 30px;
+}
+.registration h1, .registration h2 {
+    margin: 60px 0 40px 0;
+}
+.woozup-title {
+    font-size: 60px;
+}
+.registration .item.item-input, .registration .item.intlpn-container {
     border: none !important;
     background-color: rgba(255,255,255,0.2) !important;
 }
-.input-label, .item-input input, .intlpn-container input {
+.registration .input-label, .registration .item-input input, .registration .intlpn-container input {
     color: white !important;
 }
+.registration ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: white !important;
+    opacity:  .9;
+}
+.registration ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: white !important;
+    opacity:  .9;
+}
 .padding {
-    padding: 30px;
+    padding: 10px;
 }
-/*.woozup-green {
-    color: #ACFFC4;
-}
-.woozup-blue {
-    color: #7B81AD;
-}
-.woozup-pink {
-    color: #740066;
-}*/
 .canceled-title {
     text-decoration:line-through;
 }
@@ -135,10 +145,6 @@
     color: #EEE;
     text-align: center;
 }
-.centered {
-    text-align: center;
-}
-
 .dtpickbox {
     display: inline-block;
     min-height: 50px;
@@ -283,13 +289,19 @@ input[type="text"].controls {
     width: 60%;
     margin: 30px;
 }
-.profilePicture {
-    margin: 10px auto;
-    text-align: center;
+.profile-header {
+    padding: 10px;
+    margin: 5px;
 }
-.profilePicture img {
+.profile-header p {
+    margin: 0;
+}
+.profile-header img {
     border-radius: 50%;
-    width: 50%;
+    width: 90%;
+}
+.ilb {
+    display: inline-block;
 }
 #myform {
     padding: 16px;

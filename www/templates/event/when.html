@@ -17,22 +17,22 @@
         </ion-nav-buttons>
     </ion-nav-bar>-->
 <ion-modal-view>
-    <ion-header-bar>
+<!--    <ion-header-bar>
       <h1 class="title">Quand ?</h1>
-    </ion-header-bar>
+    </ion-header-bar>-->
     <ion-content>
 <!--        <uib-datepicker id="dtpick" ng-model="when.date" show-weeks="false"
                     starting-day="1" min-date="when.mindate">
         </uib-datepicker>-->
         <div class="dtpickbox">
-            <div uib-datepicker ng-model="when.date" class="well well-sm" datepicker-options="options"></div>
+            <div uib-datepicker ng-model="when" class="well well-sm" datepicker-options="options"></div>
         </div>
-        <div uib-timepicker ng-model="when.date" minute-step="15" show-meridian="false"></div>
+        <div uib-timepicker ng-model="when" minute-step="15" show-meridian="false"></div>
 <!--        <uib-timepicker id="tmpick" ng-model="event.start" minute-step="15"
                             show-meridian="false"></uib-timepicker>-->
         <button class="button button-balanced button-down"
-                ng-click="setWhen(when.date)" name="next-button">
-            Le {{when.date | date:'EEEE d MMMM à HH:mm'}}
+                ng-click="setWhen(when)" name="next-button">
+            Le {{when | date:'EEEE d MMMM à HH:mm'}}
         </button>
     </ion-content>
 </ion-modal-view>

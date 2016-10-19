@@ -1,4 +1,5 @@
 angular.module('woozup.controllers')
+
 .controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', 'sortContacts', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory',
     function ($tastypie, $ionicLoading, $ionicPopup, AuthService, sortContacts, $scope, $state, UserData, pushNotifReg, $ionicHistory) {
         "use strict";

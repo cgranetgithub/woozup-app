@@ -1,18 +1,19 @@
-<ion-view view-title="Connexion" class="bgim" hide-nav-bar="true">
-    <ion-content class="padding centered">
-        <h1 class="woozup-title">Woozup</h1>
+<ion-view view-title="Connexion" class="bgim registration" hide-nav-bar="true">
+    <ion-content class="padding">
 <!-- get number first -->
         <div ng-if="!registered && !newNumber">
+            <h1 class="woozup-title white text-center">Woozup</h1>
 <!--             <h3 class="centered woozup-blue">TELEPHONE</h3> -->
             <intlpn ng-model="data.number" placeholder="Téléphone" default-country="fr" box-header-class="bar-light" box-header-title="Pays" search-placeholder="France" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
             <button class="button button-block button-light button-large" ng-click="check_number()">Suivant</button>
         </div>
 <!-- verify number with validation code -->
         <div ng-if="!registered && newNumber && !validCode">
-            <h3 class="centered white">Entre le code de confirmation</h3>
+            <h1 class="white text-center">Code de confirmation</h1>
+            <p class="note">Nous venons de t'envoyer un code de confirmation par SMS (il devrait arriver dans quelques secondes)</p>
             <label class="item item-input">
-                <span class="input-label">Code</span>
-                <input type="number" ng-model="data.code">
+<!--                 <span class="input-label">Code de confirmation</span> -->
+                <input type="number" ng-model="data.code" placeholder="CODE">
             </label>
             <button class="button button-block button-light button-large" ng-click="verif_code()">Valider</button>
         </div>
@@ -37,12 +38,13 @@
         </div>
 <!-- login -->
         <div ng-if="registered">
-<!--             <h3 class="centered woozup-blue">Saisis ton mot de passe</h3> -->
+            <h1 class="white text-center">Mot de passe</h1>
             <label class="item item-input">
                 <span class="input-label">Mot de passe</span>
                 <input type="password" ng-model="data.password">
             </label>
             <button class="button button-block button-light button-large" ng-click="login()">OK</button>
+            <a class="note">J'ai oublié mon mot de passe</a>
         </div>
     </ion-content>
 </ion-view>
