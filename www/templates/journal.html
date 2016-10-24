@@ -1,0 +1,18 @@
+<ion-view view-title="Journal">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item item-avatar" ng-repeat="record in records track by $index" href="#/record/{{record.id}}">
+                <img ng-src="{{record.user.profile.image}}">
+                <p ng-switch="record.record_type">
+                    <strong>{{record.user.first_name}} {{record.user.last_name}}</strong>
+                    <span ng-switch-when="NEWUSER">vient de s'inscrire sur Woozup</span>
+                    <span ng-switch-when="NEWPARTICIPANT">participera à {{record.refering_event.name}}</span>
+                    <span ng-switch-when="NEWEVENT">a lancé une nouvelle invitation : {{record.refering_event.name}}</span>
+                    <span ng-switch-when="NEWFRIEND">s'est connnecté avec {{record.refering_user.first_name}} {{record.refering_user.last_name}}</span>
+                </p>
+                <p class="text-right">{{record.updated_at | date: 'HH:mm' }}</p>
+            </ion-item>
+        </ion-list>
+        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+    </ion-content>
+</ion-view>

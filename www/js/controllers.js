@@ -4,9 +4,7 @@
 var gps_in_progress = false;
 var findContacts = null;
 
-angular.module('woozup.controllers',
-               ['ionic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap',
-                'ngImgCrop', 'woozup.services', 'ngMap', 'google.places'])
+angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap', 'ngImgCrop', 'ngMap', 'google.places', 'woozup.controllers', 'woozup.services'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.
@@ -74,318 +72,67 @@ angular.module('woozup.controllers',
             };
         }])
 
-//     .controller('MenuCtrl', ['$scope', function($scope) {
-//             "use strict";
-//             $scope.new = "Nouveau rendez-vous";
-//             $scope.agenda = "Mon agenda";
-//             $scope.friendsEvents = "Ce que mes amis ont prévu";
-//             $scope.invinteFriends = "Ajouter des amis";
-//             $scope.pendingFriends = "Invitations reçues";
-//             $scope.myFriends = "Mes amis";
-//             $scope.profile = "Mon profil";
-//     }])
-
-//     .controller('WhatCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
+//     .controller('DoneCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
 //                 '$state', 'EventData', 'AuthService',
 //         function ($tastypieResource, $ionicLoading, $scope, $state,
 //                   EventData, AuthService) {
 //             "use strict";
-//             $scope.title = "Nouveau rendez-vous";
-//             $ionicLoading.show({template: "Chargement"});
-//             $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
-//             $scope.types.objects.$find().then(
-//                 function () { $ionicLoading.hide(); },
-//                 function (error) {
-//                     console.log(error);
-//                     $ionicLoading.hide();
-//                     // verify authentication
-//                     AuthService.checkUserAuth().success()
-//                         .error(function () {$state.go('network');});
+//             var date = new Date();
+//             $scope.backgroundUrl = EventData.getWhat().background;
+//             $scope.event = {};
+//             $scope.event.type = EventData.getWhat();
+//             $scope.event.title = EventData.getWhat().name;
+//             $scope.event.where = EventData.getWhere();
+//             $scope.event.start = EventData.getWhen();
+//             $scope.event.start.setHours(date.getHours() + 1);
+//             $scope.event.start.setMinutes(0);
+// 
+//             var invitees = EventData.getWho(),
+//                 displayInvitees = [], apiInvitees = [];
+//             for (var i = 0; i < invitees.length; i++) {
+//                 displayInvitees.push(invitees[i].name);
+//                 if (!invitees.all) {
+//                     apiInvitees.push(invitees[i].resource_uri);
 //                 }
-//             );
-//             $scope.next = function (typeId) {
-//                 $ionicLoading.show({template: "Chargement"});
-//                 $scope.types.objects.$get({id: typeId}).then(
-//                     function (result) {
-//                         EventData.setWhat(result);
-//                         $state.go('when');
-// //                         $state.go('when', {}, { reload: true });
+//             }
+//             console.log(displayInvitees, apiInvitees);
+//             $scope.event.invitees = EventData.getWho();
+//             $scope.next = function () {
+//                 $ionicLoading.show({template: "Création du rendez-vous"});
+//                 var event = new $tastypieResource('events/mine'),
+//                     coords = '{ "type": "Point", "coordinates": ['
+//                                  + $scope.event.where.lat + ', '
+//                                  + $scope.event.where.lng + '] }';
+//                 console.log(apiInvitees);
+// 
+//                 event.objects.$create({
+//                     name: $scope.event.title,
+//                     start: $scope.event.start,
+//                     event_type: EventData.getWhat().resource_uri,
+//                     location_name: $scope.event.where.name,
+//                     location_address: $scope.event.where.address,
+//                     location_id: $scope.event.where.id,
+//                     location_coords: coords,
+//                     invitees: apiInvitees
+//                 }).$save().then(
+//                     function () {
+//                         $state.go('menu.events.agenda', {}, { reload: true });
 //                         $ionicLoading.hide();
 //                     },
 //                     function (error) {
 //                         console.log(error);
 //                         $ionicLoading.hide();
+//                         // verify authentication
+//                         AuthService.checkUserAuth().success()
+//                             .error(function () {$state.go('network');});
 //                     }
 //                 );
 //             };
+//             $scope.where = function () {
+//                 $state.go('where');
+// //                 $state.go('where', {}, { reload: true });
+//             };
 //         }])
-
-//     .controller('WhenCtrl', ['$scope', '$state', 'EventData',
-//         function ($scope, $state, EventData) {
-//             "use strict";
-//             $scope.when = {};
-//             $scope.when.date = new Date();
-//             $scope.when.mindate = new Date();
-//             if (EventData.getWhat()) {
-//                 $scope.title = EventData.getWhat().name;
-//                 $scope.backgroundUrl = EventData.getWhat().background;
-//                 $scope.next = function () {
-//                     EventData.setWhen($scope.when.date);
-//                     $state.go('where', {}, { reload: true });
-// //                 $state.go('where');
-//                 };
-//             } else {
-//                 $state.go('tab.new');
-//             }
-// //             $scope.$watch("when.date", function (newValue, oldValue) {
-// //                 newValue.setHours(0);
-// //                 newValue.setMinutes(0);
-// //                 $scope.events = new $tastypieResource('events/friends',
-// //                                                       {order_by: 'start',
-// //                                                        start__gte: newValue});
-// //                 $scope.events.objects.$find();
-// //             });
-//         }])
-
-    .controller('WhereCtrl', ['$scope', '$log', '$state', '$filter', 'EventData',
-                'UserData', 'NgMap',
-        function ($scope, $log, $state, $filter, EventData, UserData, NgMap) {
-            "use strict";
-            /*global google: false */
-            // initialize coords
-            $scope.$log = $log;
-            var lat = 48.8567, lng = 2.3508, vm = this,
-                geocoder = new google.maps.Geocoder(),
-//                 setAddress = function (address, lat, lng) {
-//                     var coords = '{ "type": "Point", "coordinates": ['
-//                                  + lat + ', ' + lng + '] }';
-//                     EventData.setAddress(address, coords);
-//                 },
-                coordChanged = function(latLng, addr) {
-                    vm.lat = latLng.lat().toString();
-                    vm.lng = latLng.lng().toString();
-                    if (addr) {
-                        vm.where = addr;
-                        EventData.setAddress(vm.where, vm.lat, vm.lng);
-                    } else {
-                        geocoder.geocode({'location': latLng},
-                                        function (results, status) {
-                            if (status === google.maps.GeocoderStatus.OK) {
-                                if (results[0]) {
-                                    $scope.$apply(function () {
-                                        vm.where = results[0].formatted_address;
-                                        EventData.setAddress(vm.where,
-                                                             vm.lat, vm.lng);
-                                    });
-                                }
-                            }
-                        });
-                    }
-                };
-            vm.$log = $log;
-            vm.backgroundUrl = EventData.getWhat().background;
-            vm.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
-            if (EventData.getWhere() && EventData.getWhere().lat &&
-                    EventData.getWhere().lng) {
-                $log.log(EventData.getWhere());
-                lat = EventData.getWhere().lat;
-                lng = EventData.getWhere().lng;
-            } else if (UserData.getWhere()) {
-                lat = UserData.getWhere().latitude;
-                lng = UserData.getWhere().longitude;
-            }
-            var pos = new google.maps.LatLng(lat, lng);
-            coordChanged(pos, null);
-            NgMap.getMap().then(function(map) {
-//                 $log.log('markers', map.markers);
-                // disable POI (to avoid info window)
-                var styles = [{
-                    featureType: "poi",
-                    stylers: [{ visibility: "off" }]
-                }];
-                map.setOptions({styles: styles});
-                vm.map = map;
-            });
-            // when autocomplete changes, center on the place,
-            // show marker and set address in button
-            vm.placeChanged = function() {
-                $log.log(vm.place);
-                if (vm.place.geometry) {
-                    EventData.setPlace(vm.place.name, vm.place.place_id);
-                    vm.map.setCenter(vm.place.geometry.location);
-                    coordChanged(vm.place.geometry.location,
-                                vm.place.formatted_address
-                    );
-                }
-            };
-            // on click event, show marker and set address in button
-            vm.onClick= function(event) {
-                EventData.setPlace('', '');
-                coordChanged(event.latLng);
-            };
-            vm.next = function () {
-                $state.go('who');
-//                 for (var key in vm.map.markers) {
-//                     vm.map.markers[key].setMap(null);
-//                 }
-            };
-            vm.back = function () {
-                $state.go('when');
-//                 for (var key in vm.map.markers) {
-//                     vm.map.markers[key].setMap(null);
-//                 }
-            };
-        }])
-
-//         .controller('WhoCtrl', ['$scope', '$state', '$ionicLoading',
-//                     '$tastypieResource', 'EventData', 'AuthService',
-//             function ($scope, $state, $ionicLoading, $tastypieResource,
-//                       EventData, AuthService) {
-//                 "use strict";
-//                 // verify authentication
-//                 AuthService.checkUserAuth().success()
-//                     .error(function () {$state.go('network');});
-//                 $ionicLoading.show({template: "Chargement"});
-//                 // $scope.title = "Mes amis";
-//                 // $scope.displayButton = false;
-//                 $scope.friends = [];
-//                 $scope.search = '';
-//                 var friendsResource,
-//                     nextPages = function (result) {
-//                         var i;
-//                         if (result) {
-//                             for (i = 0; i < result.objects.length; i += 1) {
-//                                 var item = result.objects[i];
-//                                 if ($scope.all.checked) {
-//                                     item.checked = true;
-//                                 }
-//                                 $scope.friends.push(item);
-//                             }
-//                         }
-//                     };
-//                 // get friends logic with pagination
-//                 $scope.onSearchChange = function (word) {
-//                     friendsResource = new $tastypieResource('friends/mine', {
-//                                             order_by: 'first_name',
-//                                             first_name__icontains: word
-//                     });
-//                     $scope.friends = [];
-//                     friendsResource.objects.$find().then(
-//                         function (result) {
-//                             nextPages(result);
-//                             $ionicLoading.hide();
-//                             $scope.$broadcast('scroll.infiniteScrollComplete');
-//                         }, function (error) {
-//                             console.log(error);
-//                             // verify authentication
-//                             $ionicLoading.hide();
-//                             AuthService.checkUserAuth().success()
-//                                 .error(function () {$state.go('network');});
-//                         }
-//                     );
-//                 };
-//                 // initial request to get friends
-//                 $scope.onSearchChange('');
-//                 // pagination
-//                 $scope.loadMore = function () {
-//                     if (friendsResource.page.meta && friendsResource.page.meta.next) {
-//                         friendsResource.page.next().then(function (result) {
-//                             nextPages(result);
-//                         });
-//                     }
-//                     $scope.$broadcast('scroll.infiniteScrollComplete');
-//                 };
-//                 $scope.all = {checked: false};
-//                 $scope.allChanged = function () {
-//                     for (var i = 0; i < $scope.friends.length; i++) {
-//                        $scope.friends[i].checked = $scope.all.checked;
-//                     }
-//                 };
-//                 $scope.itemChanged = function () {
-//                     $scope.all.checked = false;
-//                 };
-//                 // setup screen
-//                 if (EventData.getWhat()) {
-//                     $scope.title = EventData.getWhat().name;
-//                     $scope.backgroundUrl = EventData.getWhat().background;
-//                     $scope.next = function () {
-//                         var invitees=[];
-//                         for (var i = 0; i < $scope.friends.length; i++) {
-//                            var item = $scope.friends[i];
-//                            if (item.checked) {
-//                                invitees.push(item);
-//                            }
-//                        };
-//                        invitees.all = $scope.all.checked;
-//                        EventData.setWho(invitees);
-//                        $state.go('done');
-//                     };
-//                 } else {
-//                     $state.go('tab.new');
-//                 }
-//             }])
-
-    .controller('DoneCtrl', ['$tastypieResource', '$ionicLoading', '$scope',
-                '$state', 'EventData', 'AuthService',
-        function ($tastypieResource, $ionicLoading, $scope, $state,
-                  EventData, AuthService) {
-            "use strict";
-            var date = new Date();
-            $scope.backgroundUrl = EventData.getWhat().background;
-            $scope.event = {};
-            $scope.event.type = EventData.getWhat();
-            $scope.event.title = EventData.getWhat().name;
-            $scope.event.where = EventData.getWhere();
-            $scope.event.start = EventData.getWhen();
-            $scope.event.start.setHours(date.getHours() + 1);
-            $scope.event.start.setMinutes(0);
-
-            var invitees = EventData.getWho(),
-                displayInvitees = [], apiInvitees = [];
-            for (var i = 0; i < invitees.length; i++) {
-                displayInvitees.push(invitees[i].name);
-                if (!invitees.all) {
-                    apiInvitees.push(invitees[i].resource_uri);
-                }
-            }
-            console.log(displayInvitees, apiInvitees);
-            $scope.event.invitees = EventData.getWho();
-            $scope.next = function () {
-                $ionicLoading.show({template: "Création du rendez-vous"});
-                var event = new $tastypieResource('events/mine'),
-                    coords = '{ "type": "Point", "coordinates": ['
-                                 + $scope.event.where.lat + ', '
-                                 + $scope.event.where.lng + '] }';
-                console.log(apiInvitees);
-
-                event.objects.$create({
-                    name: $scope.event.title,
-                    start: $scope.event.start,
-                    event_type: EventData.getWhat().resource_uri,
-                    location_name: $scope.event.where.name,
-                    location_address: $scope.event.where.address,
-                    location_id: $scope.event.where.id,
-                    location_coords: coords,
-                    invitees: apiInvitees
-                }).$save().then(
-                    function () {
-                        $state.go('menu.events.agenda', {}, { reload: true });
-                        $ionicLoading.hide();
-                    },
-                    function (error) {
-                        console.log(error);
-                        $ionicLoading.hide();
-                        // verify authentication
-                        AuthService.checkUserAuth().success()
-                            .error(function () {$state.go('network');});
-                    }
-                );
-            };
-            $scope.where = function () {
-                $state.go('where');
-//                 $state.go('where', {}, { reload: true });
-            };
-        }])
 
     .controller('EventsCtrl', ['$tastypieResource', '$cordovaGeolocation',
                 '$ionicPopup', '$scope', '$state', 'setlast', 'UserData',

@@ -10,7 +10,6 @@ angular.module('woozup.controllers')
         $scope.userresource = new $tastypieResource('user', {});
         $scope.userresource.objects.$get({id: UserData.getUserId()}).then(
             function (result) {
-                console.log(result);
                 $scope.user = result;
                 $scope.title = result.first_name;
                 $ionicLoading.hide();
@@ -105,7 +104,7 @@ angular.module('woozup.controllers')
     };
 }])
 
-.controller('PictureCtrl', ['$tastypieResource', 'CameraService', '$ionicLoading', '$scope', '$state', 'AuthService', 'UserData', 'ProfileService', '$ionicModal', '$ionicPlatform', '$ionicHistory', function ($tastypieResource, CameraService, $ionicLoading, $scope, $state, AuthService, UserData, ProfileService, $ionicModal, $ionicPlatform, $ionicHistory) {
+.controller('PictureCtrl', ['$tastypieResource', 'CameraService', '$ionicLoading', '$scope', '$state', 'AuthService', 'UserData', 'ProfileService', '$ionicModal', '$ionicPopup', '$ionicPlatform', '$ionicHistory', function ($tastypieResource, CameraService, $ionicLoading, $scope, $state, AuthService, UserData, ProfileService, $ionicModal, $ionicPopup, $ionicPlatform, $ionicHistory) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,
@@ -115,7 +114,7 @@ angular.module('woozup.controllers')
     var deregister = $ionicPlatform.registerBackButtonAction(function () {}, 101);
     //
     $ionicLoading.show({template: "Chargement"});
-    $scope.data = {'first_name': UserData.getUsername()};
+    $scope.data = {};
     $scope.userprofile = new $tastypieResource('user', {});
     $scope.userprofile.objects.$get({id: UserData.getUserId()}).then(
         function (result) {
@@ -131,20 +130,47 @@ angular.module('woozup.controllers')
         }
     );
     // modal window
-    $ionicModal.fromTemplateUrl('templates/imgcropmodal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.modal = modal;
-    });
+//     $ionicModal.fromTemplateUrl('templates/imgcropmodal.html', {
+//         scope: $scope,
+//         animation: 'slide-in-up'
+//     }).then(function(modal) {
+//         $scope.modal = modal;
+//     });
     $scope.openModal = function() {
-        $scope.modal.show();
+
+            // picture choice popup
+        $scope.data = {};
+        var myPopup = $ionicPopup.show({
+//             templateURL: 'template/imgcropmodal.html',
+            title: 'Choisir une photo',
+//             subTitle: 'Please use normal things',
+            scope: $scope,
+            buttons: [
+            {
+                text: 'Dans la galerie',
+                type: 'button-stable',
+                onTap: $scope.photoFromGallery
+            },
+            {
+                text: 'Prendre une photo',
+                type: 'button-stable',
+                onTap: $scope.photoFromCamera
+            }
+            ]
+        });
+
+        myPopup.then(function(res) {
+            console.log('Tapped!', res);
+        });      
+        
+        
+        //         $scope.modal.show();
     };
-    $scope.closeModal = function() {
-        $scope.modal.hide();
-    };
+//     $scope.closeModal = function() {
+//         $scope.modal.hide();
+//     };
     $scope.$on('$destroy', function() {
-        $scope.modal.remove();
+//         $scope.modal.remove();
     });
     // camera
     $scope.myImage = '';
@@ -173,23 +199,36 @@ angular.module('woozup.controllers')
             }
         );
     };
-    $scope.savePicture = function (croppedImage) {
-        $ionicLoading.show({template: "Sauvegarde du profil"});
-        $scope.myCroppedImage = croppedImage;
-        var b64 = croppedImage.split(',')[1],
-            file_field = {
-                "name": "myfile.png",
-                "file": b64,
-            };
-        ProfileService.setpicture(file_field).then(
-            function (res) {$ionicLoading.hide();},
-            function (err) {$ionicLoading.hide();}
-        );
-        $scope.closeModal();
-    };
+//     $scope.savePicture = function (croppedImage) {
+//         $ionicLoading.show({template: "Sauvegarde du profil"});
+//         $scope.myCroppedImage = croppedImage;
+//         var b64 = croppedImage.split(',')[1],
+//             file_field = {
+//                 "name": "myfile.png",
+//                 "file": b64,
+//             };
+//         ProfileService.setpicture(file_field).then(
+//             function (res) {$ionicLoading.hide();},
+//             function (err) {$ionicLoading.hide();}
+//         );
+//         $scope.closeModal();
+//     };
     $scope.next = function () {
         ProfileService.setprofile({'first_name': $scope.data.first_name, 'last_name': $scope.data.last_name});
+
+        if ($scope.myImage) {
+            var b64 = $scope.myImage.split(',')[1],
+                file_field = {
+                    "name": "myfile.png",
+                    "file": b64,
+                };
+            ProfileService.setpicture(file_field).then(
+                function (res) {$ionicLoading.hide();},
+                function (err) {$ionicLoading.hide();}
+            );
+        };
         $state.go('tab.home');
+
         // enable back button again
         deregister();
     };

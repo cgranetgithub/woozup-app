@@ -3,14 +3,14 @@
 <!-- get number first -->
         <div ng-if="!registered && !newNumber">
             <h1 class="woozup-title white text-center">Woozup</h1>
-<!--             <h3 class="centered woozup-blue">TELEPHONE</h3> -->
+<!--             <h3 class="text-center woozup-blue">TELEPHONE</h3> -->
             <intlpn ng-model="data.number" placeholder="Téléphone" default-country="fr" box-header-class="bar-light" box-header-title="Pays" search-placeholder="France" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
             <button class="button button-block button-light button-large" ng-click="check_number()">Suivant</button>
         </div>
 <!-- verify number with validation code -->
         <div ng-if="!registered && newNumber && !validCode">
-            <h1 class="white text-center">Code de confirmation</h1>
-            <p class="note">Nous venons de t'envoyer un code de confirmation par SMS (il devrait arriver dans quelques secondes)</p>
+            <h1 class="white text-center">Confirmation du numéro</h1>
+            <p class="note">Nous venons d'envoyer un code de vérification au {{data.number}} (il devrait arriver dans quelques secondes)</p>
             <label class="item item-input">
 <!--                 <span class="input-label">Code de confirmation</span> -->
                 <input type="number" ng-model="data.code" placeholder="CODE">
@@ -19,7 +19,7 @@
         </div>
 <!-- register, choices -->
         <div ng-if="!registered && newNumber && validCode">
-            <h3 class="centered white">Créer mon compte</h3>
+            <h3 class="text-center white">Créer mon compte</h3>
             <br>
             <button class="button button-block button-positive disabled" ng-click="fbLogin()">
                 avec

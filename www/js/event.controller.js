@@ -6,15 +6,20 @@ angular.module('woozup.controllers')
 .controller('NewEventCtrl', ['$tastypieResource', '$ionicLoading', '$ionicModal', 'AuthService', '$scope', '$state', 'UserData', 'NgMap',
     function ($tastypieResource, $ionicLoading, $ionicModal, AuthService, $scope, $state, UserData, NgMap) {
         "use strict";
+    // WHEN ------------------------
         var date = new Date();
         date.setHours(date.getHours() + 1);
         date.setMinutes(0);
         $scope.when = date;
         $scope.options = {minDate:$scope.when, showWeeks:false, startingDay:1};
+        $scope.setWhen = function (when) {
+            $scope.when = when;
+            $scope.whenModal.hide();
+        };
+    // WHAT ------------------------
         $scope.types = new $tastypieResource('event_type', {order_by: 'order'});
         $scope.types.objects.$find().then(
             function () {
-                console.log($scope.types);
                 $scope.what = $scope.types.page.objects[0];
             },
             function (error) {
@@ -24,149 +29,149 @@ angular.module('woozup.controllers')
                     .error(function () {$state.go('network');});
             }
         );
+        $scope.setWhat = function (type) {
+            $scope.what = type;
+            $scope.whatModal.hide();
+        };
+    // WHO ------------------------
         $scope.friends = [];
-        $scope.search = '';
-        var friendsResource,
-            nextPages = function (result) {
+        $scope.invitees = [];
+        $scope.friendsResource = new $tastypieResource('friends/mine', {order_by: 'first_name'});
+        var nextPages = function (result) {
                 var i;
                 if (result) {
                     for (i = 0; i < result.objects.length; i += 1) {
                         var item = result.objects[i];
-                        if ($scope.all.checked) {
-                            item.checked = true;
-                        }
+                        if ($scope.all.checked) { item.checked = true; }
                         $scope.friends.push(item);
-                    }
-                }
-            };
+        }}};
         // get friends logic with pagination
-        $scope.onSearchChange = function (word) {
-            friendsResource = new $tastypieResource('friends/mine', {
-//                                     order_by: 'first_name',
-//                                     first_name__icontains: word
-            });
-            $scope.friends = [];
-            friendsResource.objects.$find().then(
-                function (result) {
-                    nextPages(result);
-                    $ionicLoading.hide();
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                }, function (error) {
-                    console.log(error);
-                    // verify authentication
-                    $ionicLoading.hide();
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            );
-        };
-        // initial request to get friends
-        $scope.onSearchChange('');
+        $scope.friendsResource.objects.$find().then(
+            function (result) {
+                nextPages(result);
+                $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            }, function (error) {
+                console.log(error);
+                // verify authentication
+                $ionicLoading.hide();
+                AuthService.checkUserAuth().success()
+                    .error(function () {$state.go('network');});
+            }
+        );
         // pagination
         $scope.loadMore = function () {
-            if (friendsResource.page.meta && friendsResource.page.meta.next) {
-                friendsResource.page.next().then(function (result) {
+            if ($scope.friendsResource.page.meta && $scope.friendsResource.page.meta.next) {
+                $scope.friendsResource.page.next().then(function (result) {
                     nextPages(result);
                 });
-            }
+            };
             $scope.$broadcast('scroll.infiniteScrollComplete');
         };
         $scope.all = {checked: false};
         $scope.allChanged = function () {
             for (var i = 0; i < $scope.friends.length; i++) {
                 $scope.friends[i].checked = $scope.all.checked;
-            }
-        };
+        }};
         $scope.itemChanged = function () {
             $scope.all.checked = false;
-        };
-        
-        $scope.setWhat = function (type) {
-            $scope.what = type;
-            $scope.whatModal.hide();
-        };
-        
-        // initialize coords
-        var lat = 48.8567, lng = 2.3508, vm = this,
-            geocoder = new google.maps.Geocoder(),
-                setAddress = function (address, lat, lng) {
-                    var coords = '{ "type": "Point", "coordinates": ['
-                                 + lat + ', ' + lng + '] }';
-//                     EventData.setAddress(address, coords);
-                },
-            coordChanged = function(latLng, addr) {
-                vm.lat = latLng.lat().toString();
-                vm.lng = latLng.lng().toString();
-                if (addr) {
-                    vm.where = addr;
-//                     EventData.setAddress(vm.where, vm.lat, vm.lng);
-                } else {
-                    geocoder.geocode({'location': latLng},
-                                    function (results, status) {
-                        if (status === google.maps.GeocoderStatus.OK) {
-                            if (results[0]) {
-                                $scope.$apply(function () {
-                                    vm.where = results[0].formatted_address;
-//                                     EventData.setAddress(vm.where,
-//                                                             vm.lat, vm.lng);
-                                });
-                            }
-                        }
-                    });
-                }
+        };        
+        $scope.setWho = function () {
+            if (! $scope.all.checked) {
+                for (var i = 0; i < $scope.friends.length; i++) {
+                    var item = $scope.friends[i];
+                    if (item.checked) {
+                        $scope.invitees.push(item.resource_uri);
+                    };
+                };
             };
-//         vm.backgroundUrl = EventData.getWhat().background;
-//         vm.title = EventData.getWhat().name + ', le ' + $filter('date')(EventData.getWhen(), 'EEEE d MMMM');
-        if (vm.lat && vm.lng) {
-            lat = vm.lat;
-            lng = vm.lng;
-        } else if (UserData.getWhere()) {
-            lat = UserData.getWhere().latitude;
-            lng = UserData.getWhere().longitude;
-        }
-        var pos = new google.maps.LatLng(lat, lng);
-        coordChanged(pos, null);
+            $scope.whoModal.hide();
+        };
+    // WHERE ------------------------
+        $scope.where = {
+            lat: 48.8567, lng: 2.3508,
+            address: null, goecoord: null
+        };
+        $scope.geocoder = new google.maps.Geocoder();
         NgMap.getMap().then(function(map) {
-//                 $log.log('markers', map.markers);
             // disable POI (to avoid info window)
             var styles = [{
                 featureType: "poi",
                 stylers: [{ visibility: "off" }]
             }];
             map.setOptions({styles: styles});
-            vm.map = map;
+            $scope.map = map;
         });
+        $scope.coordChanged = function(latLng, addr) {
+            $scope.where.lat = latLng.lat().toString();
+            $scope.where.lng = latLng.lng().toString();
+            if (addr) {
+                $scope.where.address = addr;
+            } else {
+                $scope.geocoder.geocode({'location': latLng}, function (results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        if (results[0]) {
+                            $scope.$apply(function () {
+                                $scope.where.address = results[0].formatted_address;
+                            });
+                        }
+                    }
+                });
+            }
+        };
+        if ($scope.where.lat && $scope.where.lng) {
+        } else if (UserData.getWhere()) {
+            $scope.where.lat = UserData.getWhere().latitude;
+            $scope.where.lng = UserData.getWhere().longitude;
+        }
+        var pos = new google.maps.LatLng($scope.where.lat, $scope.where.lng);
+        $scope.coordChanged(pos, null);
         // when autocomplete changes, center on the place,
         // show marker and set address in button
-        vm.placeChanged = function() {
-            if (vm.place.geometry) {
-//                 EventData.setPlace(vm.place.name, vm.place.place_id);
-                vm.map.setCenter(vm.place.geometry.location);
-                coordChanged(vm.place.geometry.location,
-                            vm.place.formatted_address
-                );
+        $scope.place = null;
+        $scope.placeChanged = function(place) {
+            $scope.place = place;
+            if ($scope.place && $scope.place.geometry) {
+                $scope.map.setCenter($scope.place.geometry.location);
+                $scope.coordChanged($scope.place.geometry.location, $scope.place.formatted_address);
             }
         };
         // on click event, show marker and set address in button
-        vm.onClick= function(event) {
-//             EventData.setPlace('', '');
-            coordChanged(event.latLng);
-        };
-        
-        
-        
-        
-        $scope.setWhen = function (when) {
-            $scope.when = when;
-//             EventData.setWhen($scope.when.date);
-            $scope.whenModal.hide();
+        $scope.onClick= function(event) {
+            $scope.coordChanged(event.latLng, null);
         };
         $scope.setWhere = function () {
+            $scope.where.geocoord = '{ "type": "Point", "coordinates": [' + $scope.where.lat + ', ' + $scope.where.lng + '] }';
             $scope.whereModal.hide();
         };
-        $scope.setWho = function () {
-            $scope.whoModal.hide();
+    // Event creation
+        $scope.create = function() {
+            $ionicLoading.show({template: "Création du rendez-vous"});
+            var event = new $tastypieResource('events/mine');
+            event.objects.$create({
+                name: $scope.what.description,
+                start: $scope.when,
+                event_type: $scope.what.resource_uri,
+                location_name: $scope.where.name,
+                location_address: $scope.where.address,
+    //             location_id: $scope.where.id,
+                location_coords: $scope.where.geocoords,
+                invitees: $scope.invitees}
+            ).$save().then(
+                function () {
+                    $ionicLoading.hide();
+                    $state.go('home');
+                },
+                function (error) {
+                    console.log(error);
+                    $ionicLoading.hide();
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('network');});
+                }
+            );
         };
+    // load modals
         $ionicModal.fromTemplateUrl('templates/event/what.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -191,7 +196,7 @@ angular.module('woozup.controllers')
         }).then(function(modal) {
             $scope.whoModal = modal;
         });
-        // Cleanup the modal when we're done with it!
+    // Cleanup the modals when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.whatModal.remove();
             $scope.whenModal.remove();

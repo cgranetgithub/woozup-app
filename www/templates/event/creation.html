@@ -1,16 +1,18 @@
 <ion-view view-title="Nouvel événement">
   <ion-content class="padding">
     <button class="button button-block" ng-click="whatModal.show()" ng-model="what">
-        {{what.short_name}}
+        {{what.description}}
     </button>
     <button class="button button-block" ng-click="whenModal.show()" ng-model="when">
         Le {{when | date:'EEEE d MMMM à HH:mm'}}
     </button>
-    <button class="button button-block" ng-click="whereModal.show()">
-        Où ?
+    <button class="button button-block" ng-click="whereModal.show()" ng-model="where">
+        {{where.address}}
     </button>
     <button class="button button-block" ng-click="whoModal.show()">
-        Avec qui ?
+        <span ng-if="invitees.length==0">Tout le monde est invité</span>
+        <span ng-if="invitees.length==1">1 invité</span>
+        <span ng-if="invitees.length>1">{{invitees.length}} invités</span>
     </button>
     <button class="button button-block button-balanced" ng-click="create()">
         C'est parti !

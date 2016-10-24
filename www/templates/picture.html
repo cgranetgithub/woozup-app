@@ -1,9 +1,9 @@
-<ion-view view-title="Woozup" class="bgim" hide-nav-bar="true">
+<ion-view view-title="Woozup" class="bgim registration" hide-nav-bar="true">
     <ion-content class="padding">
         <br>
-        <h3 class="centered white">Il faut que tes amis te reconnaissent !</h3>
-        <br>
-        <p class="note">Saisis ton nom et choisis une photo</p>
+        <h3 class="centered white text-center">Il faut que tes amis te reconnaissent !</h3>
+<!--        <br>
+        <p class="note">Saisis ton nom et choisis une photo</p>-->
 <!--        <div class="list card">
             <div class="item item-avatar">
                 <img ng-src="{{myCroppedImage}}">
@@ -19,14 +19,14 @@
         <div class="profilePicture">
             <img ng-if="!myImage" src="img/round58.png"
                  ng-click="openModal()"></img>
-            <img ng-if="myImage" ng-src="{{myCroppedImage}}"
+            <img ng-if="myImage" ng-src="{{myImage}}"
                  ng-click="openModal()"></img>
         </div>
         <div>
             <button class="button button-block button-light"
                     ng-click="next()"
-                    ng-disabled="!data.first_name || !myImage">
-                OK, ça me va
+                    ng-disabled="!data.first_name">
+                Valider
             </button>
         </div>
     </ion-content>

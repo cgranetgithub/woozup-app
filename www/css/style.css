@@ -15,7 +15,7 @@
 .registration {
     padding: 30px;
 }
-.registration h1, .registration h2 {
+.registration h1, .registration h2, .registration h3 {
     margin: 60px 0 40px 0;
 }
 .woozup-title {
@@ -262,7 +262,7 @@ input[type="text"].controls {
     height: 100%;
 }
 .bgim {
-    background: url('../img/blurred_colors.jpg') no-repeat center center fixed;
+    background: url('../img/blurred_colors.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -317,4 +317,12 @@ input.ng-invalid-pattern {
 .icon {
     width: 30%;
     margin: auto;
+}
+.profilePicture {
+    margin: 10px auto;
+    text-align: center;
+}
+.profilePicture img {
+    border-radius: 50%;
+    width: 50%;
 }

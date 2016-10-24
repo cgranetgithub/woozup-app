@@ -1,12 +1,18 @@
 <ion-view view-title="Woozup">
     <ion-content>
+        <div ng-if="events.length==0" class="text-center button-down">
+            <button class="button icon-left ion-ios-plus-outline button-positive">
+                Lance une invitation
+            </button>
+        </div>
         <ion-list>
             <ion-item class="item item-avatar" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">
                 <img ng-src="{{event.owner.profile.image}}">
 <!--                 <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}> -->
-                <h2><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}} ({{event.event_type.description}})</h2>
+                <h2><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}} <span ng-if=!event.name> {{event.event_type.description}}</span></h2>
 <!--                <h2 ng-if=event.canceled class="canceled-title"><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}}</h2>-->
-                <p><b ng-if=event.canceled  class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}, avec {{event.owner.name}}</p>
+                <p><b ng-if="event.canceled" class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+                <p ng-if="event.participants.length>0">avec {{event.participants.length}}</p>
                 <button class="button button-clear button-stable icon ion-ios-heart-outline"></button>
                 <button class="button button-clear button-stable icon ion-ios-chatbubble-outline"></button>
                 <button class="button button-clear button-stable icon ion-ios-redo-outline"></button>

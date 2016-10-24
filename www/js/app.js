@@ -8,7 +8,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'woozup.services' is found in services.js
 // 'woozup.controllers' is found in controllers.js
-angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'woozup.controllers', 'woozup.services'])
+angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', 'woozup.controllers', 'woozup.services'])
 
     .run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg,
                    $cordovaDialogs, $state) {
@@ -144,66 +144,12 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'woozup.controlle
                 templateUrl: 'templates/connect.html',
                 controller: 'ConnectCtrl'
             })
-//             .state('login', {
-// //                 cache: false,
-//                 url: '/login',
-//                 templateUrl: 'templates/login.html',
-//                 controller: 'LoginCtrl'
-//             })
-//             .state('register', {
-// //                 cache: false,
-//                 url: '/register',
-//                 templateUrl: 'templates/register.html',
-//                 controller: 'RegisterCtrl'
-//             })
             .state('picture', {
                 cache: false,
                 url: '/picture',
                 templateUrl: 'templates/picture.html',
                 controller: 'PictureCtrl'
             })
-//             .state('when', {
-// //                 cache: false,
-//                 url: '/when',
-//                 templateUrl: 'templates/when.html',
-//                 controller: 'WhenCtrl'
-//             })
-//             .state('where', {
-//                 cache: false,
-//                 url: '/where',
-//                 templateUrl: 'templates/where.html',
-// //                 controller: 'WhereCtrl'
-//             })
-//             .state('who', {
-// //                 cache: false,
-//                 url: '/who',
-//                 templateUrl: 'templates/who.html',
-//                 controller: 'WhoCtrl'
-//             })
-//             .state('done', {
-// //                 cache: false,
-//                 url: '/done',
-//                 templateUrl: 'templates/done.html',
-//                 controller: 'DoneCtrl'
-//             })
-//             .state('menu', {
-// //                 cache: false,
-//                 url: '/menu',
-//                 abstract: true,
-//                 templateUrl: 'templates/menu.html',
-//                 controller: 'MenuCtrl'
-//             })
-//             .state('menu.events', {
-// //                 cache: false,
-//                 url: '/events',
-//                 abstract: true,
-//                 views: {
-//                     'with-menu': {
-//                         templateUrl: 'templates/events.html',
-//                         controller: 'EventsCtrl'
-//                     }
-//                 }
-//             })
             .state('tab', {
 //                 cache: false,
                 url: '/tab',
@@ -240,12 +186,12 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'woozup.controlle
                     }
                 }
             })
-            .state('tab.friends', {
-                url: '/friends',
+            .state('tab.journal', {
+                url: '/journal',
                 views: {
-                    'friends': {
-                        templateUrl: 'templates/people.html',
-                        controller: 'NewFriendsCtrl'
+                    'journal': {
+                        templateUrl: 'templates/journal.html',
+                        controller: 'JournalCtrl'
                     }
                 }
             })
