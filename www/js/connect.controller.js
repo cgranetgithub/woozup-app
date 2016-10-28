@@ -27,8 +27,8 @@ angular.module('woozup.controllers')
                         }).error(function () {
                             $ionicLoading.hide();
                             var alertPopup = $ionicPopup.alert({
-                                title: "Problème",
-                                template: "Réessaie"
+                                title: "Numéro invalide",
+                                template: "Ce numéro de téléphone n'a pas l'air correct."
                             });
                         });
                 });
@@ -43,8 +43,8 @@ angular.module('woozup.controllers')
                 }).error(function () {
                     $ionicLoading.hide();
                     var alertPopup = $ionicPopup.alert({
-                        title: "Problème",
-                        template: "Réessaie"
+                        title: "Code incorrect",
+                        template: "Ce code ne correspond pas à celui que nous avons envoyé."
                     });
                 });
         };

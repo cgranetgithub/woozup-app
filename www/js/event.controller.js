@@ -160,7 +160,7 @@ angular.module('woozup.controllers')
             ).$save().then(
                 function () {
                     $ionicLoading.hide();
-                    $state.go('home');
+                    $state.go('tab.home');
                 },
                 function (error) {
                     console.log(error);

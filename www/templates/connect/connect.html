@@ -5,7 +5,7 @@
             <h1 class="woozup-title white text-center">Woozup</h1>
 <!--             <h3 class="text-center woozup-blue">TELEPHONE</h3> -->
             <intlpn ng-model="data.number" placeholder="Téléphone" default-country="fr" box-header-class="bar-light" box-header-title="Pays" search-placeholder="France" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
-            <button class="button button-block button-light button-large" ng-click="check_number()">Suivant</button>
+            <button class="button button-block button-light button-large button-outline" ng-click="check_number()">Suivant</button>
         </div>
 <!-- verify number with validation code -->
         <div ng-if="!registered && newNumber && !validCode">
@@ -15,7 +15,7 @@
 <!--                 <span class="input-label">Code de confirmation</span> -->
                 <input type="number" ng-model="data.code" placeholder="CODE">
             </label>
-            <button class="button button-block button-light button-large" ng-click="verif_code()">Valider</button>
+            <button class="button button-block button-light button-large button-outline" ng-click="verif_code()">Valider</button>
         </div>
 <!-- register, choices -->
         <div ng-if="!registered && newNumber && validCode">
@@ -43,7 +43,7 @@
                 <span class="input-label">Mot de passe</span>
                 <input type="password" ng-model="data.password">
             </label>
-            <button class="button button-block button-light button-large" ng-click="login()">OK</button>
+            <button class="button button-block button-light button-large button-outline" ng-click="login()">OK</button>
             <a class="note">J'ai oublié mon mot de passe</a>
         </div>
     </ion-content>

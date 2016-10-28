@@ -123,31 +123,31 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             .state('logout', {
                 cache: false,
                 url: '/logout',
-                templateUrl: 'templates/checkauth.html',
+                templateUrl: 'templates/connect/checkauth.html',
                 controller: 'LogoutCtrl'
             })
             .state('network', {
                 cache: false,
                 url: '/network',
-                templateUrl: 'templates/network.html',
+                templateUrl: 'templates/connect/network.html',
                 controller: 'NetworkCtrl'
             })
             .state('checkauth', {
                 cache: false,
                 url: '/checkauth',
-                templateUrl: 'templates/checkauth.html',
+                templateUrl: 'templates/connect/checkauth.html',
                 controller: 'CheckauthCtrl'
             })
             .state('connect', {
 //                 cache: false,
                 url: '/connect',
-                templateUrl: 'templates/connect.html',
+                templateUrl: 'templates/connect/connect.html',
                 controller: 'ConnectCtrl'
             })
             .state('picture', {
                 cache: false,
                 url: '/picture',
-                templateUrl: 'templates/picture.html',
+                templateUrl: 'templates/account/picture.html',
                 controller: 'PictureCtrl'
             })
             .state('tab', {
@@ -200,7 +200,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 url: '/account',
                 views: {
                     'account': {
-                        templateUrl: 'templates/profile.html',
+                        templateUrl: 'templates/account/profile.html',
                         controller: 'ProfileCtrl'
                     }
                 }

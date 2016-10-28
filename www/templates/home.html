@@ -1,9 +1,9 @@
 <ion-view view-title="Woozup">
     <ion-content>
         <div ng-if="events.length==0" class="text-center button-down">
-            <button class="button icon-left ion-ios-plus-outline button-positive">
-                Lance une invitation
-            </button>
+            <a href="#/tab/new" class="button icon-left ion-ios-plus-outline button-positive button-outline">
+                Lancer une invitation
+            </a>
         </div>
         <ion-list>
             <ion-item class="item item-avatar" ng-repeat="event in events track by $index" href="#/event/{{event.id}}">

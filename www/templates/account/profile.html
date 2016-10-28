@@ -12,14 +12,14 @@
 <!--             <img ng-src="{{user.profile.image}}" ng-click="openModal()"> -->
         <div class="row text-center profile-header no-padding-margin">
             <div class="col col-33">
-                <img ng-src="{{user.profile.image}}">
-                <img ng-if="!user.profile.image">
+                <img ng-if="!user.profile.image" ng-src="{{user.profile.image}}">
+                <img ng-if="user.profile.image" ng-src="img/round58.png">
             </div>
             <div class="col">
                 <div class="row no-padding-margin">
                     <div class="col no-padding-margin">
                         <p><strong>1</strong></p>
-                        <p class="grey">évènement</p>
+                        <p class="grey">évènements</p>
                     </div>
                     <div class="col no-padding-margin">
                         <p><strong>1</strong></p>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="row no-padding-margin">
                     <div class="col no-padding-margin">
-                        <button class="button button-small button-block">test</button>
+                        <button class="button button-small button-block">Modifier mon profil</button>
                     </div>
                 </div>
             </div>

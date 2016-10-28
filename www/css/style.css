@@ -2,6 +2,21 @@
     background: transparent;
     border-color: #FFF;
 }*/
+@font-face {
+  font-family: "woozup";
+  src: url("../font/woozup.ttf") format("truetype");
+}
+.wooup-font {
+    font-family: "woozup";
+}
+.bar .title {
+    font-size: 40px;
+    font-family: "woozup";
+}
+.woozup-title {
+    font-size: 100px;
+    font-family: "woozup";
+}
 .no-padding-margin {
     padding: 0;
     margin: 0;
@@ -16,10 +31,7 @@
     padding: 30px;
 }
 .registration h1, .registration h2, .registration h3 {
-    margin: 60px 0 40px 0;
-}
-.woozup-title {
-    font-size: 60px;
+    margin: 60px 0;
 }
 .registration .item.item-input, .registration .item.intlpn-container {
     border: none !important;

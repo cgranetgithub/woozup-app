@@ -1,4 +1,4 @@
-<ion-view view-title={{title}}>
+<ion-view view-title="Woozup" hide-nav-bar="true">
     <ion-content>
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
@@ -9,7 +9,7 @@
             <ion-item class="item item-avatar item-button-right"
                       ng-repeat="friend in friends track by $index">
                 <img ng-src="{{friend.image}}">
-                <h2>{{friend.first_name}}</h2>
+                <h2>{{friend.first_name}} {{friend.last_name}}</h2>
 <!--                 <p>{{friend.user.email}}</p> -->
                 <div class="buttons">
                     <button class="button button-outline button-stable roundbutton"
@@ -30,13 +30,13 @@
                 <img ng-if="!invite.photo" src="img/round58-grey.png">
                 <h2>{{invite.name}}</h2>
                 <p>{{invite.numbers}}</p>
-                <p>{{invite.emails}}</p>
+<!--                 <p>{{invite.emails}}</p> -->
                 <div class="buttons">
                     <button class="button button-outline button-stable roundbutton"
                             ng-click="ignoreInviteButton(invite)">
                             <i class="icon ion-android-cancel"></i>
                     </button>
-                    <button class="button button-outline button-positve roundbutton"
+                    <button class="button button-outline button-positive roundbutton"
                             ng-click="sendInviteButton(invite)">
                             <i class="icon ion-person-add"></i>
                     </button>

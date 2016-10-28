@@ -1,4 +1,4 @@
-<ion-view view-title="Nouvel événement">
+<ion-view view-title="Lancer une invitation">
   <ion-content class="padding">
     <button class="button button-block" ng-click="whatModal.show()" ng-model="what">
         {{what.description}}
@@ -14,7 +14,7 @@
         <span ng-if="invitees.length==1">1 invité</span>
         <span ng-if="invitees.length>1">{{invitees.length}} invités</span>
     </button>
-    <button class="button button-block button-balanced" ng-click="create()">
+    <button class="button button-block button-positive button-outline" ng-click="create()">
         C'est parti !
     </button>
   </ion-content>

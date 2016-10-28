@@ -25,21 +25,21 @@ angular.module('woozup.controllers')
     };
     $scope.loadProfile();
     // modal window
-    $ionicModal.fromTemplateUrl('templates/imgcropmodal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.modal = modal;
-    });
-    $scope.openModal = function() {
-        $scope.modal.show();
-    };
-    $scope.closeModal = function() {
-        $scope.modal.hide();
-    };
-    $scope.$on('$destroy', function() {
-        $scope.modal.remove();
-    });
+//     $ionicModal.fromTemplateUrl('templates/account/imgcropmodal.html', {
+//         scope: $scope,
+//         animation: 'slide-in-up'
+//     }).then(function(modal) {
+//         $scope.modal = modal;
+//     });
+//     $scope.openModal = function() {
+//         $scope.modal.show();
+//     };
+//     $scope.closeModal = function() {
+//         $scope.modal.hide();
+//     };
+//     $scope.$on('$destroy', function() {
+//         $scope.modal.remove();
+//     });
     // camera
     $scope.myImage = '';
     $scope.myCroppedImage = '';
@@ -137,9 +137,7 @@ angular.module('woozup.controllers')
 //         $scope.modal = modal;
 //     });
     $scope.openModal = function() {
-
-            // picture choice popup
-        $scope.data = {};
+        // picture choice popup
         var myPopup = $ionicPopup.show({
 //             templateURL: 'template/imgcropmodal.html',
             title: 'Choisir une photo',
