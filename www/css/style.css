@@ -1,7 +1,4 @@
-/*.bar.bar-dark, .tabs-dark > .tabs, .tabs.tabs-dark, .bar-dark .button {
-    background: transparent;
-    border-color: #FFF;
-}*/
+/* GENERAL */
 @font-face {
   font-family: "woozup";
   src: url("../font/woozup.ttf") format("truetype");
@@ -10,12 +7,15 @@
     font-family: "woozup";
 }
 .bar .title {
-    font-size: 40px;
+    font-size: 60px;
     font-family: "woozup";
 }
 .woozup-title {
     font-size: 100px;
     font-family: "woozup";
+}
+.padding {
+    padding: 10px;
 }
 .no-padding-margin {
     padding: 0;
@@ -27,6 +27,7 @@
 .grey {
     color: grey;
 }
+/* REGISTRATION SCREENS */
 .registration {
     padding: 30px;
 }
@@ -48,59 +49,19 @@
     color: white !important;
     opacity:  .9;
 }
-.padding {
-    padding: 10px;
-}
+
 .canceled-title {
     text-decoration:line-through;
 }
 .canceled-message {
     color: red;
 }
-/*.item {
-    opacity: 0.8;
-    min-height: 38px;
-}
-.item-avatar {
-    padding-left: 55px;
-}
-.item-avatar > img:first-child {
-    left: 5px;
-}
-.item-avatar-right, .item-avatar-right .item-content {
-    min-height: 38px;
-}*/
 .item-button-right .buttons {
     right: 5px;
 }
 .item-button-right {
     padding-right: 110px;
 }
-/*.event-item .item-content {
-    padding-left: 70px;
-    padding-right: 90px;
-}
-.event-item-icon {
-    background: grey;
-    border-radius: 0 80% 0 0;
-    position: absolute;
-    bottom: 0;
-    left: 1px;
-    height: 70%;
-    padding: 15px 10px 5px 5px;
-    z-index: -1;
-    opacity: 0.2;
-}
-.event-item-avatar {
-    border-radius: 50%;
-    position: absolute;
-    top: 1px;
-    bottom: 1px;
-    right: 5px;
-    height: 85%;
-    margin: auto;
-    z-index: -1;
-}*/
 .gallery {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -130,32 +91,6 @@
     display: block;
     margin: auto;
     margin-top: 20px;
-}
-.event-descr {
-    background-color: transparent;
-    border-width: 0;
-/*     border-radius: 0 0 70% 30%; */
-    color: white;
-/*     padding-bottom: 40px; */
-    opacity: 1;
-}
-.event-descr h1 {
-    color: #EEE;
-    white-space: normal;
-}
-.event-descr h2 {
-    color: #FFF;
-    white-space: normal;
-    line-height: 1.2;
-/*     margin-top: 5px; */
-}
-.event-descr img {
-    bottom: 15px;
-}
-.event-participant-title {
-    margin-top: 0px;
-    color: #EEE;
-    text-align: center;
 }
 .dtpickbox {
     display: inline-block;
@@ -280,13 +215,6 @@ input[type="text"].controls {
     -o-background-size: cover;
     background-size: cover;
 /*     background: linear-gradient(to bottom right, darkblue, lightblue); */
-}
-.blue-bgim {
-/*    background: url('../img/splash-blue.png') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;*/
 }
 .withBg {
     background-repeat: no-repeat;

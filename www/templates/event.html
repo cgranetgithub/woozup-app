@@ -1,4 +1,4 @@
-<ion-nav-bar>
+<!--<ion-nav-bar>
     <ion-nav-buttons side="left">
         <button class="button back-button buttons button-clear header-item"
                 ng-click="goBackAction()">
@@ -6,36 +6,36 @@
             <span class="back-text"></span>
         </button>
     </ion-nav-buttons>
-</ion-nav-bar>
-<ion-view view-title={{event.event_type.name}} class="withBg"
-        ng-style="{'background-image': 'url(' + event.event_type.background + ')'}">
+</ion-nav-bar>-->
+<ion-view view-title={{event.event_type.name}}>
+    <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click="goBackAction()">
+            <i class="icon ion-arrow-left-c"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content class="padding">
-        <ion-list>
-            <ion-item class="item item-thumbnail-right event-descr item-text-wrap">
-                <img ng-src="{{event.event_type.icon}}">
-                <h1 ng-if=!event.canceled>{{event.name}}</h1>
-                <h1 ng-if=event.canceled><s>{{event.name}}</s> (annulé)</h1>
-                <h2>{{event.start | date : 'EEEE d MMMM à H:mm'}}</h2>
-            </ion-item>
-            <ion-item class="item event-descr">
-                <h2>{{event.location_address}}</h2>
-            </ion-item>
-            <h3 class="event-participant-title">avec</h3>
-            <ion-item class="item item-avatar">
-                <img ng-src="{{event.owner.image}}">
-                <h2>{{event.owner.name}} (organisateur)</h2>
-            </ion-item>
-            <ion-list>
-                <ion-item class="item item-avatar-left"
-                        ng-repeat="participant in event.participants">
-                    <img ng-src="{{participant.image}}">
-                    <h3>{{participant.name}}</h3>
-                </ion-item>
-            </ion-list>
-        </ion-list>
-        <br>
-        <button ng-if=!event.canceled class="button button-block button-balanced"
-                ng-click="buttonAction(event.id)">
+        <div class="row text-center profile-header no-padding-margin">
+            <div class="col col-33">
+                <img ng-if="!event.owner.image" ng-src="{{event.owner.image}}">
+                <img ng-if="event.owner.image" ng-src="img/round58.png">
+                <p>{{event.owner.first_name}} {{event.owner.last_name}}</p>
+            </div>
+            <div class="col">
+                    <img ng-src="{{event.event_type.icon}}">
+                    <h2 ng-if=!event.canceled>{{event.name}}</h2>
+                    <h2 ng-if=event.canceled><s>{{event.name}}</s> (annulé)</h2>
+                    <p>{{event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+                    <p>{{event.location_address}}</p>
+                <p>avec</p>
+                <ion-list>
+                    <ion-item class="item item-avatar-left" ng-repeat="participant in event.participants">
+                        <img ng-src="{{participant.image}}">
+                        <h3>{{participant.first_name}} {{participant.last_name}}</h3>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+        <button ng-if=!event.canceled class="button button-block button-assertive button-outline" ng-click="buttonAction(event.id)">
             {{buttonTitle}}
         </button>
     </ion-content>

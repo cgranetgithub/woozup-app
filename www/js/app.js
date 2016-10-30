@@ -190,8 +190,8 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 url: '/journal',
                 views: {
                     'journal': {
-                        templateUrl: 'templates/journal.html',
-                        controller: 'JournalCtrl'
+                        templateUrl: "templates/journal.html",
+//                         controller: 'JournalCtrl'
                     }
                 }
             })
@@ -204,17 +204,13 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                         controller: 'ProfileCtrl'
                     }
                 }
-            });
-//             .state('menu.friends.new', {
-//                 cache: false,
-//                 url: '/new',
-//                 views: {
-//                     'newfriends': {
-//                         templateUrl: 'templates/people.html',
-//                         controller: 'NewFriendsCtrl'
-//                     }
-//                 }
-//             })
+            })
+            .state('findMoreFriends', {
+                cache: false,
+                url: '/findMoreFriends',
+                templateUrl: 'templates/people.html',
+                controller: 'FindMoreFriendsCtrl'
+            })
 //             .state('menu.friends.my', {
 //                 cache: false,
 //                 url: '/my',
@@ -235,12 +231,12 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
 //                     }
 //                 }
 //             })
-//             .state('event', {
-//                 cache: false,
-//                 url: '/event/:eventId',
-//                 templateUrl: 'templates/event.html',
-//                 controller: 'EventCtrl'
-//             });
+            .state('event', {
+                cache: false,
+                url: '/event/:eventId',
+                templateUrl: 'templates/event.html',
+                controller: 'EventCtrl'
+            });
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/checkauth');
     }]);

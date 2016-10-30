@@ -7,7 +7,10 @@ angular.module('woozup.controllers')
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
     $ionicLoading.show({template: "Chargement"});
-    $scope.title = "Mes sorties";
+//     $scope.title = "Mes sorties";
+    $scope.findMoreFriends = function() {
+        $state.go('findMoreFriends');
+    };
     $scope.events = [];
     var today = new Date(), eventsResource,
         nextPages = function (result) {

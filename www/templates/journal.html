@@ -1,18 +1,32 @@
-<ion-view view-title="Journal">
-    <ion-content>
-        <ion-list>
-            <ion-item class="item item-avatar" ng-repeat="record in records track by $index" href="#/record/{{record.id}}">
-                <img ng-src="{{record.user.profile.image}}">
-                <p ng-switch="record.record_type">
-                    <strong>{{record.user.first_name}} {{record.user.last_name}}</strong>
-                    <span ng-switch-when="NEWUSER">vient de s'inscrire sur Woozup</span>
-                    <span ng-switch-when="NEWPARTICIPANT">participera à {{record.refering_event.name}}</span>
-                    <span ng-switch-when="NEWEVENT">a lancé une nouvelle invitation : {{record.refering_event.name}}</span>
-                    <span ng-switch-when="NEWFRIEND">s'est connnecté avec {{record.refering_user.first_name}} {{record.refering_user.last_name}}</span>
-                </p>
-                <p class="text-right">{{record.updated_at | date: 'HH:mm' }}</p>
-            </ion-item>
-        </ion-list>
-        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
-    </ion-content>
+<ion-view view-title="Tabs" hide-nav-bar="true">
+<ion-pane>
+<ion-tabs class="tabs-striped tabs-top">
+
+<!-- Tab 1 -->
+<ion-tab title="MES AMIS" >
+    <ion-nav-view name="tab-tab1">
+        <ion-content ng-controller="JournalFriendCtrl">
+            <ion-list>
+                <record-list records="records"></record-list>
+            </ion-list>
+            <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+        </ion-content>
+    </ion-nav-view>
+</ion-tab>
+
+
+<!-- Tab 2 -->
+<ion-tab title="MOI">
+    <ion-nav-view name="tab-tab2">
+        <ion-content ng-controller="PendingFriendsCtrl">
+            <ion-list>
+                <user-list users="friends"></user-list>
+            </ion-list>
+            <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+        </ion-content>
+    </ion-nav-view>
+</ion-tab>
+</ion-tabs>
+
+</ion-pane>
 </ion-view>

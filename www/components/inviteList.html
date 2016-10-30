@@ -1,0 +1,15 @@
+<ion-item class="item item-avatar item-button-right" ng-repeat="invite in $ctrl.invites track by $index">
+    <img ng-if="invite.photo" ng-src={{invite.photo}}>
+    <img ng-if="!invite.photo" src="img/round58-grey.png">
+    <h2>{{invite.name}}</h2>
+    <p>{{invite.numbers}}</p>
+    <p>{{invite.emails}}</p>
+    <div class="buttons">
+        <button class="button button-outline button-stable roundbutton" ng-click="ignoreInviteButton(invite)">
+                <i class="icon ion-android-cancel"></i>
+        </button>
+        <button class="button button-outline button-positive roundbutton" ng-click="sendInviteButton(invite)">
+                <i class="icon ion-android-person-add"></i>
+        </button>
+    </div>
+</ion-item>

@@ -1,4 +1,9 @@
 <ion-view view-title={{title}}>
+    <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click="goBackAction()">
+            <i class="icon ion-arrow-left-c"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content>
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
@@ -6,42 +11,8 @@
                  ng-change="onSearchChange(search)">
         </label>
         <ion-list>
-            <ion-item class="item item-avatar item-button-right"
-                      ng-repeat="friend in friends track by $index">
-                <img ng-src="{{friend.image}}">
-                <h2>{{friend.first_name}}</h2>
-<!--                 <p>{{friend.user.email}}</p> -->
-                <div class="buttons">
-                    <button class="button button-outline button-stable roundbutton"
-                            ng-click="ignoreFriendButton(friend)"
-                            ng-if="displayButton">
-                            <i class="icon ion-android-cancel"></i>
-                    </button>
-                    <button class="button button-outline button-positive roundbutton"
-                            ng-click="inviteFriendButton(friend)"
-                            ng-if="displayButton">
-                            <i class="icon ion-person-add"></i>
-                    </button>
-                </div>
-            </ion-item>
-            <ion-item class="item item-avatar item-button-right"
-                      ng-repeat="invite in invites track by $index">
-                <img ng-if="invite.photo" ng-src={{invite.photo}}>
-                <img ng-if="!invite.photo" src="img/round58-grey.png">
-                <h2>{{invite.name}}</h2>
-                <p>{{invite.numbers}}</p>
-                <p>{{invite.emails}}</p>
-                <div class="buttons">
-                    <button class="button button-outline button-stable roundbutton"
-                            ng-click="ignoreInviteButton(invite)">
-                            <i class="icon ion-android-cancel"></i>
-                    </button>
-                    <button class="button button-outline button-positve roundbutton"
-                            ng-click="sendInviteButton(invite)">
-                            <i class="icon ion-person-add"></i>
-                    </button>
-                </div>
-            </ion-item>
+            <user-list users="friends"></user-list>
+            <invite-list users="invites"></user-list>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
     </ion-content>

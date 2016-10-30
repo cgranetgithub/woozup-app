@@ -1,0 +1,11 @@
+<ion-item class="item item-avatar" ng-repeat="event in $ctrl.events track by $index" href="#/event/{{event.id}}">
+    <img ng-src="{{event.owner.profile.image}}">
+<!--                 <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}> -->
+    <h2><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}} <span ng-if=!event.name> {{event.event_type.description}}</span></h2>
+<!--                <h2 ng-if=event.canceled class="canceled-title"><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}}</h2>-->
+    <p><b ng-if="event.canceled" class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+    <p ng-if="event.participants.length>0">avec {{event.participants.length}} autre personne</p>
+    <button class="button button-clear button-stable icon ion-android-hand"></button>
+    <button class="button button-clear button-stable icon ion-chatbubbles"></button>
+    <button class="button button-clear button-stable icon ion-forward"></button>
+</ion-item>

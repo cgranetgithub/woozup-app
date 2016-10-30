@@ -2,43 +2,47 @@
     <ion-content>
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
-          <input type="search" placeholder="Recherche" ng-model="search"
-                 ng-change="onSearchChange(search)">
+          <input type="search" placeholder="Retrouver des amis" ng-model="search" ng-change="onSearchChange(search)">
         </label>
         <ion-list>
-            <ion-item class="item item-avatar item-button-right"
-                      ng-repeat="friend in friends track by $index">
-                <img ng-src="{{friend.image}}">
+            <ion-item class="item item-avatar item-button-right" ng-repeat="friend in friends track by $index">
+                <img ng-src="{{friend.profile.image}}">
                 <h2>{{friend.first_name}} {{friend.last_name}}</h2>
 <!--                 <p>{{friend.user.email}}</p> -->
                 <div class="buttons">
-                    <button class="button button-outline button-stable roundbutton"
-                            ng-click="ignoreFriendButton(friend)"
-                            ng-if="displayButton">
-                            <i class="icon ion-android-cancel"></i>
+                    <button class="button button-outline button-stable roundbutton" ng-click="ignoreFriendButton(friend)" ng-if="displayButton">
+                        <i class="icon ion-android-cancel"></i>
                     </button>
-                    <button class="button button-outline button-positive roundbutton"
-                            ng-click="inviteFriendButton(friend)"
-                            ng-if="displayButton">
-                            <i class="icon ion-person-add"></i>
+                    <button class="button button-outline button-positive roundbutton" ng-click="inviteFriendButton(friend)" ng-if="displayButton">
+                        <i class="icon ion-person-add"></i>
                     </button>
                 </div>
             </ion-item>
-            <ion-item class="item item-avatar item-button-right"
-                      ng-repeat="invite in invites track by $index">
+            <ion-item class="item item-avatar item-button-right" ng-repeat="invite in invites track by $index">
                 <img ng-if="invite.photo" ng-src={{invite.photo}}>
                 <img ng-if="!invite.photo" src="img/round58-grey.png">
                 <h2>{{invite.name}}</h2>
                 <p>{{invite.numbers}}</p>
 <!--                 <p>{{invite.emails}}</p> -->
                 <div class="buttons">
-                    <button class="button button-outline button-stable roundbutton"
-                            ng-click="ignoreInviteButton(invite)">
-                            <i class="icon ion-android-cancel"></i>
+                    <button class="button button-outline button-stable roundbutton" ng-click="ignoreInviteButton(invite)">
+                        <i class="icon ion-android-cancel"></i>
                     </button>
-                    <button class="button button-outline button-positive roundbutton"
-                            ng-click="sendInviteButton(invite)">
-                            <i class="icon ion-person-add"></i>
+                    <button class="button button-outline button-positive roundbutton" ng-click="sendInviteButton(invite)">
+                        <i class="icon ion-person-add"></i>
+                    </button>
+                </div>
+            </ion-item>
+            <ion-item class="item item-avatar item-button-right" ng-repeat="user in users track by $index">
+                <img ng-src="{{user.profile.image}}">
+                <h2>{{user.first_name}} {{user.last_name}}</h2>
+<!--                 <p>{{user.user.email}}</p> -->
+                <div class="buttons">
+                    <button class="button button-outline button-stable roundbutton" ng-click="ignoreUserButton(user)" ng-if="displayButton">
+                        <i class="icon ion-android-cancel"></i>
+                    </button>
+                    <button class="button button-outline button-positive roundbutton" ng-click="inviteUserButton(user)" ng-if="displayButton">
+                        <i class="icon ion-person-add"></i>
                     </button>
                 </div>
             </ion-item>

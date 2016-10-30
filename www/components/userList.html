@@ -1,0 +1,13 @@
+<ion-item class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index">
+    <img ng-src="{{user.profile.image}}">
+    <h2>{{user.first_name}} {{user.last_name}}</h2>
+<!--                 <p>{{user.user.email}}</p> -->
+    <div class="buttons">
+        <button class="button button-outline button-stable roundbutton" ng-click="ignoreFriendButton(user)" ng-if="displayButton">
+            <i class="icon ion-android-cancel"></i>
+        </button>
+        <button class="button button-outline button-positive roundbutton" ng-click="inviteFriendButton(user)" ng-if="displayButton">
+            <i class="icon ion-android-person-add"></i>
+        </button>
+    </div>
+</ion-item>

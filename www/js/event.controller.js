@@ -203,4 +203,94 @@ angular.module('woozup.controllers')
             $scope.whereModal.remove();
             $scope.whoModal.remove();
         });
+}])
+
+.controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams', '$tastypieResource', 'InviteService', 'UserData', 'AuthService', '$ionicHistory', '$ionicLoading', function ($window, $state, $scope, $stateParams, $tastypieResource, InviteService, UserData, AuthService, $ionicHistory, $ionicLoading) {
+    "use strict";
+    // verify authentication
+    AuthService.checkUserAuth().success()
+        .error(function () {$state.go('network');});
+    $scope.buttonTitle = "Chargement";
+    $scope.goBackAction = function() {
+        if ($ionicHistory.viewHistory().backView) {
+            $ionicHistory.goBack();
+        } else {
+            $state.go('tab.home');
+        }
+    };
+    var event = new $tastypieResource('events/all'),
+        loadEvent, leaveAndReload, joinAndReload;
+
+        loadEvent = function () {
+            event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
+                function (result) {
+                    $scope.event = result;
+                    var my_id = UserData.getUserId(),
+                        index,
+                        participants = result.participants,
+                        found = false;
+                    if (!result.canceled) {
+                        if (my_id === result.owner.id) {
+                            $scope.buttonTitle = "J'annule";
+                            $scope.buttonAction = function (eventId) {
+                                var myevent = new $tastypieResource('events/mine');
+                                myevent.objects.$delete({id: eventId});
+                                $state.go('tab.home', {}, { reload: true });
+                            };
+                        } else {
+                            for (index = 0; index < participants.length; index += 1) {
+                                if (my_id === participants[index].id) {
+                                    found = true;
+                                }
+                            }
+                            if (found) {
+                                $scope.buttonTitle = "J'annule";
+                                $scope.buttonAction = function (eventId) {
+                                    leaveAndReload(eventId);
+    //                                 $window.location.reload(true);
+                                };
+                            } else {
+                                $scope.buttonTitle = "Je participe";
+                                $scope.buttonAction = function (eventId) {
+                                    joinAndReload(eventId);
+    //                                 $window.location.reload(true);
+                                };
+                            }
+                        }
+                    }
+                }, function (error) {
+                    console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('network');});
+                    $scope.buttonTitle = "Erreur de chargement";
+                });
+        };
+        leaveAndReload = function (eventId) {
+            $ionicLoading.show({template: "Chargement"});
+            InviteService.leave(eventId).then(
+                function () {
+                    $ionicLoading.hide();
+                    loadEvent();
+                },
+                function (error) {
+                    $ionicLoading.hide();
+                    loadEvent();
+                }
+            );
+        };
+        joinAndReload = function (eventId) {
+            $ionicLoading.show({template: "Chargement"});
+            InviteService.join(eventId).then(
+                function () {
+                    $ionicLoading.hide();
+                    loadEvent();
+                },
+                function (error) {
+                    $ionicLoading.hide();
+                    loadEvent();
+                }
+            );
+        };
+    loadEvent();
 }]);
