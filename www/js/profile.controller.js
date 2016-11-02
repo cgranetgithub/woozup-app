@@ -24,6 +24,20 @@ angular.module('woozup.controllers')
         );
     };
     $scope.loadProfile();
+    $scope.events = [];
+    var eventsResource = new $tastypieResource('events/mine');
+    eventsResource.objects.$find().then(
+        function (result) {
+            $scope.events = result.objects;
+        }
+    );
+    $scope.friends = [];
+    var friendsResource = new $tastypieResource('friends/mine');
+    friendsResource.objects.$find().then(
+        function (result) {
+            $scope.friends = result.objects;
+        }
+    );
     // modal window
 //     $ionicModal.fromTemplateUrl('templates/account/imgcropmodal.html', {
 //         scope: $scope,

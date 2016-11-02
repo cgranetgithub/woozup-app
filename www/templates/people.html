@@ -11,8 +11,8 @@
                  ng-change="onSearchChange(search)">
         </label>
         <ion-list>
-            <user-list users="friends"></user-list>
-            <invite-list users="invites"></user-list>
+            <user-list users="friends" displaybutton=true></user-list>
+            <invite-list invites="invites"></invite-list>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
     </ion-content>

@@ -8,8 +8,6 @@ angular.module('woozup.controllers')
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
     $ionicLoading.show({template: "Chargement"});
-//     $scope.title = "Mes amis";
-    $scope.displayButton = true;
     $scope.friends = [];
     $scope.search = '';
     var friendsResource,
@@ -46,14 +44,6 @@ angular.module('woozup.controllers')
             });
         }
         $scope.$broadcast('scroll.infiniteScrollComplete');
-    };
-    $scope.inviteFriendButton = function (friend) {
-        $scope.friends.splice(friend.$index, 1);
-        acceptFriend(friend.id);
-    };
-    $scope.ignoreFriendButton = function (friend) {
-        $scope.friends.splice(friend.$index, 1);
-        rejectFriend(friend.id);
     };
 }])
 

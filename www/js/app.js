@@ -147,7 +147,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             .state('picture', {
                 cache: false,
                 url: '/picture',
-                templateUrl: 'templates/account/picture.html',
+                templateUrl: 'templates/user/picture.html',
                 controller: 'PictureCtrl'
             })
             .state('tab', {
@@ -200,7 +200,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 url: '/account',
                 views: {
                     'account': {
-                        templateUrl: 'templates/account/profile.html',
+                        templateUrl: 'templates/user/profile.html',
                         controller: 'ProfileCtrl'
                     }
                 }
@@ -231,6 +231,12 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
 //                     }
 //                 }
 //             })
+            .state('user', {
+                cache: false,
+                url: '/user/:userId',
+                templateUrl: 'templates/user/userView.html',
+                controller: 'UserCtrl'
+            })
             .state('event', {
                 cache: false,
                 url: '/event/:eventId',

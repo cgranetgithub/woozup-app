@@ -48,22 +48,22 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             $http.post(apiUrl + 'invite/ignore/' + inviteId + '/');
         };
     }])
-.factory('inviteFriend', ['$http', 'apiUrl', 'UserData',
-    function ($http, apiUrl, UserData) {
-        "use strict";
-        return function (userId) {
-            $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
-            $http.post(apiUrl + 'user/invite/' + userId + '/');
-        };
-    }])
-.factory('ignoreFriend', ['$http', 'apiUrl', 'UserData',
-    function ($http, apiUrl, UserData) {
-        "use strict";
-        return function (userId) {
-            $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
-            $http.post(apiUrl + 'user/ignore/' + userId + '/');
-        };
-    }])
+// .factory('inviteFriend', ['$http', 'apiUrl', 'UserData',
+//     function ($http, apiUrl, UserData) {
+//         "use strict";
+//         return function (userId) {
+//             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
+//             $http.post(apiUrl + 'user/invite/' + userId + '/');
+//         };
+//     }])
+// .factory('ignoreFriend', ['$http', 'apiUrl', 'UserData',
+//     function ($http, apiUrl, UserData) {
+//         "use strict";
+//         return function (userId) {
+//             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
+//             $http.post(apiUrl + 'user/ignore/' + userId + '/');
+//         };
+//     }])
 .factory('acceptFriend', ['$http', 'apiUrl', 'UserData',
     function ($http, apiUrl, UserData) {
         "use strict";

@@ -27,7 +27,6 @@ angular.module('woozup.controllers')
                                     {order_by: 'start', start__gte: today});
     eventsResource.objects.$find().then(
         function (result) {
-            console.log(result);
             nextPages(result);
             $ionicLoading.hide();
             $scope.$broadcast('scroll.infiniteScrollComplete');

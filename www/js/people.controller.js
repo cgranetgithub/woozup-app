@@ -3,13 +3,13 @@
 
 angular.module('woozup.controllers')
 
-.controller('FindMoreFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'sendInvite', 'ignoreInvite', 'inviteFriend', 'ignoreFriend', 'AuthService', '$ionicHistory', function ($tastypieResource, $ionicLoading, $q, $scope, $state, sendInvite, ignoreInvite, inviteFriend, ignoreFriend, AuthService, $ionicHistory) {
+.controller('FindMoreFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', '$ionicHistory', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService, $ionicHistory) {
     "use strict";
     // verify authentication
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
     $ionicLoading.show({template: "Chargement"});
-    $scope.title = "Retrouver plus d'amis";
+    $scope.title = "Suggestions";
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
             $ionicHistory.goBack();
@@ -17,7 +17,6 @@ angular.module('woozup.controllers')
             $state.go('tab.home');
         }
     };
-    $scope.displayButton = true;
     $scope.invites = [];
     $scope.friends = [];
     $scope.search = '';
@@ -71,21 +70,5 @@ angular.module('woozup.controllers')
             nextFriendPage = friendsResource.page.next();
         }
         nextPages(nextInvitePage, nextFriendPage);
-    };
-    $scope.inviteFriendButton = function (friend) {
-        $scope.friends.splice($scope.friends.indexOf(friend), 1);
-        inviteFriend(friend.id);
-    };
-    $scope.ignoreFriendButton = function (friend) {
-        $scope.friends.splice($scope.friends.indexOf(friend), 1);
-        ignoreFriend(friend.id);
-    };
-    $scope.sendInviteButton = function (invite) {
-        $scope.invites.splice($scope.invites.indexOf(invite), 1);
-        sendInvite(invite.id);
-    };
-    $scope.ignoreInviteButton = function (invite) {
-        $scope.invites.splice($scope.invites.indexOf(invite), 1);
-        ignoreInvite(invite.id);
     };
 }]);

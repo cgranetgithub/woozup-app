@@ -1,14 +1,13 @@
 /*jslint browser: true, devel: true, maxerr: 999, white: true, vars: true, newcap: true*/
 /*global angular*/
+
 angular.module('woozup.controllers')
-.controller('SearchCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'sendInvite', 'ignoreInvite', 'inviteFriend', 'ignoreFriend', 'AuthService', function ($tastypieResource, $ionicLoading, $q, $scope, $state, sendInvite, ignoreInvite, inviteFriend, ignoreFriend, AuthService) {
+
+.controller('SearchCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService) {
     "use strict";
     // verify authentication
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
-//     $ionicLoading.show({template: "Chargement"});
-    $scope.title = "Mes amis";
-    $scope.displayButton = true;
     $scope.users = [];
     $scope.search = '';
     var usersResource,
@@ -57,14 +56,5 @@ angular.module('woozup.controllers')
                 });
         }
         $scope.$broadcast('scroll.infiniteScrollComplete');
-    };
-    $scope.inviteFriendButton = function (friend) {
-        $scope.friends.splice($scope.friends.indexOf(friend), 1);
-        inviteFriend(friend.id);
-        console.log('ij');
-    };
-    $scope.ignoreFriendButton = function (friend) {
-        $scope.friends.splice($scope.friends.indexOf(friend), 1);
-        ignoreFriend(friend.id);
     };
 }]);

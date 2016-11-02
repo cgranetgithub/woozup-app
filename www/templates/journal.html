@@ -20,7 +20,7 @@
     <ion-nav-view name="tab-tab2">
         <ion-content ng-controller="PendingFriendsCtrl">
             <ion-list>
-                <user-list users="friends"></user-list>
+                <user-list displaybutton=true users="friends"></user-list>
             </ion-list>
             <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
         </ion-content>

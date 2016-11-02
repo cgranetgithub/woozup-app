@@ -4,7 +4,7 @@
 var gps_in_progress = false;
 var findContacts = null;
 
-angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap', 'ngImgCrop', 'ngMap', 'google.places', 'woozup.controllers', 'woozup.services'])
+angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap', 'ngImgCrop', 'ngMap', 'google.places', 'woozup.services'])
 
 // With the new view caching in Ionic, Controllers are only called
 // when they are recreated or on app start, instead of every page change.

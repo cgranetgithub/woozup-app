@@ -5,11 +5,11 @@
     <p>{{invite.numbers}}</p>
     <p>{{invite.emails}}</p>
     <div class="buttons">
-        <button class="button button-outline button-stable roundbutton" ng-click="ignoreInviteButton(invite)">
-                <i class="icon ion-android-cancel"></i>
+        <button class="button button-outline button-stable roundbutton" ng-click="$ctrl.ignore(invite)">
+            <i class="icon ion-android-cancel"></i>
         </button>
-        <button class="button button-outline button-positive roundbutton" ng-click="sendInviteButton(invite)">
-                <i class="icon ion-android-person-add"></i>
+        <button class="button button-outline button-positive roundbutton" ng-click="$ctrl.send(invite)">
+            <i class="icon ion-android-person-add"></i>
         </button>
     </div>
 </ion-item>

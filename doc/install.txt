@@ -18,6 +18,9 @@ $ ionic state reset
 # use bower to install dependencies from bower.json
 $ bower install
 
+# build resources
+ionic resources
+
 -------------------------------------------------------
 
 # install Facebook plugin

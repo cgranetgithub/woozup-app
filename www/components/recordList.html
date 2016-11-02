@@ -1,5 +1,6 @@
-<ion-item class="item item-avatar" ng-repeat="record in $ctrl.records track by $index" href="#/record/{{record.id}}">
-    <img ng-src="{{record.user.profile.image}}">
+<ion-item class="item item-avatar" ng-repeat="record in $ctrl.records track by $index" href="#/user/{{record.user.id}}">
+    <img ng-if="!record.user.profile.image" ng-src="{{record.user.profile.image}}">
+    <img ng-if="record.user.profile.image" ng-src="img/round58.png">
     <p ng-switch="record.record_type">
         <strong>{{record.user.first_name}} {{record.user.last_name}}</strong>
         <span ng-switch-when="NEWUSER">vient de s'inscrire sur Woozup</span>

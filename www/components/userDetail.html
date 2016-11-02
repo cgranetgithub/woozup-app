@@ -1,0 +1,27 @@
+<div class="row text-center profile-header no-padding-margin">
+    <div class="col col-33">
+        <img ng-if="!$ctrl.user.profile.image" ng-src="{{$ctrl.user.profile.image}}">
+        <img ng-if="$ctrl.user.profile.image" ng-src="img/round58.png">
+    </div>
+    <div class="col">
+        <div class="row no-padding-margin">
+            <div class="col no-padding-margin">
+                <p><strong>{{ $ctrl.events.length }}</strong></p>
+                <p class="grey">évènements</p>
+            </div>
+            <div class="col no-padding-margin">
+                <p><strong>{{ $ctrl.friends.length }}</strong></p>
+                <p class="grey">amis</p>
+            </div>
+<!--                    <div class="col no-padding-margin">
+                <p><strong>1</strong></p>
+                <p class="grey">followers</p>
+            </div>-->
+        </div>
+        <div class="row no-padding-margin">
+            <div class="col no-padding-margin">
+                <button class="button button-small button-block">Modifier mon profil</button>
+            </div>
+        </div>
+    </div>
+</div>

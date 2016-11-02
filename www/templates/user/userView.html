@@ -1,0 +1,10 @@
+<ion-view view-title="{{user.first_name}} {{user.last_name}}">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click="goBackAction()">
+            <i class="icon ion-arrow-left-c"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <user-detail user="user" friends="friends" events="events"></user-detail>
+    </ion-content>
+</ion-view>
