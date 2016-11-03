@@ -7,7 +7,7 @@
     font-family: "woozup";
 }
 .bar .title {
-    font-size: 60px;
+    font-size: 40px;
     font-family: "woozup";
 }
 .woozup-title {
@@ -56,11 +56,11 @@
 .canceled-message {
     color: red;
 }
-.item-button-right .buttons {
+/*.item-button-right .buttons {
     right: 5px;
-}
+}*/
 .item-button-right {
-    padding-right: 110px;
+    padding-right: 0 !important;
 }
 .gallery {
     -webkit-flex-wrap: wrap;

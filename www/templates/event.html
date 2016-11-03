@@ -16,22 +16,20 @@
     <ion-content class="padding">
         <div class="row text-center profile-header no-padding-margin">
             <div class="col col-33">
-                <img ng-if="!event.owner.image" ng-src="{{event.owner.image}}">
-                <img ng-if="event.owner.image" ng-src="img/round58.png">
+                <img ng-if="event.owner.profile.image" ng-src="{{event.owner.profile.image}}">
+                <img ng-if="!event.owner.profile.image" ng-src="img/round58-grey.png">
                 <p>{{event.owner.first_name}} {{event.owner.last_name}}</p>
             </div>
             <div class="col">
-                    <img ng-src="{{event.event_type.icon}}">
+<!--                     <img ng-src="{{event.event_type.icon}}"> -->
                     <h2 ng-if=!event.canceled>{{event.name}}</h2>
                     <h2 ng-if=event.canceled><s>{{event.name}}</s> (annulé)</h2>
                     <p>{{event.start | date : 'EEEE d MMMM à H:mm'}}</p>
                     <p>{{event.location_address}}</p>
-                <p>avec</p>
+                <p ng-if="event.participants.length!=0">avec</p>
                 <ion-list>
-                    <ion-item class="item item-avatar-left" ng-repeat="participant in event.participants">
-                        <img ng-src="{{participant.image}}">
-                        <h3>{{participant.first_name}} {{participant.last_name}}</h3>
-                    </ion-item>
+                    <user-list users="event.participants" displaybutton=false>
+                    </user-list>
                 </ion-list>
             </div>
         </div>

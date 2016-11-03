@@ -139,7 +139,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 controller: 'CheckauthCtrl'
             })
             .state('connect', {
-//                 cache: false,
+                cache: false,
                 url: '/connect',
                 templateUrl: 'templates/connect/connect.html',
                 controller: 'ConnectCtrl'
@@ -151,7 +151,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 controller: 'PictureCtrl'
             })
             .state('tab', {
-//                 cache: false,
+                cache: false,
                 url: '/tab',
                 abstract: true,
                 templateUrl: 'templates/tabs.html'
@@ -187,6 +187,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 }
             })
             .state('tab.journal', {
+                cache: false,
                 url: '/journal',
                 views: {
                     'journal': {

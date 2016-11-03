@@ -41,7 +41,7 @@ angular.module('woozup.controllers')
             }
         );
     };
-//     $scope.onSearchChange('');
+    $scope.onSearchChange('');
     $scope.loadMore = function () {
         var nextUserPage = null;
         if (usersResource && usersResource.page.meta && usersResource.page.meta.next) {
