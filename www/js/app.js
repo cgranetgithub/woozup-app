@@ -33,12 +33,12 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 } ),
                     alertDismissed = function () {},
                     onOffline = function () {
-                        navigator.notification.alert(
-                            'La connexion à Internet a été perdue', //message
-                            alertDismissed,         // callback
-                            'Problème de connexion',  // title
-                            'OK'                    // buttonName
-                        );
+//                         navigator.notification.alert(
+//                             'La connexion à Internet a été perdue', //message
+//                             alertDismissed,         // callback
+//                             'Problème de connexion',  // title
+//                             'OK'                    // buttonName
+//                         );
                         $state.go('connect');
                     };
                 document.addEventListener("offline", onOffline, false);

@@ -128,6 +128,9 @@
     width: 96%;
     right: 2%;
     z-index: 1;
+    border: 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.79);
 }
 .full button span {
     background-color: limegreen;
@@ -221,14 +224,6 @@ input[type="text"].controls {
     background-position: center center;
     background-size: cover;
 }
-.logocontainer {
-    text-align: center;
-    margin: 30px;
-}
-.logo {
-    width: 60%;
-    margin: 30px;
-}
 .profile-header {
     padding: 10px;
     margin: 5px;
@@ -239,12 +234,6 @@ input[type="text"].controls {
 .profile-header img {
     border-radius: 50%;
     width: 90%;
-}
-.ilb {
-    display: inline-block;
-}
-#myform {
-    padding: 16px;
 }
 .note {
     color: white;

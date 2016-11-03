@@ -21,17 +21,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "^1.5.8",
+    "angular-animate": "^1.5.3",
     "angular-bootstrap": "^2.2.0",
-    "angular-google-places-autocomplete": "^0.2.7",
-    "angular-i18n": "^1.5.8",
+    "angular-i18n": "^1.5.3",
     "angular-resource-tastypie": "^1.0.4",
     "angular-ui-router": "^0.3.1",
-    "angular-sanitize": "^1.5.8",
-    "ng-img-crop": "^0.3.2",
+    "angular-sanitize": "^1.5.3",
     "ngmap": "^1.17.6",
     "ngCordova": "^0.1.27-alpha",
-    "angular-resource": "^1.5.8",
+    "angular-resource": "^1.5.3",
     "bootstrap": "^3.3.7",
     "intlpnIonic": "https://github.com/pierre-vigier/intlpnIonic.git#0.1.8"
   }

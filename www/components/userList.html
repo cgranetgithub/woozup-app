@@ -1,6 +1,6 @@
 <ion-item class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index" href="#/user/{{user.id}}">
-    <img ng-if="!user.profile.image" ng-src="{{user.profile.image}}">
-    <img ng-if="user.profile.image" ng-src="img/round58.png">
+    <img ng-if="user.profile.image" ng-src="{{user.profile.image}}">
+    <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
     <h2>{{user.first_name}} {{user.last_name}}</h2>
 <!--                 <p>{{user.user.email}}</p> -->
     <div class="buttons">

@@ -172,7 +172,6 @@ angular.module('woozup.controllers')
         });
 
         myPopup.then(function(res) {
-            console.log('Tapped!', res);
         });      
         
         
@@ -186,12 +185,12 @@ angular.module('woozup.controllers')
     });
     // camera
     $scope.myImage = '';
-    $scope.myCroppedImage = '';
+//     $scope.myCroppedImage = '';
     $scope.photoFromCamera = function () {
         $ionicLoading.show({template: "Chargement de la photo"});
         CameraService.photoFromCamera().then(
             function (imageURI) {
-                $scope.myImage = imageURI;
+                $scope.myImage = "data:image/jpeg;base64," + imageURI;
                 $ionicLoading.hide();
             }, function (err) {
                 console.log(err);
@@ -203,7 +202,7 @@ angular.module('woozup.controllers')
         $ionicLoading.show({template: "Chargement de la photo"});
         CameraService.photoFromGallery().then(
             function (imageURI) {
-                $scope.myImage = imageURI;
+                $scope.myImage = "data:image/jpeg;base64," + imageURI;
                 $ionicLoading.hide();
             }, function (err) {
                 console.log(err);
@@ -231,9 +230,10 @@ angular.module('woozup.controllers')
         if ($scope.myImage) {
             var b64 = $scope.myImage.split(',')[1],
                 file_field = {
-                    "name": "myfile.png",
+                    "name": "2016.jpg",
                     "file": b64,
                 };
+            console.log(file_field);
             ProfileService.setpicture(file_field).then(
                 function (res) {$ionicLoading.hide();},
                 function (err) {$ionicLoading.hide();}

@@ -7,9 +7,9 @@ angular.module('woozup.services', ['ngResourceTastypie'])
     var hostname = backend_url,
         apiUrl = hostname + 'api/v1/';
 // #### for debug
-    var hostname = 'http://192.168.1.25:8000/',
+//     var hostname = 'http://192.168.1.25:8000/',
 //          hostname = 'http://localhost:8000/',
-        apiUrl = hostname + 'api/v1/';
+//         apiUrl = hostname + 'api/v1/';
 // #########
     $provide.value('apiUrl', apiUrl);
     $provide.value('hostname', hostname);
@@ -325,7 +325,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     promise  = deferred.promise,
                     options = {
                         quality: 75,
-                        destinationType: Camera.DestinationType.FILE_URI,
+                        destinationType: Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.CAMERA,
                         allowEdit: true,
                         encodingType: Camera.EncodingType.JPEG, //important for orientation
@@ -359,7 +359,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 var deferred = $q.defer(),
                     promise  = deferred.promise,
                     options = {
-                        destinationType: Camera.DestinationType.FILE_URI,
+                        destinationType: Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
 //                             encodingType: Camera.EncodingType.PNG,
                         mediaType: Camera.MediaType.PICTURE,

@@ -1,5 +1,7 @@
 <ion-item class="item item-avatar" ng-repeat="event in $ctrl.events track by $index" href="#/event/{{event.id}}">
-    <img ng-src="{{event.owner.profile.image}}">
+    <img ng-if="event.owner.profile.image" ng-src={{event.owner.profile.image}}>
+    <img ng-if="!event.owner.profile.image" ng-src="img/round58-grey.png">
+
 <!--                 <img class="event-item-icon" ng-src="{{event.event_type.icon}}" ng-style={{event.event_type.style}}> -->
     <h2><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}} <span ng-if=!event.name> {{event.event_type.description}}</span></h2>
 <!--                <h2 ng-if=event.canceled class="canceled-title"><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}}</h2>-->

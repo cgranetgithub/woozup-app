@@ -1,20 +1,6 @@
-<!--<ion-view view-title={{vm.title}} class="withBg" ng-controller="WhereCtrl as vm"
-          ng-style="{'background-image': 'url({{vm.backgroundUrl}})'}">
-    <ion-nav-bar class="bar-dark">
-        <ion-nav-buttons side="left">
-            <button class="button back-button buttons button-clear header-item"
-                    ng-click="$ionicGoBack()">
-                <i class="icon ion-chevron-left"></i>
-                <span class="back-text"></span>
-            </button>
-        </ion-nav-buttons>
-    </ion-nav-bar>-->
 <ion-modal-view>
-<!--    <ion-header-bar>
-      <h1 class="title">Où ?</h1>
-    </ion-header-bar>-->
     <ion-content>
-        <input g-places-autocomplete class="controls map-input" type="text" placeholder="Lieu" ng-model="place" ng-change="placeChanged(place)"/>
+        <input class="map-input" places-auto-complete ng-model="place" on-place-changed="placeChanged()" ng-focus="disableTap($event)"/> <br/>
         <ng-map class="map" zoom="17" center="[{{where.lat}}, {{where.lng}}]" on-click="onClick(event)" data-tap-disabled="true" disable-default-u-i="true">
             <marker position="[{{where.lat}}, {{where.lng}}]" title="marker" animation="Animation.DROP"></marker>
         </ng-map>    
@@ -23,4 +9,3 @@
         </button>
     </ion-content>
 </ion-modal-view>
-<!-- </ion-view> -->

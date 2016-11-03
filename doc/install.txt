@@ -13,7 +13,8 @@ sudo npm -g install js-beautify jslint cordova ionic
 
 # in ionic-app, do
 # use reset to download dependencies from package.json
-$ ionic state reset
+# $ ionic state reset (deprecated)
+cordova prepare
 
 # use bower to install dependencies from bower.json
 $ bower install
