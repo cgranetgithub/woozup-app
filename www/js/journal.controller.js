@@ -7,7 +7,7 @@ angular.module('woozup.controllers')
     // verify authentication
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
-    $ionicLoading.show({template: "Chargement"});
+//     $ionicLoading.show({template: "Chargement"});
     $scope.friends = [];
     $scope.search = '';
     var friendsResource,
@@ -19,33 +19,45 @@ angular.module('woozup.controllers')
                 }
             }
         };
+    friendsResource = new $tastypieResource('friends/pending');
     $scope.onSearchChange = function (word) {
-        friendsResource = new $tastypieResource('friends/pending');
-        $scope.friends = [];
         friendsResource.objects.$find().then(
             function (result) {
+                $scope.friends = [];
                 nextPages(result);
-                $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
             }, function (error) {
                 console.log(error);
-                $ionicLoading.hide();
                 // verify authentication
                 AuthService.checkUserAuth().success()
                     .error(function () {$state.go('network');});
             }
-        );
+        ).finally(function() {
+//             $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        });
     };
     $scope.onSearchChange('');
     $scope.loadMore = function () {
         if (friendsResource.page.meta && friendsResource.page.meta.next) {
-            friendsResource.page.next().then(function (result) {
-                nextPages(result);
+            friendsResource.page.next().then(
+                function (result) {
+                    nextPages(result);
+                }, function (error) {
+                    console.log(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('network');});
+                }
+            ).finally(function() {
+//                 $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             });
+        } else {
+            $scope.$broadcast('scroll.infiniteScrollComplete');
         }
-        $scope.$broadcast('scroll.infiniteScrollComplete');
     };
 }])
+
 
 .controller('JournalFriendCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService) {
     "use strict";
@@ -63,37 +75,41 @@ angular.module('woozup.controllers')
             }
         }
     };
-    console.log('here');
-    var diaryResource;
-    diaryResource = new $tastypieResource('record');
-    diaryResource.objects.$find().then(
-        function (result) {
-            console.log(result);
-            nextPages(result);
-            $ionicLoading.hide();
-            $scope.$broadcast('scroll.infiniteScrollComplete');
-        }, function (error) {
-            console.log(error);
-            $ionicLoading.hide();
-            // verify authentication
-            AuthService.checkUserAuth().success()
-                .error(function () {$state.go('network');});
-        }
-    );
+    var diaryResource = new $tastypieResource('record');
+    $scope.load = function() {
+        diaryResource.objects.$find().then(
+            function (result) {
+                $scope.records = [];
+                nextPages(result);
+            }, function (error) {
+                console.log(error);
+                // verify authentication
+                AuthService.checkUserAuth().success()
+                    .error(function () {$state.go('network');});
+            }
+        ).finally(function() {
+//             $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+    };
+    $scope.load();
     $scope.loadMore = function () {
         if (diaryResource.page.meta && diaryResource.page.meta.next) {
             diaryResource.page.next().then(
                 function (result) {
-                    console.log(result);
                     nextPages(result);
                 }, function (error) {
                     console.log(error);
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('network');});
-                });
+                }
+            ).finally(function() {
+//                 $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        } else {
+            $scope.$broadcast('scroll.infiniteScrollComplete');
         }
-        $scope.$broadcast('scroll.infiniteScrollComplete');
     };
-//     $ionicLoading.h  ide();
 }]);

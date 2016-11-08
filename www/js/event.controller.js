@@ -80,7 +80,7 @@ angular.module('woozup.controllers')
             for (var i = 0; i < $scope.friends.length; i++) {
                 var item = $scope.friends[i];
                 if (item.checked) {
-                    $scope.invitees.push(item.resource_uri);
+                    $scope.invitees.push(item.id);
                 };
             };
         };

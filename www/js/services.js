@@ -80,14 +80,6 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             $http.post(apiUrl + 'user/reject/' + userId + '/');
         };
     }])
-.factory('sortContacts', ['$http', 'apiUrl', 'UserData',
-    function ($http, apiUrl, UserData) {
-        "use strict";
-        return function (contacts) {
-            $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
-            $http.post(apiUrl + 'contact/sort/', contacts);
-        };
-    }])
 .factory('logout', ['$http', 'apiUrl', 'UserData',
     function ($http, apiUrl, UserData) {
         "use strict";
@@ -111,47 +103,47 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             $http.post(apiUrl + 'auth/reset_password/', data);
         };
     }])
-.factory('EventData', function () {
-    "use strict";
-    var data = {};
-    return {
-        setWhat: function (id) {
-            data.what = id;
-        },
-        getWhat: function () {
-            return data.what;
-        },
-        setWhen: function (datetime) {
-            data.when = datetime;
-        },
-        getWhen: function () {
-            return data.when;
-        },
-        setWho: function (invitees) {
-            data.who = invitees;
-        },
-        getWho: function () {
-            return data.who;
-        },
-        setPlace: function (name, id) {
-            data.location_name = name;
-            data.location_id = id;
-        },
-        setAddress: function (address, lat, lng) {
-            data.location_address = address;
-            data.location_lat = lat;
-            data.location_lng = lng;
-        },
-        getWhere: function () {
-            return {'name' : data.location_name,
-                    'address': data.location_address,
-                    'id': data.location_id,
-                    'lat': data.location_lat,
-                    'lng': data.location_lng
-            };
-        }
-    };
-})
+// .factory('EventData', function () {
+//     "use strict";
+//     var data = {};
+//     return {
+//         setWhat: function (id) {
+//             data.what = id;
+//         },
+//         getWhat: function () {
+//             return data.what;
+//         },
+//         setWhen: function (datetime) {
+//             data.when = datetime;
+//         },
+//         getWhen: function () {
+//             return data.when;
+//         },
+//         setWho: function (invitees) {
+//             data.who = invitees;
+//         },
+//         getWho: function () {
+//             return data.who;
+//         },
+//         setPlace: function (name, id) {
+//             data.location_name = name;
+//             data.location_id = id;
+//         },
+//         setAddress: function (address, lat, lng) {
+//             data.location_address = address;
+//             data.location_lat = lat;
+//             data.location_lng = lng;
+//         },
+//         getWhere: function () {
+//             return {'name' : data.location_name,
+//                     'address': data.location_address,
+//                     'id': data.location_id,
+//                     'lat': data.location_lat,
+//                     'lng': data.location_lng
+//             };
+//         }
+//     };
+// })
 .factory('UserData', function () {
     "use strict";
     var data = {};
@@ -602,16 +594,3 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             }
         };
     }]);
-// Race condition found when trying to use $ionicPlatform.ready in app.js and calling register to display id in AppCtrl.
-// Implementing it here as a factory with promises to ensure register function is called before trying to display the id.
-//     .factory(("ionPlatform"), function( $q ){
-//         var ready = $q.defer();
-//
-//         ionic.Platform.ready(function( device ){
-//             ready.resolve( device );
-//         });
-//
-//         return {
-//             ready: ready.promise
-//         }
-//     })

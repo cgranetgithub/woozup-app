@@ -1,6 +1,6 @@
 angular.module('woozup.controllers')
 
-.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', 'sortContacts', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, sortContacts, $scope, $state, UserData, pushNotifReg, $ionicHistory) {
+.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, $scope, $state, UserData, pushNotifReg, $ionicHistory) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,
@@ -56,7 +56,10 @@ angular.module('woozup.controllers')
             .success(function () {
                 $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
                 pushNotifReg(UserData.getNotifData());
-                findContacts(sortContacts);
+//                 findContacts(sortContacts);
+                $scope.registered = false;
+                $scope.newNumber = false;
+                $scope.validCode = false;
                 $state.go('tab.home');
                 $ionicLoading.hide();
             }).error(function () {
@@ -100,7 +103,7 @@ angular.module('woozup.controllers')
             .success(function () {
                 $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
                 pushNotifReg(UserData.getNotifData());
-                findContacts(sortContacts);
+//                 findContacts(sortContacts);
                 $state.go('picture');
                 $ionicLoading.hide();
             }).error(function (err) {
@@ -138,7 +141,7 @@ angular.module('woozup.controllers')
                 .success(function () {
                     $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
                     pushNotifReg(UserData.getNotifData());
-                    findContacts(sortContacts);
+//                     findContacts(sortContacts);
                     $state.go('tab.home');
                 }).error(function () {
                     $ionicPopup.alert({
@@ -160,7 +163,7 @@ angular.module('woozup.controllers')
         $ionicLoading.hide();
 }])
 
-.controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService', 'sortContacts', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', function ($tastypie, $ionicLoading, AuthService, sortContacts, $state, UserData, pushNotifReg, $ionicHistory) {
+.controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', function ($tastypie, $ionicLoading, AuthService, $state, UserData, pushNotifReg, $ionicHistory) {
     "use strict";
     $ionicLoading.show({template: "Vérification de ton compte"});
     $ionicHistory.nextViewOptions({
@@ -173,7 +176,7 @@ angular.module('woozup.controllers')
             $tastypie.setAuth(UserData.getUsername(),
                                 UserData.getApiKey());
             pushNotifReg(UserData.getNotifData());
-            findContacts(sortContacts);
+//             findContacts(sortContacts);
             $state.go('tab.home');
             $ionicLoading.hide();
         })

@@ -10,6 +10,7 @@
                 Lancer une invitation
             </a>
         </div>
+        <ion-refresher pulling-text="Mise à jour" on-refresh="load()"></ion-refresher>
         <ion-list>
             <event-list events="events"></event-list>
         </ion-list>

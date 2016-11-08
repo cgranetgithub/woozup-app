@@ -3,12 +3,13 @@
 
 angular.module('woozup.controllers')
 
-.controller('FindMoreFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', '$ionicHistory', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService, $ionicHistory) {
+.controller('FindMoreFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', '$ionicHistory', 'sortContacts', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService, $ionicHistory, sortContacts) {
     "use strict";
     // verify authentication
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
-    $ionicLoading.show({template: "Chargement"});
+//     $ionicLoading.show({template: "Chargement"});
+    sortContacts();
     $scope.title = "Suggestions";
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
@@ -35,11 +36,11 @@ angular.module('woozup.controllers')
                             $scope.friends.push(arrayOfResults[1].objects[i]);
                         }
                     }
-                    $ionicLoading.hide();
+//                     $ionicLoading.hide();
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 }, function (arrayOfErrors) {
                     console.log(arrayOfErrors);
-                    $ionicLoading.hide();
+//                     $ionicLoading.hide();
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('network');});

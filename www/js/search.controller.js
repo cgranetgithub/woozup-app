@@ -3,11 +3,12 @@
 
 angular.module('woozup.controllers')
 
-.controller('SearchCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService) {
+.controller('SearchCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', 'sortContacts', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService, sortContacts) {
     "use strict";
     // verify authentication
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
+    sortContacts();
     $scope.users = [];
     $scope.search = '';
     var usersResource,
@@ -29,21 +30,21 @@ angular.module('woozup.controllers')
 //         nextPages(usersResource.objects.$find());
         usersResource.objects.$find().then(
             function (result) {
+                $scope.users = [];
                 nextPages(result);
-                $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
             }, function (error) {
                 console.log(error);
-                $ionicLoading.hide();
                 // verify authentication
                 AuthService.checkUserAuth().success()
                     .error(function () {$state.go('network');});
             }
-        );
+        ).finally(function() {
+//             $ionicLoading.hide();
+//             $scope.$broadcast('scroll.refreshComplete');
+        });
     };
     $scope.onSearchChange('');
     $scope.loadMore = function () {
-        var nextUserPage = null;
         if (usersResource && usersResource.page.meta && usersResource.page.meta.next) {
             usersResource.page.next().then(
                 function (result) {
@@ -53,8 +54,13 @@ angular.module('woozup.controllers')
                     // verify authentication
                     AuthService.checkUserAuth().success()
                         .error(function () {$state.go('network');});
-                });
+                }
+            ).finally(function() {
+//                 $ionicLoading.hide();
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        } else {
+            $scope.$broadcast('scroll.infiniteScrollComplete');
         }
-        $scope.$broadcast('scroll.infiniteScrollComplete');
     };
 }]);

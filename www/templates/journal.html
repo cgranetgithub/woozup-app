@@ -6,6 +6,7 @@
 <ion-tab title="MES AMIS" >
     <ion-nav-view name="tab-tab1">
         <ion-content ng-controller="JournalFriendCtrl">
+            <ion-refresher pulling-text="Mise à jour" on-refresh="load()"></ion-refresher>
             <ion-list>
                 <record-list records="records"></record-list>
             </ion-list>
@@ -19,6 +20,7 @@
 <ion-tab title="MOI">
     <ion-nav-view name="tab-tab2">
         <ion-content ng-controller="PendingFriendsCtrl">
+            <ion-refresher pulling-text="Mise à jour" on-refresh="onSearchChange('')"></ion-refresher>
             <ion-list>
                 <user-list displaybutton=true users="friends"></user-list>
             </ion-list>

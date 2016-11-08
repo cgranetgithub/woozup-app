@@ -2,7 +2,7 @@
 /*global angular, cordova, StatusBar, ContactFindOptions, facebookConnectPlugin*/
 
 var gps_in_progress = false;
-var findContacts = null;
+// var findContacts = null;
 
 angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap', 'ngMap', 'woozup.services'])
 
@@ -260,59 +260,3 @@ angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngRe
 //                 rejectFriend(friend.user.id);
 //             };
 //         }]);
-
-
-findContacts = function(sortContacts) {
-    "use strict";
-    var options,
-        filter = ["displayName", "name"],
-        lastCheck, //window.localStorage.contact_sync,
-        curDate = new Date();
-    if (!navigator.contacts) { return; }
-//                     if (lastCheck && (curDate.getTime() / 1000) - lastCheck < 7 * 3600 * 24) {
-//                         return;
-//                     }
-    options = new ContactFindOptions();
-    options.filter = "";
-    options.multiple = true;
-    navigator.contacts.find(filter, function (contacts) {
-        if (contacts === null) {
-            console.log("No contact retrieved");
-            return;
-        }
-        var stuff = [],
-            helper = function (tab, k) {
-                var t = [], i;
-                k = k || "value";
-                if (!tab) { return t; }
-                for (i = 0; i < tab.length; i += 1) {
-                    t.push(tab[i][k]);
-                }
-                return t;
-            };
-        contacts.forEach(function (entry) {
-            if (!entry.phoneNumbers || !entry.phoneNumbers.length) {
-//                || !entry.emails || !entry.emails.length) {
-//                 console.log("skipping " + entry.name.formatted);
-                return;
-            }
-
-            stuff.push({
-                'name': entry.name.formatted,
-//                 'emails': helper(entry.emails).join(', '),
-                'numbers': helper(entry.phoneNumbers).join(', '),
-                'photo': helper(entry.photos).join(', '),
-            });
-        });
-        // send to server by chunk
-        var i, j, temparray, chunk = 30;
-        for (i=0, j=stuff.length; i<j; i+=chunk) {
-            temparray = stuff.slice(i,i+chunk);
-            sortContacts(temparray);
-        }
-    }, function () {
-        // an error has occured, try to resync next day
-        window.localStorage.contact_sync = curDate - 6 * 3600 * 24;
-        console.log("Error");
-    }, options);
-};

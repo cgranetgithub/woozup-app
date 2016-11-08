@@ -27,6 +27,9 @@
 .grey {
     color: grey;
 }
+h1, h2, h3, h4, p, a {
+    color: dimgrey;
+}
 /* REGISTRATION SCREENS */
 .registration {
     padding: 30px;
