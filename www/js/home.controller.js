@@ -1,7 +1,7 @@
 /*jslint browser: true, devel: true, maxerr: 999, white: true, vars: true, newcap: true*/
 /*global angular*/
 angular.module('woozup.controllers')
-.controller('HomeCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService) {
+.controller('HomeCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', 'UserData', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService, UserData) {
     "use strict";
     // verify authentication
     AuthService.checkUserAuth()
@@ -12,12 +12,27 @@ angular.module('woozup.controllers')
     $scope.findMoreFriends = function() {
         $state.go('findMoreFriends');
     };
+    $scope.userid = UserData.getUserId();
     var today = new Date(), eventsResource,
         nextPages = function (result) {
-                var i;
+                var i, j, event;
                 if (result) {
                     for (i = 0; i < result.objects.length; i += 1) {
-                        $scope.events.push(result.objects[i]);
+                        event = result.objects[i];
+                        event.ownership = false;
+                        if (event.owner.id == $scope.userid) {
+                            event.ownership = true;
+                        }
+                        j = 0;
+                        event.participate = false;
+                        while (event.participants[j]) {
+                            if (event.participants[j].id == $scope.userid) {
+                                event.participate = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        $scope.events.push(event);
                     }
                 }
             };

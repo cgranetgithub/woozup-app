@@ -1,12 +1,3 @@
-<!--<ion-nav-bar>
-    <ion-nav-buttons side="left">
-        <button class="button back-button buttons button-clear header-item"
-                ng-click="goBackAction()">
-            <i class="icon ion-chevron-left"></i>
-            <span class="back-text"></span>
-        </button>
-    </ion-nav-buttons>
-</ion-nav-bar>-->
 <ion-view view-title={{event.event_type.name}}>
     <ion-nav-buttons side="left">
         <button class="button button-clear" ng-click="goBackAction()">
@@ -26,21 +17,18 @@
                     <h2 ng-if=event.canceled><s>{{event.name}}</s> (annulé)</h2>
                     <p>{{event.start | date : 'EEEE d MMMM à H:mm'}}</p>
                     <p>{{event.location_address}}</p>
-                <p ng-if="event.participants.length!=0">avec</p>
-                <ion-list>
-                    <user-list users="event.participants" displaybutton=false>
-                    </user-list>
-                </ion-list>
+            </div>
+        </div>
+        <div class="row" ng-if="event.participants.length!=0">
+            <div class="col col-10  col-center">
+                <p class="text-center">avec</p>
+            </div>
+            <div class="col">
+                <user-list small="true" users="event.participants" displaybutton=false>
             </div>
         </div>
         <button ng-if=!event.canceled class="button button-block button-assertive button-outline" ng-click="buttonAction(event.id)">
             {{buttonTitle}}
         </button>
     </ion-content>
-<!--<ion-footer-bar>
-    <button class="button button-energized footer-button" ng-click="buttonAction(event.id)">{{buttonTitle}}</button>
-</ion-footer-bar>    -->
-<!--    <ion-footer-bar class="bar-balanced" ng-click="buttonAction(event.id)">
-        <h1 class="title">{{buttonTitle}}</h1>
-    </ion-footer-bar>-->
 </ion-view>

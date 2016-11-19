@@ -1,0 +1,14 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <button class="button button-stable button-outline" ng-click="closeModal()">
+            <i class="icon ion-close-circled"></i>
+        </button>
+        <h1 class="title">Modifier mon profil</h1>
+        <button class="button button-positive button-outline" ng-click="save()">
+            <i class="icon ion-checkmark-circled"></i>
+        </button>
+    </ion-header-bar>
+    <ion-content>
+        <profile-form first-name="firstname" image="image" name-update="nameUpdate(firstName)" image-update="imageUpdate(image)"></profile-form>
+    </ion-content>
+</ion-modal-view>

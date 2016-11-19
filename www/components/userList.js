@@ -18,7 +18,8 @@ angular.module('woozup').component('userList', {
     controller: UserListController,
     bindings: {
         users: '<',
-        displaybutton: '<'
+        displaybutton: '<',
+        small: '<'
     }
 });
 

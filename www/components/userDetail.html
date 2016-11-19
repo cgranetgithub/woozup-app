@@ -3,14 +3,20 @@
         <img ng-if="$ctrl.user.profile.image" ng-src={{$ctrl.user.profile.image}}>
         <img ng-if="!$ctrl.user.profile.image" ng-src="img/round58-grey.png">
     </div>
-    <div class="col">
+    <div class="col col-center">
         <div class="row no-padding-margin">
             <div class="col no-padding-margin">
-                <p><strong>{{ $ctrl.events.length }}</strong></p>
+                <p>
+                    <strong ng-if="$ctrl.events.length">{{ $ctrl.events.length }}</strong>
+                    <ion-spinner ng-if="!$ctrl.events.length" icon="ripple"></ion-spinner>
+                </p>
                 <p class="grey">évènements</p>
             </div>
             <div class="col no-padding-margin">
-                <p><strong>{{ $ctrl.friends.length }}</strong></p>
+                <p>
+                    <strong ng-if="$ctrl.friends.length">{{ $ctrl.friends.length }}</strong>
+                    <ion-spinner ng-if="!$ctrl.friends.length" icon="ripple"></ion-spinner>
+                </p>
                 <p class="grey">amis</p>
             </div>
 <!--                    <div class="col no-padding-margin">
@@ -18,10 +24,18 @@
                 <p class="grey">followers</p>
             </div>-->
         </div>
-        <div class="row no-padding-margin">
-            <div class="col no-padding-margin">
-                <button class="button button-small button-block">Modifier mon profil</button>
-            </div>
-        </div>
+<!--        <div class="row no-padding-margin">
+            <button class="button button-small button-block button-positive button-outline" ng-if="$ctrl.showButton" ng-click="$ctrl.buttonAction($ctrl.userId)">{{$ctrl.buttonTitle}}</button>
+        </div>-->
     </div>
 </div>
+<!--<div class="row">
+    <div class="col">
+        <p class="text-center">MES INVITATIONS</p>
+        <ion-refresher pulling-text="Mise à jour" on-refresh="load()"></ion-refresher>
+        <ion-list>
+            <event-list events="events" userid="userid" reload="load"></event-list>
+        </ion-list>
+        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+    </div>
+</div>-->

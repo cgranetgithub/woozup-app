@@ -1,0 +1,10 @@
+<label class="item item-input">
+    <input type="text" ng-model="$ctrl.firstName" ng-change="$ctrl.nameUpdate({'firstName': $ctrl.firstName})" placeholder="Nom complet">
+</label>
+<!--            <label class="item item-input">
+    <input type="text" ng-model="data.last_name" placeholder="Nom">
+</label>-->
+<div class="profilePicture">
+    <img ng-if="!$ctrl.image" src="img/round58-grey.png" ng-click="$ctrl.openModal()"></img>
+    <img ng-if="$ctrl.image" ng-src="{{$ctrl.image}}" ng-click="$ctrl.openModal()"></img>
+</div>

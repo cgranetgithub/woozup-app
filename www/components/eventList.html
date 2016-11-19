@@ -1,4 +1,4 @@
-<ion-item class="item item-avatar" ng-repeat="event in $ctrl.events track by $index" href="#/event/{{event.id}}">
+<ion-item class="item item-avatar" ng-repeat="event in $ctrl.events track by $index" ng-click="$ctrl.editEvent(event)">
     <img ng-if="event.owner.profile.image" ng-src={{event.owner.profile.image}}>
     <img ng-if="!event.owner.profile.image" ng-src="img/round58-grey.png">
 
@@ -7,7 +7,11 @@
 <!--                <h2 ng-if=event.canceled class="canceled-title"><strong>{{event.owner.first_name}} {{event.owner.last_name}}</strong> - {{event.name}}</h2>-->
     <p><b ng-if="event.canceled" class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
     <p ng-if="event.participants.length>0">avec {{event.participants.length}} autre personne</p>
-    <button class="button button-clear button-stable icon ion-android-hand"></button>
-    <button class="button button-clear button-stable icon ion-chatbubbles"></button>
-<!--     <button class="button button-clear button-stable icon ion-forward"></button> -->
+    <div ng-if="!event.canceled">
+        <button ng-if="event.ownership" class="button button-clear button-assertive icon ion-android-cancel" ng-click="$ctrl.cancelEvent(event); $event.stopPropagation();" stop-event="click"></button>
+        <button ng-if="!event.ownership && event.participate" class="button button-clear button-positive icon ion-android-hand" ng-click="$ctrl.leaveEvent(event); $event.stopPropagation();" stop-event="click"></button>
+        <button ng-if="!event.ownership && !event.participate" class="button button-clear button-stable icon ion-android-hand" ng-click="$ctrl.joinEvent(event); $event.stopPropagation();" stop-event="click"></button>
+        <button class="button button-clear button-stable icon ion-chatbubbles" ng-click="$ctrl.commentEvent(event); $event.stopPropagation();" stop-event="click"></button>
+    <!--     <button class="button button-clear button-stable icon ion-forward"></button> -->
+    </div>
 </ion-item>

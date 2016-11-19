@@ -3,8 +3,13 @@
 
 angular.module('woozup.controllers')
 
-.controller('UserCtrl', ['$tastypieResource', '$ionicHistory', '$ionicLoading', '$scope', '$stateParams', 'AuthService', '$state', function ($tastypieResource, $ionicHistory, $ionicLoading, $scope, $stateParams, AuthService, $state) {
+.controller('UserCtrl', ['$tastypieResource', '$ionicHistory', '$ionicLoading', '$scope', '$stateParams', 'AuthService', '$state', 'UserData', function ($tastypieResource, $ionicHistory, $ionicLoading, $scope, $stateParams, AuthService, $state, UserData) {
     "use strict";
+    var myId = UserData.getUserId();
+    $scope.userId = parseInt($stateParams.userId, 10);
+    if ($scope.userId == myId) {
+        $state.go('tab.account');
+    };
     $ionicLoading.show({template: "Chargement"});
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
@@ -14,7 +19,7 @@ angular.module('woozup.controllers')
         }
     };
     var userresource = new $tastypieResource('user', {});
-    userresource.objects.$get({id: parseInt($stateParams.userId, 10)}).then(
+    userresource.objects.$get({id: $scope.userId}).then(
         function (result) {
             $scope.user = result;
             $ionicLoading.hide();
