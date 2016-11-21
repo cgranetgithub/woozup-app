@@ -20,10 +20,11 @@ angular.module('woozup.controllers')
 
 .controller('ProfileCtrl', ['$tastypieResource', '$scope', 'AuthService', 'UserData', 'ProfileService', '$state', '$ionicModal', 'CameraService', function ($tastypieResource, $scope, AuthService, UserData, ProfileService, $state, $ionicModal, CameraService) {
     "use strict";
+    $scope.userId = UserData.getUserId();
     var newname, newimage;
     $scope.loadProfile = function() {
         $scope.userresource = new $tastypieResource('user', {});
-        $scope.userresource.objects.$get({id: UserData.getUserId()}).then(
+        $scope.userresource.objects.$get({id: $scope.userId}).then(
             function (result) {
                 $scope.user = result;
                 $scope.firstname = result.first_name;
@@ -39,14 +40,14 @@ angular.module('woozup.controllers')
         });
     };
     $scope.loadProfile();
-    $scope.events = [];
+    $scope.events = null;
     var eventsResource = new $tastypieResource('events/mine');
     eventsResource.objects.$find().then(
         function (result) {
             $scope.events = result.objects;
         }
     );
-    $scope.friends = [];
+    $scope.friends = null;
     var friendsResource = new $tastypieResource('friends/mine');
     friendsResource.objects.$find().then(
         function (result) {

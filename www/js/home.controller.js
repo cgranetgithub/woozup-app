@@ -41,6 +41,7 @@ angular.module('woozup.controllers')
     eventsResource = new $tastypieResource('events/all',
                                     {order_by: 'start', start__gte: today});
     $scope.load = function () {
+        $scope.events = null;
         eventsResource.objects.$find().then(
             function (result) {
                 $scope.events = [];

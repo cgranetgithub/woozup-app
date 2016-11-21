@@ -7,15 +7,15 @@
         <div class="row no-padding-margin">
             <div class="col no-padding-margin">
                 <p>
-                    <strong ng-if="$ctrl.events.length">{{ $ctrl.events.length }}</strong>
-                    <ion-spinner ng-if="!$ctrl.events.length" icon="ripple"></ion-spinner>
+                    <strong ng-if="$ctrl.events">{{ $ctrl.events }}</strong>
+                    <ion-spinner ng-if="!$ctrl.events" icon="ripple"></ion-spinner>
                 </p>
                 <p class="grey">évènements</p>
             </div>
             <div class="col no-padding-margin">
                 <p>
-                    <strong ng-if="$ctrl.friends.length">{{ $ctrl.friends.length }}</strong>
-                    <ion-spinner ng-if="!$ctrl.friends.length" icon="ripple"></ion-spinner>
+                    <strong ng-if="$ctrl.friends">{{ $ctrl.friends }}</strong>
+                    <ion-spinner ng-if="!$ctrl.friends" icon="ripple"></ion-spinner>
                 </p>
                 <p class="grey">amis</p>
             </div>

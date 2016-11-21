@@ -66,7 +66,7 @@ angular.module('woozup.controllers')
         .error(function () {$state.go('network');});
 //     $ionicLoading.show({template: "Chargement"});
 //     $scope.title = "Mes sorties";
-    $scope.records = [];
+    $scope.records = null;
     var nextPages = function (result) {
         var i;
         if (result) {
@@ -77,6 +77,7 @@ angular.module('woozup.controllers')
     };
     var diaryResource = new $tastypieResource('record');
     $scope.load = function() {
+        $scope.records = null;
         diaryResource.objects.$find().then(
             function (result) {
                 $scope.records = [];

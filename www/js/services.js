@@ -59,16 +59,6 @@ angular.module('woozup.services', ['ngResourceTastypie'])
         $http.post(apiUrl + 'user/reject/' + userId + '/');
     };
 }])
-// .factory('getLink', ['$http', 'apiUrl', 'UserData', function ($http, apiUrl, UserData) {
-//     "use strict";
-//     return function (userId) {
-//         $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
-//         $http.get(apiUrl + 'link/withuser/' + userId + '/').then(
-//             function(result) {console.log(result);},
-//             function(error) {console.log(error);}
-//         );
-//     };
-// }])
 .factory('logout', ['$http', 'apiUrl', 'UserData', function ($http, apiUrl, UserData) {
     "use strict";
     return function () {
@@ -159,6 +149,57 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 apiKey   = $localstorage.get('apikey');
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
             $http.get(apiUrl + 'link/withuser/' + userId + '/')
+                .then(function (result) {
+                    deferred.resolve(result);
+                }, function (error) {
+                    console.log(error);
+                    deferred.reject('failed');
+                });
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+            return promise;
+        }
+    };
+}])
+.service('UserService', ['$q', '$http', '$localstorage', 'apiUrl', function ($q, $http, $localstorage, apiUrl) {
+    "use strict";
+    return {
+        getFriendsCount: function (userId) {
+            var deferred = $q.defer(),
+                promise  = deferred.promise,
+                userName = $localstorage.get('username'),
+                apiKey   = $localstorage.get('apikey');
+            $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+            $http.get(apiUrl + 'user/friendscount/' + userId + '/')
+                .then(function (result) {
+                    deferred.resolve(result);
+                }, function (error) {
+                    console.log(error);
+                    deferred.reject('failed');
+                });
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+            return promise;
+        },
+        getEventsCount: function (userId) {
+            var deferred = $q.defer(),
+                promise  = deferred.promise,
+                userName = $localstorage.get('username'),
+                apiKey   = $localstorage.get('apikey');
+            $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
+            $http.get(apiUrl + 'user/eventscount/' + userId + '/')
                 .then(function (result) {
                     deferred.resolve(result);
                 }, function (error) {
@@ -536,6 +577,35 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             var deferred = $q.defer(),
                 promise = deferred.promise,
                 command = 'auth/is_registered/';
+            $http.post(apiUrl + command, authData
+                ).then(function (response) {
+                deferred.resolve('Welcome!');
+            }, function (error) {
+                console.log(error);
+                if (error.data) {
+                    if (error.data.reason) {
+                        console.log("server return error:", error.data.reason);
+                    }
+                    if (error.data.code) {
+                        deferred.reject(error.data.code);
+                    }
+                }
+                deferred.reject(0);
+            });
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+            return promise;
+        },
+        resetPassword: function (authData) {
+            var deferred = $q.defer(),
+                promise = deferred.promise,
+                command = 'auth/reset_password/';
             $http.post(apiUrl + command, authData
                 ).then(function (response) {
                 deferred.resolve('Welcome!');

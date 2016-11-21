@@ -3,19 +3,23 @@
 <!-- get number first -->
         <div ng-if="!registered && !newNumber">
             <h1 class="woozup-title white text-center">Woozup</h1>
-<!--             <h3 class="text-center woozup-blue">TELEPHONE</h3> -->
             <intlpn ng-model="data.number" placeholder="Téléphone" default-country="fr" box-header-class="bar-light" box-header-title="Pays" search-placeholder="France" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
             <button class="button button-block button-light button-large button-outline" ng-click="check_number()">Suivant</button>
         </div>
 <!-- verify number with validation code -->
         <div ng-if="!registered && newNumber && !validCode">
             <h1 class="white text-center">Confirmation du numéro</h1>
-            <p class="note">Nous venons d'envoyer un code de vérification au {{data.number}} (il devrait arriver dans quelques secondes)</p>
+            <p class="note">Nous venons d'envoyer un code de vérification au {{data.number}}<br>Il devrait arriver dans quelques secondes</p>
+            <br>
             <label class="item item-input">
-<!--                 <span class="input-label">Code de confirmation</span> -->
                 <input type="number" ng-model="data.code" placeholder="CODE">
             </label>
             <button class="button button-block button-light button-large button-outline" ng-click="verif_code()">Valider</button>
+            <div class="down">
+                <p class="note">Code pas encore reçu ?<p>
+                <p class="note" ng-if="hideCodeButton">Tu pourras en demander un autre dans {{timer}}s</p>
+                <button ng-if="!hideCodeButton" class="text-center button button-light button-outline" ng-click="get_code()">Me renvoyer un code</button>
+            </div>
         </div>
 <!-- register, choices -->
         <div ng-if="!registered && newNumber && validCode">
@@ -37,14 +41,32 @@
             <br>
         </div>
 <!-- login -->
-        <div ng-if="registered">
+        <div ng-if="registered && !wantResetPassword">
             <h1 class="white text-center">Mot de passe</h1>
             <label class="item item-input">
                 <span class="input-label">Mot de passe</span>
                 <input type="password" ng-model="data.password">
             </label>
             <button class="button button-block button-light button-large button-outline" ng-click="login()">OK</button>
-            <a class="note">J'ai oublié mon mot de passe</a>
+            <div class="down">
+                <p class="note" ng-click="forgetPwd()">J'ai oublié mon mot de passe</p>
+            </div>
+        </div>
+<!-- reset password -->
+        <div ng-if="registered && wantResetPassword">
+            <h1 class="white text-center">Définir un nouveau mot de passe</h1>
+            <label class="item item-input">
+                <span class="input-label">Code reçu</span>
+                <input type="number" ng-model="data.code">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Mot de passe</span>
+                <input type="password" ng-model="data.password">
+            </label>
+            <button class="button button-block button-light button-large button-outline" ng-click="resetPassword()">Changer mon mot de passe</button>
+            <div class="down">
+                <p class="note" ng-click="backToStart()">Annuler et revenir au début</p>
+            </div>
         </div>
     </ion-content>
 </ion-view>

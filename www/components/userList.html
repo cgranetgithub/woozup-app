@@ -1,8 +1,14 @@
 <!-- normal list item -->
+<ion-item ng-if="!$ctrl.small && !$ctrl.users" class="text-center">
+    <ion-spinner icon="ripple"></ion-spinner>
+</ion-item>
+
 <ion-item ng-if="!$ctrl.small" class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index" href="#/user/{{user.id}}">
     <img ng-if="user.profile.image" ng-src="{{user.profile.image}}">
     <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
-    <h2>{{user.first_name}} {{user.last_name}}</h2>
+    <div class="item-text-center">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+    </div>
 <!--                 <p>{{user.user.email}}</p> -->
     <div class="buttons">
         <button class="button button-outline button-stable roundbutton" ng-click="$ctrl.noaction(user)" ng-if="$ctrl.displaybutton">

@@ -1,9 +1,15 @@
+<ion-item ng-if="!$ctrl.invites" class="text-center">
+    <ion-spinner icon="ripple"></ion-spinner>
+</ion-item>
+
 <ion-item class="item item-avatar item-button-right" ng-repeat="invite in $ctrl.invites track by $index">
     <img ng-if="invite.photo" ng-src={{invite.photo}}>
     <img ng-if="!invite.photo" src="img/round58-grey.png">
-    <h2>{{invite.name}}</h2>
-    <p>{{invite.numbers}}</p>
-    <p>{{invite.emails}}</p>
+    <div class="item-text-center">
+        <p>{{invite.name}}</p>
+    </div>
+<!--     <p>{{invite.numbers}}</p> -->
+<!--     <p>{{invite.emails}}</p> -->
     <div class="buttons">
         <button class="button button-outline button-stable roundbutton" ng-click="$ctrl.ignore(invite)">
             <i class="icon ion-android-cancel"></i>

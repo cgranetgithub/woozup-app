@@ -1,4 +1,8 @@
-<ion-item class="item item-avatar" ng-repeat="record in $ctrl.records track by $index" href="#/user/{{record.user.id}}">
+<ion-item ng-if="!$ctrl.records" class="text-center">
+    <ion-spinner icon="ripple"></ion-spinner>
+</ion-item>
+
+<ion-item class="item item-avatar item-text-wrap" ng-repeat="record in $ctrl.records track by $index" href="#/user/{{record.user.id}}">
     <img ng-if="record.user.profile.image" ng-src="{{record.user.profile.image}}">
     <img ng-if="!record.user.profile.image" ng-src="img/round58-grey.png">
     <p ng-switch="record.record_type">

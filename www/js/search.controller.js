@@ -9,7 +9,7 @@ angular.module('woozup.controllers')
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
     sortContacts();
-    $scope.users = [];
+    $scope.users = null;
     $scope.search = '';
     var usersResource,
         nextPages = function (usersPage) {
@@ -26,7 +26,7 @@ angular.module('woozup.controllers')
                             order_by: 'first_name',
                             first_name__icontains: word
         });
-        $scope.users = [];
+        $scope.users = null;
 //         nextPages(usersResource.objects.$find());
         usersResource.objects.$find().then(
             function (result) {

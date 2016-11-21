@@ -1,15 +1,53 @@
 angular.module('woozup.controllers')
 
-.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, $scope, $state, UserData, pushNotifReg, $ionicHistory) {
+.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', '$timeout', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, $scope, $state, UserData, pushNotifReg, $ionicHistory, $timeout) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,
         disableBack: true
     });
-    $scope.data = {};
-    $scope.registered = false;
-    $scope.newNumber = false;
-    $scope.validCode = false;
+    $scope.backToStart = function() {
+        $scope.data = {};
+        $scope.wantResetPassword = false;
+        $scope.registered = false;
+        $scope.newNumber = false;
+        $scope.validCode = false;
+    };
+    $scope.backToStart();
+    // Timer (to avoid sending SMS too fast)
+    var mytimeout = null;
+    var onTimeout = function() {
+        if ($scope.timer === 0) {
+            $scope.$broadcast('timer-stopped', 0);
+            $timeout.cancel(mytimeout);
+            return;
+        }
+        $scope.timer--;
+        mytimeout = $timeout(onTimeout, 1000);
+    };
+    var startTimer = function() {
+        $scope.timer = 59;
+        $scope.hideCodeButton = true;
+        mytimeout = $timeout(onTimeout, 1000);
+    };
+    $scope.$on('timer-stopped', function(event, remaining) {
+      if (remaining === 0) {
+        $scope.hideCodeButton = false;
+      }
+    });
+    // get code
+    $scope.get_code = function() {
+        AuthService.getCode({'phone_number': $scope.data.number}, false)
+        .success(function () {
+            $scope.newNumber = true;
+            startTimer();
+        }).error(function () {
+            var alertPopup = $ionicPopup.alert({
+                title: "Numéro invalide",
+                template: "Ce numéro de téléphone n'a pas l'air correct."
+            });
+        });
+    };
     // check number
     $scope.check_number = function () {
         $ionicLoading.show();
@@ -18,18 +56,8 @@ angular.module('woozup.controllers')
                 $scope.registered = true;
                 $ionicLoading.hide();
             }).error(function () {
-                // get code
-                AuthService.getCode({'phone_number': $scope.data.number}, false)
-                    .success(function () {
-                        $scope.newNumber = true;
-                        $ionicLoading.hide();
-                    }).error(function () {
-                        $ionicLoading.hide();
-                        var alertPopup = $ionicPopup.alert({
-                            title: "Numéro invalide",
-                            template: "Ce numéro de téléphone n'a pas l'air correct."
-                        });
-                    });
+                $scope.get_code();
+                $ionicLoading.hide();
             });
     };
     // verif code
@@ -67,6 +95,46 @@ angular.module('woozup.controllers')
                 var alertPopup = $ionicPopup.alert({
                     title: "Problème de connexion",
                     template: "Vérifie ton login / mot de passe"
+                });
+            });
+    };
+    // resetPwd
+    $scope.forgetPwd = function() {
+        var resetPopup = $ionicPopup.confirm({
+            template: "Nous allons t'envoyer un code par SMS qui te permettra de définir un nouveau mot de passe",
+            title: 'Mot de passe oublié',
+//                 subTitle: 'Please use normal things',
+            scope: $scope,
+            buttons: [
+                {   text: 'Annuler' },
+                {   text: '<b>OK</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                            $scope.wantResetPassword = true;
+                            $scope.get_code();
+                    }
+                }
+            ]
+        });
+    };
+    $scope.resetPassword = function () {
+        $ionicLoading.show();
+        var authData = {'phone_number':$scope.data.number,
+                        'code': $scope.data.code,
+                        'password': $scope.data.password};
+        AuthService.resetPassword(authData)
+            .success(function () {
+                $ionicLoading.hide();
+                var alertPopup = $ionicPopup.alert({
+                    title: "Well done!",
+                    template: "Ton mot de passe a bien été modifié."
+                });
+                $scope.backToStart();
+            }).error(function () {
+                $ionicLoading.hide();
+                var alertPopup = $ionicPopup.alert({
+                    title: "Code incorrect",
+                    template: "Ce code ne correspond pas à celui que nous avons envoyé."
                 });
             });
     };

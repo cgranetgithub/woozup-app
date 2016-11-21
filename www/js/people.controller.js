@@ -18,8 +18,8 @@ angular.module('woozup.controllers')
             $state.go('tab.home');
         }
     };
-    $scope.invites = [];
-    $scope.friends = [];
+    $scope.invites = null;
+    $scope.friends = null;
     $scope.search = '';
     var invitesResource, friendsResource,
         nextPages = function (invitePage, friendsPage) {
