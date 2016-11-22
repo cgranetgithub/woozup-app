@@ -1,0 +1,1 @@
+Woozup Ionic app - hybrid
