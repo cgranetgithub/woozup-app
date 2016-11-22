@@ -1,8 +1,18 @@
 <ion-view view-title="Lancer une invitation">
   <ion-content class="padding">
-    <button class="button button-block" ng-click="whatModal.show()" ng-model="what">
-        {{what.description}}
-    </button>
+    <div class="row no-padding-margin">
+        <div class="col col-20 no-padding-margin">
+            <button class="button category-button" ng-click="whatModal.show()" ng-model="what" style={{what.style}}>
+                <img ng-src="{{what.icon}}"></img>
+            </button>
+        </div>
+        <div class="col col-center no-padding-margin">
+            <label class="item item-input">
+                <input type="text" placeholder="{{what.name}}"
+                       ng-model="title" ng-change="titleUpdate(title)">
+            </label>
+        </div>
+    </div>
     <button class="button button-block" ng-click="whenModal.show()" ng-model="when">
         Le {{when | date:'EEEE d MMMM à HH:mm'}}
     </button>

@@ -7,10 +7,6 @@ angular.module('woozup.controllers')
     "use strict";
     var myId = UserData.getUserId();
     $scope.userId = parseInt($stateParams.userId, 10);
-    if ($scope.userId == myId) {
-        $state.go('tab.account');
-    };
-    $ionicLoading.show({template: "Chargement"});
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
             $ionicHistory.goBack();
@@ -18,6 +14,13 @@ angular.module('woozup.controllers')
             $state.go('tab.home');
         }
     };
+    if (!$scope.userId) {
+        return;
+    };
+    if ($scope.userId == myId) {
+        $state.go('tab.account');
+    };
+    $ionicLoading.show({template: "Chargement"});
     var userresource = new $tastypieResource('user', {});
     userresource.objects.$get({id: $scope.userId}).then(
         function (result) {

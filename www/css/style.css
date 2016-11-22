@@ -108,8 +108,27 @@ h1, h2, h3, h4, p, a {
     width: 100%;
 }
 /* ========================================= */
-.category {
-    height: 50px;
+.category-grid-item {
+    line-height: 0;
+    padding: 5px 10px;
+    margin: 5px 0 0 5px;
+}
+.category-button {
+    line-height: 0;
+    padding: 5px;
+    margin: 5px 10px 5px 0;
+    max-width: 100px;
+}
+.category-button img {
+    width: 100%;
+}
+.category-grid-item img {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+}
+.category-grid-item span {
+    color: white;
 }
 .button-date {
     width: 66%;

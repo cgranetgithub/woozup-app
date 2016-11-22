@@ -32,6 +32,9 @@ angular.module('woozup.controllers')
         $scope.what = type;
         $scope.whatModal.hide();
     };
+    $scope.titleUpdate = function(title) {
+        $scope.title = title;
+    };
     // WHO ------------------------
     $scope.friends = [];
     $scope.invitees = [];
@@ -80,7 +83,9 @@ angular.module('woozup.controllers')
             for (var i = 0; i < $scope.friends.length; i++) {
                 var item = $scope.friends[i];
                 if (item.checked) {
-                    $scope.invitees.push(item.id);
+                    // hack, to be improve with better API
+                    var resUrl = '/api/v1/user/' + item.id + '/';
+                    $scope.invitees.push(resUrl);
                 };
             };
         };
@@ -168,8 +173,12 @@ angular.module('woozup.controllers')
     $scope.create = function() {
         $ionicLoading.show({template: "Création du rendez-vous"});
         var event = new $tastypieResource('events/mine');
+        var eventName = $scope.what.description;
+        if ($scope.title) {
+            eventName = $scope.title;
+        };
         event.objects.$create({
-            name: $scope.what.description,
+            name: eventName,
             start: $scope.when,
             event_type: $scope.what.resource_uri,
             location_name: $scope.where.name,
@@ -230,7 +239,6 @@ angular.module('woozup.controllers')
     // verify authentication
     AuthService.checkUserAuth().success()
         .error(function () {$state.go('network');});
-    $scope.buttonTitle = "Chargement";
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
             $ionicHistory.goBack();
@@ -242,6 +250,7 @@ angular.module('woozup.controllers')
         loadEvent, leaveAndReload, joinAndReload;
 
         loadEvent = function () {
+            $scope.buttonTitle = null;
             event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
                 function (result) {
                     $scope.event = result;
@@ -270,7 +279,7 @@ angular.module('woozup.controllers')
     //                                 $window.location.reload(true);
                                 };
                             } else {
-                                $scope.buttonTitle = "Je participe";
+                                $scope.buttonTitle = "Je viens";
                                 $scope.buttonAction = function (eventId) {
                                     joinAndReload(eventId);
     //                                 $window.location.reload(true);

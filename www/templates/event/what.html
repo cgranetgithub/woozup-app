@@ -1,23 +1,13 @@
-<!--<ion-view view-title={{title}} class="bgim">
-    <ion-content class="gallery">
-        <br>-->
 <ion-modal-view>
-<!--    <ion-header-bar>
-      <h1 class="title">Quoi ?</h1>
-    </ion-header-bar>-->
-    <ion-content>
-        <ion-list>
-            <ion-item class="text-center" ng-repeat="type in types.page.objects" ng-click="setWhat(type)">
-<!--             <img class="category" ng-src="{{type.icon}}"> -->
-                {{type.description}}
-            </ion-item>
+    <ion-content class="text-center">
+<!--         <ion-list class="text-center"> -->
+            <button class="button category-grid-item"
+                    ng-repeat="type in types.page.objects"
+                    ng-click="setWhat(type)"
+                    item-width="33%" item-height="200px"
+                    style={{type.style}}>
+                <img ng-if="type.icon" ng-src="{{type.icon}}">
+                <span>{{type.short_name}}</span>
+            </button>
     </ion-content>
 </ion-modal-view>
-<!-- <br> -->
-<!--     </ion-content> -->
-<!--     must be out of the content -->
-<!--    <button class="button button-positive bottom-right-button"
-            ui-sref="menu.friends.new">
-        <i class="icon ion-ios-people"></i>
-    </button>
-</ion-view>-->

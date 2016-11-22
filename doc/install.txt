@@ -21,8 +21,9 @@ cordova platform add android
 # use bower to install dependencies from bower.json
 $ bower install
 
-# build resources
+# build resources + add push notif icon android
 ionic resources
+cp -r resources/android/ic_notification/* platforms/android/res/
 
 -------------------------------------------------------
 

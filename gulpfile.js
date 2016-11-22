@@ -50,3 +50,8 @@ gulp.task('git-check', function(done) {
   }
   done();
 });
+
+gulp.task('ic_notification', function() {
+    gulp.src('./resources/android/ic_notification/**')
+        .pipe(gulp.dest('./platforms/android/res'));
+});

@@ -24,7 +24,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
         }
         if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
             var push = PushNotification.init({
-                "android": {"senderID": "496829276290"},
+                "android": {"senderID": "496829276290", "forceShow":true, "sound":true, "vibrate":true, "icon": "ic_stat_android_hand_white"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
                 "windows": {}
             } ),
@@ -67,10 +67,10 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                             $state.go('event', {'eventId': data.additionalData.id});
                             break;
                         case 'friendrequest':
-                            $state.go('friends.pending');
+                            $state.go('user', {'userId': data.additionalData.id});
                             break;
                         case 'friendaccept':
-                            $state.go('friends.my');
+                            $state.go('user', {'userId': data.additionalData.id});
                             break;
                         default:
                             $state.go('checkauth');
@@ -150,7 +150,8 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             cache: false,
             url: '/tab',
             abstract: true,
-            templateUrl: 'templates/tabs.html'
+            templateUrl: 'templates/tabs.html',
+            controller: 'TabCtrl'
         })
         .state('tab.new', {
 //                 cache: false,
@@ -237,7 +238,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
         .state('event', {
             cache: false,
             url: '/event/:eventId',
-            templateUrl: 'templates/event.html',
+            templateUrl: 'templates/event/event.html',
             controller: 'EventCtrl'
         });
     // if none of the above states are matched, use this as the fallback

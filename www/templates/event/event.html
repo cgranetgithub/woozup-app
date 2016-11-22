@@ -20,14 +20,12 @@
             </div>
         </div>
         <div class="row" ng-if="event.participants.length!=0">
-            <div class="col col-10  col-center">
-                <p class="text-center">avec</p>
-            </div>
-            <div class="col">
-                <user-list small="true" users="event.participants" displaybutton=false>
-            </div>
+            <p style="margin:auto;">AVEC</p>
         </div>
-        <button ng-if=!event.canceled class="button button-block button-assertive button-outline" ng-click="buttonAction(event.id)">
+        <div class="row" ng-if="event.participants.length!=0">
+            <user-list small="true" users="event.participants" displaybutton=false>
+        </div>
+        <button ng-if="!event.canceled && buttonTitle" class="button button-block button-assertive button-outline" ng-click="buttonAction(event.id)">
             {{buttonTitle}}
         </button>
     </ion-content>

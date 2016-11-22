@@ -1,7 +1,7 @@
 rm woozup.apk
 echo "Setting real URL"
 cat <<EOF >www/js/url.js
-var backend_url = "http://www.woozup.social/";
+var backend_url = "http://woozup.herokuapp.com/";
 EOF
 cordova plugin rm cordova-plugin-console
 cordova build --release android

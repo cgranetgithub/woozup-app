@@ -4,7 +4,6 @@ function InviteButtonController(LinkService, acceptFriend, rejectFriend) {
     LinkService.getLink(ctrl.userId).then(
         function(result) {
             var link = angular.fromJson(result['data']);
-            console.log(link);
             if (link) {
                 if (link.receiver.id == ctrl.userId) {
                     myStatus = link.sender_status;
