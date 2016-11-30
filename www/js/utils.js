@@ -38,7 +38,6 @@ angular.module('woozup.services')
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
             for (i=0, j=stuff.length; i<j; i+=chunk) {
                 temparray = stuff.slice(i,i+chunk);
-                console.log(temparray);
                 $http.post(apiUrl + 'contact/sort/', temparray);
             }
         };

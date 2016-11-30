@@ -4,13 +4,16 @@ angular.module('woozup.controllers')
 .controller('HomeCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', 'UserData', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService, UserData) {
     "use strict";
     // verify authentication
-    AuthService.checkUserAuth()
-        .success()
-        .error(function () {$state.go('network');});
+//     AuthService.checkUserAuth()
+//         .success()
+//         .error(function () {$state.go('network');});
 //     $ionicLoading.show({template: "Chargement"});
 //     $scope.title = "Mes sorties";
     $scope.findMoreFriends = function() {
         $state.go('findMoreFriends');
+    };
+    $scope.createEvent = function() {
+        $state.go('tab.new');
     };
     $scope.userid = UserData.getUserId();
     var today = new Date(), eventsResource,
@@ -36,10 +39,10 @@ angular.module('woozup.controllers')
                     }
                 }
             };
-    today.setHours(0);
+    today.setHours(today.getUTCHours()-2);
     today.setMinutes(0);
     eventsResource = new $tastypieResource('events/all',
-                                    {order_by: 'start', start__gte: today});
+                        {order_by: 'start', start__gte: today, 'canceled': false});
     $scope.load = function () {
         $scope.events = null;
         eventsResource.objects.$find().then(

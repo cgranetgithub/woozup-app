@@ -6,9 +6,9 @@ angular.module('woozup.controllers')
 .controller('SearchCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', 'sortContacts', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService, sortContacts) {
     "use strict";
     // verify authentication
-    AuthService.checkUserAuth().success()
-        .error(function () {$state.go('network');});
-    sortContacts();
+//     AuthService.checkUserAuth().success()
+//         .error(function () {$state.go('network');});
+//     sortContacts();
     $scope.users = null;
     $scope.search = '';
     var usersResource,

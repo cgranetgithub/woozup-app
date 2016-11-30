@@ -5,8 +5,8 @@ angular.module('woozup.controllers')
 .controller('PendingFriendsCtrl', ['$tastypieResource', '$ionicLoading', 'acceptFriend', 'rejectFriend', '$scope', '$state', 'AuthService', function ($tastypieResource, $ionicLoading, acceptFriend, rejectFriend, $scope, $state, AuthService) {
     "use strict";
     // verify authentication
-    AuthService.checkUserAuth().success()
-        .error(function () {$state.go('network');});
+//     AuthService.checkUserAuth().success()
+//         .error(function () {$state.go('network');});
 //     $ionicLoading.show({template: "Chargement"});
     $scope.friends = [];
     $scope.search = '';
@@ -62,8 +62,8 @@ angular.module('woozup.controllers')
 .controller('JournalFriendCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService) {
     "use strict";
     // verify authentication
-    AuthService.checkUserAuth().success()
-        .error(function () {$state.go('network');});
+//     AuthService.checkUserAuth().success()
+//         .error(function () {$state.go('network');});
 //     $ionicLoading.show({template: "Chargement"});
 //     $scope.title = "Mes sorties";
     $scope.records = null;

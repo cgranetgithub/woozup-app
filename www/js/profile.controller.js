@@ -1,24 +1,9 @@
 /*jslint browser: true, devel: true, maxerr: 999, white: true, vars: true, newcap: true*/
 /*global angular, cordova, StatusBar, ContactFindOptions, facebookConnectPlugin*/
 
-function saveProfile(ProfileService, firstname, b64) {
-    if (firstname) {
-        ProfileService.setprofile({'first_name': firstname})
-            .then(function (res) {}, function (err) {console.log(err);});
-    //         .finally(function() {$ionicLoading.hide();});
-    }
-    if (b64) {
-        var file_field = {"name": "2016.jpg", "file": b64};
-        ProfileService.setpicture(file_field)
-            .then(function (res) {}, function (err) {console.log(err);});
-//             .finally(function() {$ionicLoading.hide();});
-    };
-}
-
-
 angular.module('woozup.controllers')
 
-.controller('ProfileCtrl', ['$tastypieResource', '$scope', 'AuthService', 'UserData', 'ProfileService', '$state', '$ionicModal', 'CameraService', function ($tastypieResource, $scope, AuthService, UserData, ProfileService, $state, $ionicModal, CameraService) {
+.controller('ProfileCtrl', ['$tastypieResource', '$scope', 'AuthService', 'UserData', 'ProfileService', '$state', '$ionicModal', '$ionicLoading', 'CameraService', function ($tastypieResource, $scope, AuthService, UserData, ProfileService, $state, $ionicModal, $ionicLoading, CameraService) {
     "use strict";
     $scope.userId = UserData.getUserId();
     var newname, newimage;
@@ -40,20 +25,20 @@ angular.module('woozup.controllers')
         });
     };
     $scope.loadProfile();
-    $scope.events = null;
-    var eventsResource = new $tastypieResource('events/mine');
-    eventsResource.objects.$find().then(
-        function (result) {
-            $scope.events = result.objects;
-        }
-    );
-    $scope.friends = null;
-    var friendsResource = new $tastypieResource('friends/mine');
-    friendsResource.objects.$find().then(
-        function (result) {
-            $scope.friends = result.objects;
-        }
-    );
+//     $scope.events = null;
+//     var eventsResource = new $tastypieResource('events/mine');
+//     eventsResource.objects.$find().then(
+//         function (result) {
+//             $scope.events = result.objects;
+//         }
+//     );
+//     $scope.friends = null;
+//     var friendsResource = new $tastypieResource('friends/mine');
+//     friendsResource.objects.$find().then(
+//         function (result) {
+//             $scope.friends = result.objects;
+//         }
+//     );
     // modal window
     $ionicModal.fromTemplateUrl('templates/user/profileEdit.html', {
         scope: $scope,
@@ -71,12 +56,30 @@ angular.module('woozup.controllers')
         $scope.modal.remove();
     });
     $scope.save = function() {
-        saveProfile(ProfileService, newname, newimage);
-        $scope.loadProfile();
+        if (newname) {
+            $ionicLoading.show({template: "Mise à jour"});
+            ProfileService.setprofile({'first_name': newname})
+                .then(function (res) {}, function (err) {console.log(err);})
+                .finally(function() {
+                    $scope.loadProfile();
+                    $ionicLoading.hide();
+                });
+        }
+        if (newimage) {
+            var file_field = {"name": "2016.jpg", "file": newimage};
+            $ionicLoading.show({template: "Mise à jour"});
+            ProfileService.setpicture(file_field)
+                .then(function (res) {}, function (err) {console.log(err);})
+                .finally(function() {
+                    $scope.loadProfile();
+                    $ionicLoading.hide();
+                });
+        };
         $scope.closeModal();
     };
     $scope.nameUpdate = function(firstName) {
         newname = firstName;
+        $scope.firstname = firstName;
     };
     $scope.imageUpdate = function(image) {
         newimage = image;

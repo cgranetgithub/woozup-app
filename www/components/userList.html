@@ -3,7 +3,7 @@
     <ion-spinner icon="ripple"></ion-spinner>
 </ion-item>
 
-<ion-item ng-if="!$ctrl.small" class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index" href="#/user/{{user.id}}">
+<ion-item ng-if="!$ctrl.small" class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
     <img ng-if="user.profile.image" ng-src="{{user.profile.image}}">
     <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
     <div class="item-text-center">
@@ -11,16 +11,17 @@
     </div>
 <!--                 <p>{{user.user.email}}</p> -->
     <div class="buttons">
-        <button class="button button-outline button-stable roundbutton" ng-click="$ctrl.noaction(user)" ng-if="$ctrl.displaybutton">
+        <button class="button button-outline button-stable roundbutton" ng-if="$ctrl.displaybutton" ng-click="$ctrl.noaction(user); $event.stopPropagation();" stop-event="click">
             <i class="icon ion-android-cancel"></i>
         </button>
-        <button class="button button-outline button-positive roundbutton" ng-click="$ctrl.yesaction(user)" ng-if="$ctrl.displaybutton">
+        <button class="button button-outline button-positive roundbutton" ng-if="$ctrl.displaybutton" ng-click="$ctrl.yesaction(user); $event.stopPropagation();" stop-event="click">
             <i class="icon ion-android-person-add"></i>
         </button>
     </div>
 </ion-item>
+
 <!-- small inline list item -->
-<span ng-if="$ctrl.small" class="mini-avatar" ng-repeat="user in $ctrl.users track by $index" href="#/user/{{user.id}}">
+<span ng-if="$ctrl.small" class="mini-avatar" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
     <img ng-if="user.profile.image" ng-src="{{user.profile.image}}" >
     <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
     {{user.first_name}} {{user.last_name}}

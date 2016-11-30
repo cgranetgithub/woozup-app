@@ -13,12 +13,18 @@ angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngRe
 //$scope.$on('$ionicView.enter', function (e) {
 //});
 
-.controller('TabCtrl', ['$scope', '$tastypieResource', function ($scope, $tastypieResource) {
+.controller('TabCtrl', ['AuthService', '$scope', '$tastypieResource', function (AuthService, $scope, $tastypieResource) {
     "use strict";
     var pendingFriends = new $tastypieResource('friends/pending');
     pendingFriends.objects.$find().then(
         function (result) {
             $scope.notif = result.meta.total_count;
+        },
+        function (error) {
+            console.log(error);
+            // verify authentication
+            AuthService.checkUserAuth().success()
+                .error(function () {$state.go('network');});
         }
     );
 }]);

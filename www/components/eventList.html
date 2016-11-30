@@ -22,4 +22,7 @@
         <button class="button button-clear button-stable icon ion-chatbubbles" ng-click="$ctrl.commentEvent(event); $event.stopPropagation();" stop-event="click"></button>
     <!--     <button class="button button-clear button-stable icon ion-forward"></button> -->
     </div>
+    <div class="category-icon-right" style={{event.event_type.style}}>
+        <img ng-src="{{event.event_type.icon}}"></img>
+    </div>
 </ion-item>

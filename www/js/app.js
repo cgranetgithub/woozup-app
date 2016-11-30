@@ -23,22 +23,21 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             StatusBar.styleDefault();
         }
         if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
-            var push = PushNotification.init({
-                "android": {"senderID": "496829276290", "forceShow":true, "sound":true, "vibrate":true, "icon": "ic_stat_android_hand_white"},
+            var push, alertDismissed, onOffline, onOnline, onResume;
+            push = PushNotification.init({
+                "android": {"senderID": "496829276290", "forceShow":true, "sound":true, "vibrate":true, "icon": "ic_stat_android_hand_white", "iconColor": "#387ef5"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
                 "windows": {}
-            } ),
-                alertDismissed = function () {},
-                onOffline = function () {
-                    $state.go('connect');
-//                         navigator.notification.alert(
-//                             'La connexion à Internet a été perdue', //message
-//                             alertDismissed,         // callback
-//                             'Problème de connexion',  // title
-//                             'OK'                    // buttonName
-//                         );
-                };
+            });
+            alertDismissed = function () {};
+            onOffline = function () { $state.go('network'); };
             document.addEventListener("offline", onOffline, false);
+            onOnline = function () { $state.go('checkauth'); };
+            document.addEventListener("online", onOnline, false);
+            onResume = function () {
+//                 $state.go('checkauth'); //don't do that because resume is called after requesting permission => you don't want any change in that case
+            };
+            document.addEventListener("resume", onResume, false);
             push.on('registration', function(data) {
                 UserData.setNotifData(data.registrationId,
                                     $cordovaDevice.getModel(),
@@ -48,41 +47,40 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 pushNotifReg(UserData.getNotifData()); // !!! important
             });
             push.on('notification', function(data) {
-                function onConfirm(buttonIndex) {
-                    if (buttonIndex === '2') {
-                        switch(data.additionalData.reason) {
-                        case 'eventchanged':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'eventcanceled':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'newevent':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'joinevent':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'leftevent':
-                            $state.go('event', {'eventId': data.additionalData.id});
-                            break;
-                        case 'friendrequest':
-                            $state.go('user', {'userId': data.additionalData.id});
-                            break;
-                        case 'friendaccept':
-                            $state.go('user', {'userId': data.additionalData.id});
-                            break;
-                        default:
-                            $state.go('checkauth');
-                        }
+                AuthService.checkUserAuth()
+                .success(function () {
+                    switch(data.additionalData.reason) {
+                    case 'eventchanged':
+                        $state.go('event', {'eventId': data.additionalData.id});
+                        break;
+                    case 'eventcanceled':
+                        $state.go('event', {'eventId': data.additionalData.id});
+                        break;
+                    case 'newevent':
+                        $state.go('event', {'eventId': data.additionalData.id});
+                        break;
+                    case 'joinevent':
+                        $state.go('event', {'eventId': data.additionalData.id});
+                        break;
+                    case 'leftevent':
+                        $state.go('event', {'eventId': data.additionalData.id});
+                        break;
+                    case 'newcomment':
+                        $state.go('event', {'eventId': data.additionalData.id});
+                        break;
+                    case 'friendrequest':
+                        $state.go('user', {'userId': data.additionalData.id});
+                        break;
+                    case 'friendaccept':
+                        $state.go('user', {'userId': data.additionalData.id});
+                        break;
+                    default:
+                        $state.go('checkauth');
                     }
-                }
-//                 navigator.notification.confirm(
-//                     data.message,            // message
-//                     onConfirm,               // callback to invoke with index of button pressed
-//                     data.title, // title
-//                     ['Fermer','Voir']        // buttonLabels (1, 2)
-//                 );
+                }).error(function (error) {
+                    console.log(error);
+                    $state.go('network');
+                });
             });
             push.on('error', function(e) {
                 console.error(e.message);

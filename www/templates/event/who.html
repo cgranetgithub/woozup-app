@@ -1,18 +1,25 @@
 <ion-modal-view>
+    <ion-header-bar>
+        <button class="button button-stable button-outline" ng-click="whoModal.hide()">
+            <i class="icon ion-close-circled"></i>
+        </button>
+        <button class="button button-positive button-outline" ng-click="setWho()">
+            <i class="icon ion-checkmark-circled"></i>
+        </button>
+    </ion-header-bar>
     <ion-content>
         <ion-list>
             <ion-checkbox ng-model="all.checked" ng-change="allChanged()">
-                Tout le monde
+                Tous / aucun
             </ion-checkbox>
             <ion-checkbox class="item item-avatar item-checkbox-right" ng-change="itemChanged()" ng-repeat="friend in friends track by $index" ng-model=friend.checked ng-checked="friend.checked">
-                <img ng-src="{{friend.profile.image}}">
-                <h2>{{friend.first_name}} {{friend.last_name}}</h2>
+                <img ng-if="friend.profile.image" ng-src="{{friend.profile.image}}">
+                <img ng-if="!friend.profile.image" ng-src="img/round58-grey.png">
+                <div class="item-text-center">
+                    <p>{{friend.first_name}} {{friend.last_name}}</p>
+                </div>
             </ion-checkbox>
         </ion-list>
         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
-    <button class="button button-balanced button-down"
-            ng-click="setWho()" name="next-button">
-        OK
-    </button>
     </ion-content>
 </ion-modal-view>

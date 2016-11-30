@@ -30,12 +30,6 @@
 h1, h2, h3, h4, p, a {
     color: dimgrey;
 }
-.down {
-    width: 96%;
-    bottom: 10%;
-    position: absolute;
-    text-align: center;
-}
 /* ==================================== */
 /* ======= REGISTRATION SCREENS ======= */
 /* ==================================== */
@@ -59,6 +53,16 @@ h1, h2, h3, h4, p, a {
 .registration ::-moz-placeholder { /* Mozilla Firefox 19+ */
     color: white !important;
     opacity:  .9;
+}
+.downNote {
+    margin-top: 100px;
+}
+.note {
+    color: white;
+    text-align: center;
+}
+.separator {
+    margin: 10px 0;
 }
 /* ====================== */
 /* ======= EVENTS ======= */
@@ -113,15 +117,6 @@ h1, h2, h3, h4, p, a {
     padding: 5px 10px;
     margin: 5px 0 0 5px;
 }
-.category-button {
-    line-height: 0;
-    padding: 5px;
-    margin: 5px 10px 5px 0;
-    max-width: 100px;
-}
-.category-button img {
-    width: 100%;
-}
 .category-grid-item img {
     width: 32px;
     height: 32px;
@@ -129,6 +124,25 @@ h1, h2, h3, h4, p, a {
 }
 .category-grid-item span {
     color: white;
+}
+.category-button {
+    line-height: 0;
+    padding: 5px;
+    margin: 5px 10px 5px 0;
+    max-width: 100px;
+}
+.category-icon-right {
+    line-height: 0;
+    border-radius: 5px;
+    padding: 5px;
+    width: 40px;
+    right: 5px;
+    bottom: 5px;
+    position: absolute;
+    opacity: 0.8;
+}
+.category-button img, .category-icon-right img {
+    width: 100%;
 }
 .button-date {
     width: 66%;
@@ -279,11 +293,6 @@ input[type="text"].controls {
     border-radius: 50%;
     width: 90%;
 }
-.note {
-    color: white;
-    text-align: center;
-}
-
 input.ng-invalid-pattern {
     color: red;
 }
@@ -307,4 +316,18 @@ input.ng-invalid-pattern {
     width: 32px;
     height: 32px;
     vertical-align: middle;
+}
+.center-message {
+    margin-top: 30px;
+    text-align: center;
+}
+.center-message p, .center-message button {
+    margin: 30px auto;
+    display: block;
+    width: 75%;
+    line-height: 25px;
+    padding: 5px;
+}
+.bottom-space {
+    margin-bottom: 40px;
 }

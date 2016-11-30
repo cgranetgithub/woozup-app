@@ -153,7 +153,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve(result);
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -181,7 +181,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve(result);
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -204,7 +204,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve(result);
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -232,7 +232,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve('succeeded');
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -255,7 +255,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve('succeeded');
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -283,7 +283,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve('succeeded');
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -306,7 +306,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve('succeeded');
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('failed');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -343,9 +343,9 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 function (imageURI) {
 //                             $scope.myImage = imageURI;
                     deferred.resolve(imageURI);
-                }, function (err) {
-                    console.log(err);
-                    deferred.reject('failed');
+                }, function (error) {
+                    console.log(error);
+                    deferred.reject(error);
                 });
 //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
             promise.success = function (fn) {
@@ -375,9 +375,9 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 function (imageURI) {
 //                             $scope.myImage = imageURI;
                     deferred.resolve(imageURI);
-                }, function (err) {
-                    console.log(err);
-                    deferred.reject('failed');
+                }, function (error) {
+                    console.log(error);
+                    deferred.reject(error);
                 });
 //             $cordovaCamera.cleanup() // .then(...); // only for FILE_URI
             promise.success = function (fn) {
@@ -410,7 +410,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                     deferred.resolve('success');
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('error!');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -430,14 +430,14 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 apiKey   = $localstorage.get('apikey');
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
             $http.get(apiUrl + 'user/check_auth/')
-                .then(function () {
+                .then(function (res) {
                     UserData.setUserName(userName);
                     UserData.setApiKey(apiKey);
                     UserData.setUserId(userId);
-                    deferred.resolve('Authenticated');
+                    deferred.resolve(res);
                 }, function (error) {
                     console.log(error);
-                    deferred.reject('Not Authenticated!');
+                    deferred.reject(error);
                 });
             promise.success = function (fn) {
                 promise.then(fn);
@@ -468,7 +468,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 deferred.resolve('Welcome!');
             }, function (error) {
                 console.log(error);
-                deferred.reject('Wrong credentials!');
+                deferred.reject(error);
             });
             promise.success = function (fn) {
                 promise.then(fn);

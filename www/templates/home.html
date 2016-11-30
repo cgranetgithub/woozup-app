@@ -5,10 +5,21 @@
         </button>
     </ion-nav-buttons>
     <ion-content>
-        <div ng-if="events.length==0" class="text-center button-down">
-            <a href="#/tab/new" class="button icon-left ion-ios-plus-outline button-positive button-outline">
-                Lancer une invitation
-            </a>
+        <div ng-if="events.length==0" class="center-message">
+            <p>Rien de prévu pour l'instant...</p>
+            <button class="button button-positive button-outline" ng-click="findMoreFriends()">
+                <i class="icon ion-android-person-add"></i>
+                <br>
+                Retrouve tes amis pour voir ce qu'ils ont prévu
+            </button>
+            <button class="button button-positive button-outline" ng-click="createEvent()">
+                <i class="icon ion-ios-plus-outline"></i>
+                <br>
+                Lance ta première invitation !
+            </button>
+<!--            <a href="#/tab/new" class="button icon-left ion-ios-plus-outline button-positive button-outline">
+                Lance ta première invitation !
+            </a>-->
         </div>
         <ion-refresher pulling-text="Mise à jour" on-refresh="load()"></ion-refresher>
         <ion-list>

@@ -6,8 +6,8 @@ angular.module('woozup.controllers')
 .controller('FindMoreFriendsCtrl', ['$tastypieResource', '$ionicLoading', '$q', '$scope', '$state', 'AuthService', '$ionicHistory', 'sortContacts', function ($tastypieResource, $ionicLoading, $q, $scope, $state, AuthService, $ionicHistory, sortContacts) {
     "use strict";
     // verify authentication
-    AuthService.checkUserAuth().success()
-        .error(function () {$state.go('network');});
+//     AuthService.checkUserAuth().success()
+//         .error(function () {$state.go('network');});
 //     $ionicLoading.show({template: "Chargement"});
     sortContacts();
     $scope.title = "Suggestions";
@@ -18,14 +18,16 @@ angular.module('woozup.controllers')
             $state.go('tab.home');
         }
     };
-    $scope.invites = null;
-    $scope.friends = null;
     $scope.search = '';
     var invitesResource, friendsResource,
-        nextPages = function (invitePage, friendsPage) {
+        nextPages = function (invitePage, friendsPage, clear) {
             $q.all([invitePage, friendsPage]).then(
                 function (arrayOfResults) {
                     var i;
+                    if (clear) {
+                        $scope.invites = [];
+                        $scope.friends = [];                
+                    };
                     if (arrayOfResults[0]) {
                         for (i = 0; i < arrayOfResults[0].objects.length; i += 1) {
                             $scope.invites.push(arrayOfResults[0].objects[i]);
@@ -48,6 +50,8 @@ angular.module('woozup.controllers')
             );
         };
     $scope.onSearchChange = function (word) {
+        $scope.invites = null;
+        $scope.friends = null;
         invitesResource = new $tastypieResource('invite', {
                             status__exact: 'NEW', order_by: 'name',
                             name__icontains: word
@@ -56,9 +60,7 @@ angular.module('woozup.controllers')
                             order_by: 'first_name',
                             first_name__icontains: word
         });
-        $scope.invites = [];
-        $scope.friends = [];
-        nextPages(invitesResource.objects.$find(), friendsResource.objects.$find());
+        nextPages(invitesResource.objects.$find(), friendsResource.objects.$find(), true);
     };
     $scope.onSearchChange('');
     $scope.loadMore = function () {
@@ -70,6 +72,6 @@ angular.module('woozup.controllers')
         if (friendsResource.page.meta && friendsResource.page.meta.next) {
             nextFriendPage = friendsResource.page.next();
         }
-        nextPages(nextInvitePage, nextFriendPage);
+        nextPages(nextInvitePage, nextFriendPage, false);
     };
 }]);

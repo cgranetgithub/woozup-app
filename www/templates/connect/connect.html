@@ -15,7 +15,7 @@
                 <input type="number" ng-model="data.code" placeholder="CODE">
             </label>
             <button class="button button-block button-light button-large button-outline" ng-click="verif_code()">Valider</button>
-            <div class="down">
+            <div class="downNote">
                 <p class="note">Code pas encore reçu ?<p>
                 <p class="note" ng-if="hideCodeButton">Tu pourras en demander un autre dans {{timer}}s</p>
                 <button ng-if="!hideCodeButton" class="text-center button button-light button-outline" ng-click="get_code()">Me renvoyer un code</button>

@@ -4,7 +4,7 @@
             <i class="icon ion-ios-arrow-thin-left"></i>
         </button>
     </ion-nav-buttons>
-    <ion-content class="padding">
+    <ion-content class="padding text-center">
         <div class="row text-center profile-header no-padding-margin">
             <div class="col col-33">
                 <img ng-if="event.owner.profile.image" ng-src="{{event.owner.profile.image}}">
@@ -15,18 +15,26 @@
 <!--                     <img ng-src="{{event.event_type.icon}}"> -->
                     <h2 ng-if=!event.canceled>{{event.name}}</h2>
                     <h2 ng-if=event.canceled><s>{{event.name}}</s> (annulé)</h2>
-                    <p>{{event.start | date : 'EEEE d MMMM à H:mm'}}</p>
-                    <p>{{event.location_address}}</p>
             </div>
         </div>
-        <div class="row" ng-if="event.participants.length!=0">
-            <p style="margin:auto;">AVEC</p>
-        </div>
-        <div class="row" ng-if="event.participants.length!=0">
-            <user-list small="true" users="event.participants" displaybutton=false>
-        </div>
-        <button ng-if="!event.canceled && buttonTitle" class="button button-block button-assertive button-outline" ng-click="buttonAction(event.id)">
+        <p>{{event.start | date : 'EEEE d MMMM à H:mm'}}</p>
+        <p>{{event.location_address}}</p>
+        <button ng-if="!event.canceled && buttonTitle" class="button button-block button-positive button-outline icon ion-android-hand" ng-click="buttonAction(event.id)">
             {{buttonTitle}}
         </button>
+<!--         <p class="separator">AVEC</p> -->
+        <div class="item item-divider separator">
+            AVEC ({{event.participants.length}})
+        </div>
+        <p ng-if="event.participants.length==0">Personne pour l'instant</p>
+        <user-list ng-if="event.participants.length!=0" small="true" users="event.participants" displaybutton=false></user-list>
+<!--         <p class="separator">COMMENTAIRES</p> -->
+        
+        <div class="item item-divider separator">
+            DISCUSSION
+        </div>
+        <div class="bottom-space">
+            <comment-list event="event"></comment-list>
+        </div>
     </ion-content>
 </ion-view>

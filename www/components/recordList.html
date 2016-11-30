@@ -10,6 +10,8 @@
         <span ng-switch-when="NEWUSER">vient de s'inscrire sur Woozup</span>
         <span ng-switch-when="NEWPARTICIPANT">participera à {{record.refering_event.name}}</span>
         <span ng-switch-when="NEWEVENT">a lancé une nouvelle invitation : {{record.refering_event.name}}</span>
+        <span ng-switch-when="NEWCOMMENT">a commenté {{record.refering_event.name}}</span>
+        <span ng-switch-when="EVENTCANCELED">a annulé : {{record.refering_event.name}}</span>
         <span ng-switch-when="NEWFRIEND">s'est connnecté avec {{record.refering_user.first_name}} {{record.refering_user.last_name}}</span>
     </p>
     <p class="text-right">{{record.updated_at | date: 'EEEE d, HH:mm' }}</p>

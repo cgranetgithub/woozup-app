@@ -240,16 +240,25 @@ angular.module('woozup.controllers')
     });
     // verify authentication
     AuthService.checkUserAuth()
-        .success(function () {
-            $tastypie.setAuth(UserData.getUsername(),
-                                UserData.getApiKey());
-            pushNotifReg(UserData.getNotifData());
+        .success(function (result) {
+//             $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
+//             pushNotifReg(UserData.getNotifData());
 //             findContacts(sortContacts);
-            $state.go('tab.home');
+            var user = angular.fromJson(result['data']);
+            if (user.first_name || user.last_name) {
+                $state.go('tab.home');
+            } else {
+                $state.go('picture');
+            }
             $ionicLoading.hide();
         })
-        .error(function () {
-            $state.go('connect');
+        .error(function (error) {
+            console.log(error);
+            if (error.status == 401) {
+                $state.go('connect');
+            } else {
+                $state.go('network');
+            }
             $ionicLoading.hide();
         });
 }])

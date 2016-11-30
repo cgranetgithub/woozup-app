@@ -51,12 +51,10 @@ angular.module('woozup.controllers')
     $scope.friendsResource.objects.$find().then(
         function (result) {
             nextPages(result);
-            $ionicLoading.hide();
             $scope.$broadcast('scroll.infiniteScrollComplete');
         }, function (error) {
             console.log(error);
             // verify authentication
-            $ionicLoading.hide();
             AuthService.checkUserAuth().success()
                 .error(function () {$state.go('network');});
         }
@@ -79,6 +77,7 @@ angular.module('woozup.controllers')
         $scope.all.checked = false;
     };        
     $scope.setWho = function () {
+        $scope.invitees = [];
         if (! $scope.all.checked) {
             for (var i = 0; i < $scope.friends.length; i++) {
                 var item = $scope.friends[i];
@@ -236,9 +235,7 @@ angular.module('woozup.controllers')
 
 .controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams', '$tastypieResource', 'InviteService', 'UserData', 'AuthService', '$ionicHistory', '$ionicLoading', function ($window, $state, $scope, $stateParams, $tastypieResource, InviteService, UserData, AuthService, $ionicHistory, $ionicLoading) {
     "use strict";
-    // verify authentication
-    AuthService.checkUserAuth().success()
-        .error(function () {$state.go('network');});
+    var eventResource, commentResource, loadEvent, leaveAndReload, joinAndReload;
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
             $ionicHistory.goBack();
@@ -246,80 +243,78 @@ angular.module('woozup.controllers')
             $state.go('tab.home');
         }
     };
-    var event = new $tastypieResource('events/all'),
-        loadEvent, leaveAndReload, joinAndReload;
-
-        loadEvent = function () {
-            $scope.buttonTitle = null;
-            event.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
-                function (result) {
-                    $scope.event = result;
-                    var my_id = UserData.getUserId(),
-                        index,
-                        participants = result.participants,
-                        found = false;
-                    if (!result.canceled) {
-                        if (my_id === result.owner.id) {
-                            $scope.buttonTitle = "J'annule";
-                            $scope.buttonAction = function (eventId) {
-                                var myevent = new $tastypieResource('events/mine');
-                                myevent.objects.$delete({id: eventId});
-                                $state.go('tab.home', {}, { reload: true });
-                            };
-                        } else {
-                            for (index = 0; index < participants.length; index += 1) {
-                                if (my_id === participants[index].id) {
-                                    found = true;
-                                }
-                            }
-                            if (found) {
-                                $scope.buttonTitle = "J'annule";
-                                $scope.buttonAction = function (eventId) {
-                                    leaveAndReload(eventId);
-    //                                 $window.location.reload(true);
-                                };
-                            } else {
-                                $scope.buttonTitle = "Je viens";
-                                $scope.buttonAction = function (eventId) {
-                                    joinAndReload(eventId);
-    //                                 $window.location.reload(true);
-                                };
+    eventResource = new $tastypieResource('events/all');
+    loadEvent = function() {
+        $scope.buttonTitle = null;
+        eventResource.objects.$get({id: parseInt($stateParams.eventId, 10)}).then(
+            function (result) {
+                $scope.event = result;
+                var my_id = UserData.getUserId(),
+                    index,
+                    participants = result.participants,
+                    found = false;
+                if (!result.canceled) {
+                    if (my_id === result.owner.id) {
+                        $scope.buttonTitle = "J'annule";
+                        $scope.buttonAction = function (eventId) {
+                            var myevent = new $tastypieResource('events/mine');
+                            myevent.objects.$delete({id: eventId});
+                            $state.go('tab.home', {}, { reload: true });
+                        };
+                    } else {
+                        for (index = 0; index < participants.length; index += 1) {
+                            if (my_id === participants[index].id) {
+                                found = true;
                             }
                         }
+                        if (found) {
+                            $scope.buttonTitle = "J'annule";
+                            $scope.buttonAction = function (eventId) {
+                                leaveAndReload(eventId);
+//                                 $window.location.reload(true);
+                            };
+                        } else {
+                            $scope.buttonTitle = "Je viens";
+                            $scope.buttonAction = function (eventId) {
+                                joinAndReload(eventId);
+//                                 $window.location.reload(true);
+                            };
+                        }
                     }
-                }, function (error) {
-                    console.log(error);
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                    $scope.buttonTitle = "Erreur de chargement";
-                });
-        };
-        leaveAndReload = function (eventId) {
-            $ionicLoading.show({template: "Chargement"});
-            InviteService.leave(eventId).then(
-                function () {
-                    $ionicLoading.hide();
-                    loadEvent();
-                },
-                function (error) {
-                    $ionicLoading.hide();
-                    loadEvent();
                 }
-            );
-        };
-        joinAndReload = function (eventId) {
-            $ionicLoading.show({template: "Chargement"});
-            InviteService.join(eventId).then(
-                function () {
-                    $ionicLoading.hide();
-                    loadEvent();
-                },
-                function (error) {
-                    $ionicLoading.hide();
-                    loadEvent();
-                }
-            );
-        };
+            }, function(error) {
+                console.log(error);
+                // verify authentication
+                AuthService.checkUserAuth().success()
+                    .error(function () {$state.go('network');});
+                $scope.buttonTitle = "Erreur de chargement";
+            });
+    };
     loadEvent();
+    leaveAndReload = function(eventId) {
+        $ionicLoading.show({template: "Chargement"});
+        InviteService.leave(eventId).then(
+            function () {
+                $ionicLoading.hide();
+                loadEvent();
+            },
+            function (error) {
+                $ionicLoading.hide();
+                loadEvent();
+            }
+        );
+    };
+    joinAndReload = function(eventId) {
+        $ionicLoading.show({template: "Chargement"});
+        InviteService.join(eventId).then(
+            function () {
+                $ionicLoading.hide();
+                loadEvent();
+            },
+            function (error) {
+                $ionicLoading.hide();
+                loadEvent();
+            }
+        );
+    };
 }]);
