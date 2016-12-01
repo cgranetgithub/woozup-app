@@ -9,7 +9,7 @@
 
 angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', 'woozup.controllers', 'woozup.services'])
 
-.run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg, $cordovaDialogs, $state) {
+.run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg, $cordovaDialogs, $state, AuthService) {
     "use strict";
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the
@@ -49,33 +49,28 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             push.on('notification', function(data) {
                 AuthService.checkUserAuth()
                 .success(function () {
-                    switch(data.additionalData.reason) {
-                    case 'eventchanged':
-                        $state.go('event', {'eventId': data.additionalData.id});
-                        break;
-                    case 'eventcanceled':
-                        $state.go('event', {'eventId': data.additionalData.id});
-                        break;
-                    case 'newevent':
-                        $state.go('event', {'eventId': data.additionalData.id});
-                        break;
-                    case 'joinevent':
-                        $state.go('event', {'eventId': data.additionalData.id});
-                        break;
-                    case 'leftevent':
-                        $state.go('event', {'eventId': data.additionalData.id});
-                        break;
-                    case 'newcomment':
-                        $state.go('event', {'eventId': data.additionalData.id});
-                        break;
-                    case 'friendrequest':
-                        $state.go('user', {'userId': data.additionalData.id});
-                        break;
-                    case 'friendaccept':
-                        $state.go('user', {'userId': data.additionalData.id});
-                        break;
-                    default:
-                        $state.go('checkauth');
+                    if (['eventchanged', 'newevent', 'joinevent', 'leftevent', 'newcomment'].indexOf(data.additionalData.reason) >= 0) {
+                        var onConfirm = function(buttonIndex) {
+                            if (buttonIndex === '2') {
+                                $state.go('event', {'eventId': data.additionalData.id});
+                            }
+                        }
+                    } else if (['friendrequest', 'friendaccept'].indexOf(data.additionalData.reason) >= 0) {
+                        var onConfirm = function(buttonIndex) {
+                            if (buttonIndex === '2') {
+                                $state.go('user', {'userId': data.additionalData.id});
+                            }
+                        }
+                    }
+                    if (ionic.Platform.is('android')) {
+                        onConfirm('2');
+                    } else {
+                        navigator.notification.confirm(
+                            data.message,
+                            onConfirm,
+                            data.title,
+                            ['Fermer','Voir'] // buttonLabels (1, 2)
+                        );
                     }
                 }).error(function (error) {
                     console.log(error);

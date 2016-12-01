@@ -11,6 +11,14 @@ sudo apt-get install -y nodejs
 # install ionic and cordova
 sudo npm -g install js-beautify jslint cordova ionic
 
+# use bower to install dependencies from bower.json
+$ bower install
+
+# build resources + add push notif icon android
+# do it before platforms
+ionic resources
+cp -r resources/android/ic_notification/* platforms/android/res/
+
 # in ionic-app, do
 # use reset to download dependencies from package.json (deprecated)
 # $ ionic state reset (deprecated)
@@ -18,12 +26,8 @@ sudo npm -g install js-beautify jslint cordova ionic
 cordova platform add ios
 cordova platform add android
 
-# use bower to install dependencies from bower.json
-$ bower install
-
-# build resources + add push notif icon android
-ionic resources
-cp -r resources/android/ic_notification/* platforms/android/res/
+# for mac (important)
+ionic prepare ios
 
 -------------------------------------------------------
 
