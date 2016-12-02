@@ -9,7 +9,7 @@
 
 angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', 'woozup.controllers', 'woozup.services'])
 
-.run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg, $cordovaDialogs, $state, AuthService) {
+.run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg, $cordovaDialogs, $state, AuthService, $cordovaPushV5) {
     "use strict";
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the
@@ -22,31 +22,33 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+        // Push Notifications
         if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
-            var push, alertDismissed, onOffline, onOnline, onResume;
-            push = PushNotification.init({
+            var alertDismissed, onOffline, onOnline, onResume, options;
+            options = {
                 "android": {"senderID": "496829276290", "forceShow":true, "sound":true, "vibrate":true, "icon": "ic_stat_android_hand_white", "iconColor": "#387ef5"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
                 "windows": {}
-            });
-            alertDismissed = function () {};
-            onOffline = function () { $state.go('network'); };
-            document.addEventListener("offline", onOffline, false);
-            onOnline = function () { $state.go('checkauth'); };
-            document.addEventListener("online", onOnline, false);
-            onResume = function () {
-//                 $state.go('checkauth'); //don't do that because resume is called after requesting permission => you don't want any change in that case
             };
-            document.addEventListener("resume", onResume, false);
-            push.on('registration', function(data) {
-                UserData.setNotifData(data.registrationId,
-                                    $cordovaDevice.getModel(),
-                                    $cordovaDevice.getUUID(),
-                                    ionic.Platform.platform()
-                                    );
-                pushNotifReg(UserData.getNotifData()); // !!! important
+            // initialize
+            $cordovaPushV5.initialize(options).then(function() {
+                // start listening for new notifications
+                $cordovaPushV5.onNotification();
+                // start listening for errors
+                $cordovaPushV5.onError();
+                // register to get registrationId
+                $cordovaPushV5.register().then(function(registrationId) {
+                    // save `registrationId` somewhere;
+                    UserData.setNotifData(registrationId,
+                                        $cordovaDevice.getModel(),
+                                        $cordovaDevice.getUUID(),
+                                        ionic.Platform.platform()
+                                        );
+                    pushNotifReg(UserData.getNotifData()); // !!! important
+                })
             });
-            push.on('notification', function(data) {
+            // triggered every time notification received
+            $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data){
                 AuthService.checkUserAuth()
                 .success(function () {
                     if (['eventchanged', 'newevent', 'joinevent', 'leftevent', 'newcomment'].indexOf(data.additionalData.reason) >= 0) {
@@ -77,9 +79,15 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                     $state.go('network');
                 });
             });
-            push.on('error', function(e) {
-                console.error(e.message);
-            });
+            // actions in case of network status change
+            onOffline = function () { $state.go('network'); };
+            document.addEventListener("offline", onOffline, false);
+            onOnline = function () { $state.go('checkauth'); };
+            document.addEventListener("online", onOnline, false);
+            // onResume = function () {
+            //   $state.go('checkauth'); //don't do that because resume is called after requesting permission => you don't want any change in that case
+            // };
+            // document.addEventListener("resume", onResume, false);
         }
     });
 })
