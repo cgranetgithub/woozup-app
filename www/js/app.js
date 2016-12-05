@@ -9,7 +9,7 @@
 
 angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', 'woozup.controllers', 'woozup.services'])
 
-.run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg, $cordovaDialogs, $state, AuthService, $cordovaPushV5) {
+.run(function ($ionicPlatform, $cordovaDevice, UserData, pushNotifReg, $cordovaDialogs, $state, AuthService, $cordovaPushV5, $rootScope) {
     "use strict";
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the
@@ -51,17 +51,22 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data){
                 AuthService.checkUserAuth()
                 .success(function () {
+                    var onConfirm;
                     if (['eventchanged', 'newevent', 'joinevent', 'leftevent', 'newcomment'].indexOf(data.additionalData.reason) >= 0) {
-                        var onConfirm = function(buttonIndex) {
+                        onConfirm = function(buttonIndex) {
                             if (buttonIndex === '2') {
                                 $state.go('event', {'eventId': data.additionalData.id});
                             }
                         }
                     } else if (['friendrequest', 'friendaccept'].indexOf(data.additionalData.reason) >= 0) {
-                        var onConfirm = function(buttonIndex) {
+                        onConfirm = function(buttonIndex) {
                             if (buttonIndex === '2') {
                                 $state.go('user', {'userId': data.additionalData.id});
                             }
+                        }
+                    } else {
+                        onConfirm = function(buttonIndex) {
+                            console.log("unrecognized reason:", data.additionalData.reason, "buttonIndex", buttonIndex);
                         }
                     }
                     if (ionic.Platform.is('android')) {
