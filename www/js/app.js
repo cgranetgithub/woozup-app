@@ -54,13 +54,13 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                     var onConfirm;
                     if (['eventchanged', 'newevent', 'joinevent', 'leftevent', 'newcomment'].indexOf(data.additionalData.reason) >= 0) {
                         onConfirm = function(buttonIndex) {
-                            if (buttonIndex === '2') {
+                            if (buttonIndex === 2) {
                                 $state.go('event', {'eventId': data.additionalData.id});
                             }
                         }
                     } else if (['friendrequest', 'friendaccept'].indexOf(data.additionalData.reason) >= 0) {
                         onConfirm = function(buttonIndex) {
-                            if (buttonIndex === '2') {
+                            if (buttonIndex === 2) {
                                 $state.go('user', {'userId': data.additionalData.id});
                             }
                         }
@@ -70,7 +70,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                         }
                     }
                     if (ionic.Platform.is('android')) {
-                        onConfirm('2');
+                        onConfirm(2);
                     } else {
                         navigator.notification.confirm(
                             data.message,
@@ -83,6 +83,9 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                     console.log(error);
                     $state.go('network');
                 });
+            });
+            $rootScope.$on('$cordovaPushV5:errorOccurred', function(event, error) {
+                console.log(error);
             });
             // actions in case of network status change
             onOffline = function () { $state.go('network'); };

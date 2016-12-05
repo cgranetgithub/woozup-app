@@ -331,3 +331,7 @@ input.ng-invalid-pattern {
 .bottom-space {
     margin-bottom: 40px;
 }
+/* iOS fix */
+.platform-ios.platform-cordova:not(.fullscreen) .iosfix>.tabs {
+    top: 0 !important;
+}
