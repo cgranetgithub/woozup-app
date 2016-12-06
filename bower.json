@@ -2,7 +2,7 @@
   "name": "woozup",
   "private": true,
   "devDependencies": {
-    "ionic": "^1.3.1"
+    "ionic": "^1.3.2"
   },
   "authors": [
     "charles <cgranet@protonmail.com>"
@@ -21,16 +21,22 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "^1.5.3",
-    "angular-bootstrap": "^2.2.0",
-    "angular-i18n": "^1.5.3",
+    "angular-animate": "^1.5.9",
+    "angular-bootstrap": "^2.3.0",
+    "angular-i18n": "^1.5.9",
     "angular-resource-tastypie": "^1.0.4",
-    "angular-ui-router": "^0.3.1",
-    "angular-sanitize": "^1.5.3",
-    "ngmap": "^1.17.6",
+    "angular-ui-router": "^0.3.2",
+    "angular-sanitize": "^1.5.9",
+    "ngmap": "^1.17.8",
     "ngCordova": "^0.1.27-alpha",
-    "angular-resource": "^1.5.3",
+    "angular-resource": "^1.5.9",
     "bootstrap": "^3.3.7",
-    "intlpnIonic": "https://github.com/pierre-vigier/intlpnIonic.git#0.1.8"
+    "intlpnIonic": "^0.1.8"
+  },
+  "resolutions": {
+    "angular-animate": "^1.5.9",
+    "angular": "^1.0.8",
+    "angular-ui-router": "^0.3.2",
+    "angular-sanitize": "^1.5.9"
   }
 }

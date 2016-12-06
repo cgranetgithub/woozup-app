@@ -13,7 +13,13 @@ angular.module('woozup.services', ['ngResourceTastypie'])
 // #########
     $provide.value('apiUrl', apiUrl);
     $provide.value('hostname', hostname);
-    $tastypieProvider.setResourceUrl(apiUrl);
+//     $tastypieProvider.setResourceUrl(apiUrl);
+    
+    $tastypieProvider.add('woozup', {
+            url: apiUrl,
+            username: 'username',
+            apikey: 'apikey'
+    });
 }])
 .factory('setlast', ['$http', 'apiUrl', 'UserData', function ($http, apiUrl, UserData) {
     "use strict";
@@ -392,7 +398,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
         }
     };
 }])
-.service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData', function ($q, $http, $localstorage, apiUrl, UserData) {
+.service('AuthService', ['$q', '$http', '$localstorage', 'apiUrl', 'UserData', '$tastypie', function ($q, $http, $localstorage, apiUrl, UserData, $tastypie) {
     "use strict";
     return {
         pingAuth: function () {
@@ -431,6 +437,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
             $http.get(apiUrl + 'user/check_auth/')
                 .then(function (res) {
+                    $tastypie.setProviderAuth('woozup', userName, apiKey)
                     UserData.setUserName(userName);
                     UserData.setApiKey(apiKey);
                     UserData.setUserId(userId);
@@ -459,6 +466,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             }
             $http.post(command, authData
                 ).then(function (response) {
+                $tastypie.setProviderAuth('woozup', response.data.username, response.data.api_key)
                 $localstorage.set('userid', response.data.userid);
                 $localstorage.set('username', response.data.username);
                 $localstorage.set('apikey', response.data.api_key);
@@ -486,6 +494,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 command = 'auth/register/';
             $http.post(apiUrl + command, authData
                 ).then(function (response) {
+                $tastypie.setProviderAuth('woozup', response.data.username, response.data.api_key)
                 $localstorage.set('userid', response.data.userid);
                 $localstorage.set('username', response.data.username);
                 $localstorage.set('apikey', response.data.api_key);

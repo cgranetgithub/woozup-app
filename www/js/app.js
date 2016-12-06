@@ -218,26 +218,6 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             templateUrl: 'templates/people.html',
             controller: 'FindMoreFriendsCtrl'
         })
-//             .state('menu.friends.my', {
-//                 cache: false,
-//                 url: '/my',
-//                 views: {
-//                     'myfriends': {
-//                         templateUrl: 'templates/people.html',
-//                         controller: 'MyFriendsCtrl'
-//                     }
-//                 }
-//             })
-//             .state('menu.friends.pending', {
-//                 cache: false,
-//                 url: '/pending',
-//                 views: {
-//                     'pendingfriends': {
-//                         templateUrl: 'templates/people.html',
-//                         controller: 'PendingFriendsCtrl'
-//                     }
-//                 }
-//             })
         .state('user', {
             cache: false,
             url: '/user/:userId',
