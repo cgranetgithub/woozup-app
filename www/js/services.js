@@ -6,11 +6,6 @@ angular.module('woozup.services', ['ngResourceTastypie'])
     "use strict";
     var hostname = backend_url,
         apiUrl = hostname + 'api/v1/';
-// #### for debug
-//     var hostname = 'http://192.168.1.25:8000/',
-//          hostname = 'http://localhost:8000/',
-//         apiUrl = hostname + 'api/v1/';
-// #########
     $provide.value('apiUrl', apiUrl);
     $provide.value('hostname', hostname);
 //     $tastypieProvider.setResourceUrl(apiUrl);

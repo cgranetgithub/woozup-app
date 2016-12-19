@@ -1,83 +1,17 @@
 /*jslint browser: true, devel: true, maxerr: 999, white: true, vars: true, newcap: true*/
 /*global angular*/
 angular.module('woozup.controllers')
-.controller('HomeCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', 'UserData', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService, UserData) {
+.controller('HomeCtrl', ['$scope', '$state', '$tastypieResource', '$ionicLoading', 'AuthService', 'UserData', 'GenericResourceList', function ($scope, $state, $tastypieResource, $ionicLoading, AuthService, UserData, GenericResourceList) {
     "use strict";
-    // verify authentication
-//     AuthService.checkUserAuth()
-//         .success()
-//         .error(function () {$state.go('network');});
-//     $ionicLoading.show({template: "Chargement"});
-//     $scope.title = "Mes sorties";
+    var today = new Date();
+    today.setHours(today.getUTCHours()-2);
+    today.setMinutes(0);
+    $scope.eventsResource = new $tastypieResource('events/all', {order_by: 'start', start__gte: today, 'canceled': false});
     $scope.findMoreFriends = function() {
-        $state.go('findMoreFriends');
+        $state.go('tab.people');
     };
     $scope.createEvent = function() {
         $state.go('tab.new');
     };
     $scope.userid = UserData.getUserId();
-    var today = new Date(), eventsResource,
-        nextPages = function (result) {
-                var i, j, event;
-                if (result) {
-                    for (i = 0; i < result.objects.length; i += 1) {
-                        event = result.objects[i];
-                        event.ownership = false;
-                        if (event.owner.id == $scope.userid) {
-                            event.ownership = true;
-                        }
-                        j = 0;
-                        event.participate = false;
-                        while (event.participants[j]) {
-                            if (event.participants[j].id == $scope.userid) {
-                                event.participate = true;
-                                break;
-                            }
-                            j++;
-                        }
-                        $scope.events.push(event);
-                    }
-                }
-            };
-    today.setHours(today.getUTCHours()-2);
-    today.setMinutes(0);
-    eventsResource = new $tastypieResource('events/all',
-                        {order_by: 'start', start__gte: today, 'canceled': false});
-    $scope.load = function () {
-        $scope.events = null;
-        eventsResource.objects.$find().then(
-            function (result) {
-                $scope.events = [];
-                nextPages(result);
-            }, function (error) {
-                console.log(error);
-                // verify authentication
-                AuthService.checkUserAuth().success()
-                    .error(function () {$state.go('network');});
-            }
-        ).finally(function() {
-//             $ionicLoading.hide();
-            $scope.$broadcast('scroll.refreshComplete');
-        });
-    };
-    $scope.load();
-    $scope.loadMore = function () {
-        if (eventsResource.page.meta && eventsResource.page.meta.next) {
-            eventsResource.page.next().then(
-                function (result) {
-                    nextPages(result);
-                }, function (error) {
-                    console.log(error);
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            ).finally(function() {
-//                 $ionicLoading.hide();
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
-        } else {
-            $scope.$broadcast('scroll.infiniteScrollComplete');
-        }
-    };
 }]);

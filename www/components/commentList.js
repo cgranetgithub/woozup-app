@@ -1,48 +1,30 @@
-function CommentListController($tastypieResource, $state, AuthService) {
+function CommentListController($tastypieResource, GenericResourceList) {
     "use strict";
-    var commentResource, ctrl, nextPages, newComment;
+    var commentResource, ctrl, newComment, canLoadMore;
     ctrl = this;
-    nextPages = function (result) {
-        var i;
-        if (result) {
-            for (i = 0; i < result.objects.length; i += 1) {
-                ctrl.comments.push(result.objects[i]);
-            }
+    commentResource = new $tastypieResource('comments');
+    canLoadMore = function() {
+        if (commentResource.page.meta && commentResource.page.meta.next) {
+            ctrl.showButton = true;
+        } else {
+            ctrl.showButton = false;
         }
     };
-    commentResource = new $tastypieResource('comments');
     ctrl.load = function () {
-        commentResource.objects.$find({'event': ctrl.event.id}).then(
-            function (result) {
-                ctrl.comments = [];
-                nextPages(result);
-            }, function (error) {
-                console.log(error);
-                // verify authentication
-                AuthService.checkUserAuth().success()
-                    .error(function () {$state.go('network');});
-            }
-        ).finally(function() {
-            ctrl.$broadcast('scroll.refreshComplete');
-        });
+        GenericResourceList.search(commentResource, {'event': ctrl.event.id})
+        .then(function(list) {
+            ctrl.comments=list;
+            canLoadMore();
+        })
+        .finally(function() {ctrl.$broadcast('scroll.refreshComplete');});
     };
     ctrl.loadMore = function () {
-        if (commentResource.page.meta && commentResource.page.meta.next) {
-            commentResource.page.next().then(
-                function (result) {
-                    nextPages(result);
-                }, function (error) {
-                    console.log(error);
-                    // verify authentication
-                    AuthService.checkUserAuth().success()
-                        .error(function () {$state.go('network');});
-                }
-            ).finally(function() {
-                ctrl.$broadcast('scroll.infiniteScrollComplete');
-            });
-        } else {
-            ctrl.$broadcast('scroll.infiniteScrollComplete');
-        }
+        GenericResourceList.loadMore(commentResource, ctrl.comments)
+        .then(function(list) {
+            ctrl.comments=list;
+            canLoadMore();
+        })
+        .finally(function() {ctrl.$broadcast('scroll.infiniteScrollComplete');});
     };
     ctrl.sendComment = function(newComment) {
         if (newComment) {

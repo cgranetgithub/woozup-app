@@ -3,7 +3,7 @@
 
 angular.module('woozup.controllers')
 
-.controller('NewEventCtrl', ['$tastypieResource', '$ionicLoading', '$ionicModal', 'AuthService', '$scope', '$state', 'UserData', 'NgMap', function ($tastypieResource, $ionicLoading, $ionicModal, AuthService, $scope, $state, UserData, NgMap) {
+.controller('NewEventCtrl', ['$tastypieResource', '$ionicLoading', '$ionicModal', 'AuthService', '$scope', '$state', 'UserData', 'NgMap', 'GenericResourceList', function ($tastypieResource, $ionicLoading, $ionicModal, AuthService, $scope, $state, UserData, NgMap, GenericResourceList) {
     "use strict";
     // WHEN ------------------------
     var date = new Date();
@@ -38,37 +38,33 @@ angular.module('woozup.controllers')
     // WHO ------------------------
     $scope.friends = [];
     $scope.invitees = [];
-    $scope.friendsResource = new $tastypieResource('friends/mine', {order_by: 'first_name'});
-    var nextPages = function (result) {
+    var friendsResource = new $tastypieResource('friends/mine', {order_by: 'first_name', limit:200});
+    var nextPages = function (list, result) {
             var i;
             if (result) {
                 for (i = 0; i < result.objects.length; i += 1) {
                     var item = result.objects[i];
                     if ($scope.all.checked) { item.checked = true; }
-                    $scope.friends.push(item);
-    }}};
-    // get friends logic with pagination
-    $scope.friendsResource.objects.$find().then(
-        function (result) {
-            nextPages(result);
-            $scope.$broadcast('scroll.infiniteScrollComplete');
-        }, function (error) {
-            console.log(error);
-            // verify authentication
-            AuthService.checkUserAuth().success()
-                .error(function () {$state.go('network');});
-        }
-    );
-    // pagination
-    $scope.loadMore = function () {
-        if ($scope.friendsResource.page.meta && $scope.friendsResource.page.meta.next) {
-            $scope.friendsResource.page.next().then(function (result) {
-                nextPages(result);
-            });
-        };
-        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    list.push(item);
+                }
+            }
+        return list;
     };
-    $scope.all = {checked: false};
+    $scope.all = {checked: true};
+    $scope.load = function () {
+        GenericResourceList.search(friendsResource, null, nextPages)
+        .then(function(list) {
+            $scope.friends=list;
+            $scope.invitees=list;
+        })
+        .finally(function() {$scope.$broadcast('scroll.refreshComplete');});
+    };
+    $scope.load();
+    $scope.loadMore = function () {
+        GenericResourceList.loadMore(friendsResource, $scope.friends)
+        .then(function(list) {$scope.friends=list;})
+        .finally(function() {$scope.$broadcast('scroll.infiniteScrollComplete');});
+    };
     $scope.allChanged = function () {
         for (var i = 0; i < $scope.friends.length; i++) {
             $scope.friends[i].checked = $scope.all.checked;
@@ -78,14 +74,12 @@ angular.module('woozup.controllers')
     };        
     $scope.setWho = function () {
         $scope.invitees = [];
-        if (! $scope.all.checked) {
-            for (var i = 0; i < $scope.friends.length; i++) {
-                var item = $scope.friends[i];
-                if (item.checked) {
-                    // hack, to be improve with better API
-                    var resUrl = '/api/v1/user/' + item.id + '/';
-                    $scope.invitees.push(resUrl);
-                };
+        for (var i = 0; i < $scope.friends.length; i++) {
+            var item = $scope.friends[i];
+            if (item.checked) {
+                // hack, to be improve with better API
+                var resUrl = '/api/v1/user/' + item.id + '/';
+                $scope.invitees.push(resUrl);
             };
         };
         $scope.whoModal.hide();

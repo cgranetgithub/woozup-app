@@ -163,7 +163,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             controller: 'TabCtrl'
         })
         .state('tab.new', {
-//                 cache: false,
+            cache: false,
             url: "/new",
             views: {
                 'newevent': {
@@ -182,23 +182,22 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 }
             }
         })
-        .state('tab.search', {
-            cache: false,
-            url: '/search',
-            views: {
-                'search': {
-                    templateUrl: 'templates/search.html',
-                    controller: 'SearchCtrl'
-                }
-            }
-        })
         .state('tab.journal', {
             cache: false,
             url: '/journal',
             views: {
                 'journal': {
                     templateUrl: "templates/journal.html",
-//                         controller: 'JournalCtrl'
+                    controller: 'JournalCtrl'
+                }
+            }
+        })
+        .state('tab.people', {
+            cache: false,
+            url: '/people',
+            views: {
+                'people': {
+                    templateUrl: "templates/people.html",
                 }
             }
         })
@@ -212,12 +211,12 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 }
             }
         })
-        .state('findMoreFriends', {
-            cache: false,
-            url: '/findMoreFriends',
-            templateUrl: 'templates/people.html',
-            controller: 'FindMoreFriendsCtrl'
-        })
+//         .state('findMoreFriends', {
+//             cache: false,
+//             url: '/findMoreFriends',
+//             templateUrl: 'templates/people.html',
+//             controller: 'FindMoreFriendsCtrl'
+//         })
         .state('user', {
             cache: false,
             url: '/user/:userId',

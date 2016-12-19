@@ -22,19 +22,18 @@ angular.module('woozup.controllers')
     };
     $ionicLoading.show({template: "Chargement"});
     var userresource = new $tastypieResource('user', {});
-    userresource.objects.$get({id: $scope.userId}).then(
+    userresource.objects.$get({id: $scope.userId})
+    .then(
         function (result) {
             $scope.user = result;
-            $ionicLoading.hide();
         },
         function (error) {
             console.log(error);
-            $ionicLoading.hide();
             // verify authentication
             AuthService.checkUserAuth().success()
                 .error(function () {$state.go('network');});
         }
-    );
+    ).finally(function() {$ionicLoading.hide();});
     $scope.events = [];
     var eventsResource = new $tastypieResource('events/mine');
     eventsResource.objects.$find().then(

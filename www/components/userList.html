@@ -1,28 +1,47 @@
-<!-- normal list item -->
-<ion-item ng-if="!$ctrl.small && !$ctrl.users" class="text-center">
-    <ion-spinner icon="ripple"></ion-spinner>
-</ion-item>
+<ion-refresher ng-if="$ctrl.refresher" pulling-text="Mise à jour" on-refresh="$ctrl.onSearchChange($ctrl.search)"></ion-refresher>
 
-<ion-item ng-if="!$ctrl.small" class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
-    <img ng-if="user.profile.image" ng-src="{{user.profile.image}}">
-    <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
-    <div class="item-text-center">
-        <h2>{{user.first_name}} {{user.last_name}}</h2>
-    </div>
-<!--                 <p>{{user.user.email}}</p> -->
-    <div class="buttons">
-        <button class="button button-outline button-stable roundbutton" ng-if="$ctrl.displaybutton" ng-click="$ctrl.noaction(user); $event.stopPropagation();" stop-event="click">
-            <i class="icon ion-android-cancel"></i>
-        </button>
-        <button class="button button-outline button-positive roundbutton" ng-if="$ctrl.displaybutton" ng-click="$ctrl.yesaction(user); $event.stopPropagation();" stop-event="click">
-            <i class="icon ion-android-person-add"></i>
-        </button>
-    </div>
-</ion-item>
+<label ng-if="$ctrl.searchEnabled" class="item item-input">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="search" placeholder="Recherche" ng-model="$ctrl.search"
+            ng-change="$ctrl.onSearchChange($ctrl.search)">
+</label>
 
-<!-- small inline list item -->
-<span ng-if="$ctrl.small" class="mini-avatar" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
-    <img ng-if="user.profile.image" ng-src="{{user.profile.image}}" >
-    <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
-    {{user.first_name}} {{user.last_name}}
-</span>
+
+<ion-list>
+
+    <!-- normal list item -->
+    <ion-item ng-if="!$ctrl.small && !$ctrl.users" class="text-center">
+        <ion-spinner icon="ripple"></ion-spinner>
+    </ion-item>
+
+    <ion-item ng-if="!$ctrl.small" class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
+        <img ng-if="user.profile.image" ng-src="{{user.profile.image}}">
+        <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
+        <div class="item-text-center">
+            <h2>{{user.first_name}} {{user.last_name}}</h2>
+        </div>
+    <!--                 <p>{{user.user.email}}</p> -->
+        <div class="buttons">
+            <button class="button button-outline button-stable roundbutton" ng-if="$ctrl.displayButton" ng-click="$ctrl.noaction(user); $event.stopPropagation();" stop-event="click">
+                <i class="icon ion-android-cancel"></i>
+            </button>
+            <button class="button button-outline button-positive roundbutton" ng-if="$ctrl.displayButton" ng-click="$ctrl.yesaction(user); $event.stopPropagation();" stop-event="click">
+                <i class="icon ion-android-person-add"></i>
+            </button>
+        </div>
+    </ion-item>
+
+    <!-- small inline list item -->
+    <span ng-if="$ctrl.small" class="mini-avatar" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
+        <img ng-if="user.profile.image" ng-src="{{user.profile.image}}" >
+        <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
+        {{user.first_name}} {{user.last_name}}
+    </span>
+
+</ion-list>
+<ion-infinite-scroll ng-if="$ctrl.moreInfinite" on-infinite="$ctrl.loadMore()"></ion-infinite-scroll>
+
+<button class="button button-clear button-positive button-block"
+        ng-if="$ctrl.moreManual && $ctrl.showButton" ng-click="$ctrl.loadMore()">
+        Voir plus
+</button>

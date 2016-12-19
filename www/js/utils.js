@@ -1,3 +1,81 @@
+function resultToList(list, result) {
+    var i;
+    if (result) {
+        for (i = 0; i < result.objects.length; i += 1) {
+            list.push(result.objects[i]);
+        }
+    }
+    return list;
+};
+
+
+angular.module('woozup.services')
+
+.service('GenericResourceList', ['$q', 'AuthService', '$state', function ($q, AuthService, $state) {
+    "use strict";
+    return {
+        search: function (resource, params, nextPages) {
+            nextPages = nextPages || resultToList
+            params = params || {}
+            var deferred = $q.defer(),
+                promise  = deferred.promise;
+            resource.objects.$find(params).then(
+                function (result) {
+                    var list = [];
+                    list = nextPages(list, result);
+                    deferred.resolve(list);
+                }, function (error) {
+                    console.log(error);
+                    deferred.reject(error);
+                    // verify authentication
+                    AuthService.checkUserAuth().success()
+                        .error(function () {$state.go('network');});
+                }
+            );
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+            return promise;
+        },
+        loadMore: function (resource, list, nextPages) {
+            nextPages = nextPages || resultToList
+            var deferred = $q.defer(),
+                promise  = deferred.promise;
+            if (resource.page.meta && resource.page.meta.next) {
+                resource.page.next().then(
+                    function (result) {
+                        list = nextPages(list, result);
+                        deferred.resolve(list);
+                    }, function (error) {
+                        console.log(error);
+                        deferred.reject(error);
+                        // verify authentication
+                        AuthService.checkUserAuth().success()
+                            .error(function () {$state.go('network');});
+                    })
+            } else {
+                deferred.resolve(list);
+            }
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+            return promise;
+        }
+    };
+}]);
+
+
+
 function helper(tab, k) {
     var t = [], i;
     k = k || "value";

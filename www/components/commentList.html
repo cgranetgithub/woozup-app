@@ -1,23 +1,31 @@
-<ion-item ng-if="!$ctrl.comments" class="text-center">
-    <ion-spinner icon="ripple"></ion-spinner>
-</ion-item>
+    <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+            <input type="text" ng-model="$ctrl.newComment" placeholder="Ajouter un commentaire">
+        </label>
+        <button class="button button-small" ng-click="$ctrl.sendComment($ctrl.newComment)" ng-disabled="!$ctrl.newComment">
+            <i class="icon ion-paper-airplane"></i>
+        </button>
+    </div>
 
+<ion-list>
 
-<div class="card" ng-repeat="comment in $ctrl.comments track by $index">
-  <div class="item item-text-wrap text-left">
-    <p class="text-left">{{comment.text}}<p>
-    <p class="text-right"><small>{{comment.author.first_name}} {{comment.author.last_name}}, {{ comment.updated_at | date : 'd MMM à H:mm'}}</small></p>
-  </div>
-</div>
+    <ion-item ng-if="!$ctrl.comments" class="text-center">
+        <ion-spinner icon="ripple"></ion-spinner>
+    </ion-item>
 
-<div class="item item-input-inset">
-    <label class="item-input-wrapper">
-        <input type="text" ng-model="$ctrl.newComment" placeholder="Ajouter un commentaire">
-    </label>
-    <button class="button button-small" ng-click="$ctrl.sendComment($ctrl.newComment)" ng-disabled="!$ctrl.newComment">
-        <i class="icon ion-paper-airplane"></i>
-    </button>
-</div>
+    <div class="card" ng-repeat="comment in $ctrl.comments track by $index">
+    <div class="item item-text-wrap text-left">
+        <p class="text-left">{{comment.text}}<p>
+        <p class="text-right"><small>{{comment.author.first_name}} {{comment.author.last_name}}, {{ comment.updated_at | date : 'd MMM à H:mm'}}</small></p>
+    </div>
+    </div>
+
+</ion-list>
+
+<button class="button button-clear button-positive"
+        ng-if="$ctrl.showButton" ng-click="$ctrl.loadMore()">
+        Commentaires précédents
+</button>
 
 <!--<ion-item class="item item-avatar smaller-item" ng-repeat="comment in $ctrl.comments track by $index" ng-click="$ctrl.editEvent(comment)">
     <p>{{comment.text}}</p>

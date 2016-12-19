@@ -20,9 +20,9 @@
         {{where.address}}
     </button>
     <button class="button button-block" ng-click="whoModal.show()">
-        <span ng-if="invitees.length==0">Tout le monde est invité</span>
-        <span ng-if="invitees.length==1">1 invité</span>
+        <span ng-if="invitees.length<2">{{invitees.length}} invité</span>
         <span ng-if="invitees.length>1">{{invitees.length}} invités</span>
+        <span ng-if="invitees.length==friends.length"> (Tous)</span>
     </button>
     <button class="button button-block button-positive button-outline" ng-click="create()">
         C'est parti !

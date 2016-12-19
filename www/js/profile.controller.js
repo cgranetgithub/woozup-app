@@ -8,7 +8,7 @@ angular.module('woozup.controllers')
     $scope.userId = UserData.getUserId();
     var newname, newimage;
     $scope.loadProfile = function() {
-        $scope.userresource = new $tastypieResource('user', {});
+        $scope.userresource = new $tastypieResource('user');
         $scope.userresource.objects.$get({id: $scope.userId}).then(
             function (result) {
                 $scope.user = result;
@@ -25,20 +25,6 @@ angular.module('woozup.controllers')
         });
     };
     $scope.loadProfile();
-//     $scope.events = null;
-//     var eventsResource = new $tastypieResource('events/mine');
-//     eventsResource.objects.$find().then(
-//         function (result) {
-//             $scope.events = result.objects;
-//         }
-//     );
-//     $scope.friends = null;
-//     var friendsResource = new $tastypieResource('friends/mine');
-//     friendsResource.objects.$find().then(
-//         function (result) {
-//             $scope.friends = result.objects;
-//         }
-//     );
     // modal window
     $ionicModal.fromTemplateUrl('templates/user/profileEdit.html', {
         scope: $scope,
