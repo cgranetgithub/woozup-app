@@ -96,6 +96,12 @@ angular.module('woozup.services', ['ngResourceTastypie'])
         getUserId: function () {
             return parseInt(data.userId, 10);
         },
+        setFacebookId: function (facebookId) {
+            data.facebookId = facebookId;
+        },
+        getFacebookId: function () {
+            return parseInt(data.facebookId, 10);
+        },
         setUserName: function (userName) {
             data.userName = userName;
         },
@@ -454,13 +460,13 @@ angular.module('woozup.services', ['ngResourceTastypie'])
         loginUser: function (authData, social) {
             var deferred = $q.defer(),
                 promise = deferred.promise,
-//                         command = apiUrl + 'auth/login_by_email/';
                 command = apiUrl + 'auth/login/';
             if (social) {
-                command = apiUrl + 'register-by-token/' + social + '/';
+                command = apiUrl + 'auth/social_login/';
             }
             $http.post(command, authData
-                ).then(function (response) {
+            ).then(function (response) {
+                console.log(response);
                 $tastypie.setProviderAuth('woozup', response.data.username, response.data.api_key)
                 $localstorage.set('userid', response.data.userid);
                 $localstorage.set('username', response.data.username);
@@ -483,11 +489,14 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             };
             return promise;
         },
-        registerUser: function (authData) {
+        registerUser: function (authData, social) {
             var deferred = $q.defer(),
                 promise = deferred.promise,
-                command = 'auth/register/';
-            $http.post(apiUrl + command, authData
+                command = apiUrl + 'auth/register/';
+            if (social) {
+                command = apiUrl + 'auth/social_register/';
+            }
+            $http.post(command, authData
                 ).then(function (response) {
                 $tastypie.setProviderAuth('woozup', response.data.username, response.data.api_key)
                 $localstorage.set('userid', response.data.userid);

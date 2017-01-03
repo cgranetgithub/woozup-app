@@ -1,4 +1,6 @@
+<!-- Refresher must be immediate child of ion-content or ion-scroll -->
 <ion-refresher ng-if="$ctrl.refresher" pulling-text="Mise à jour" on-refresh="$ctrl.load()"></ion-refresher>
+
 <ion-list>
 
     <ion-item ng-if="!$ctrl.events" class="text-center">

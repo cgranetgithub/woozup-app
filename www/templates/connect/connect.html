@@ -4,54 +4,68 @@
         <div ng-if="!registered && !newNumber">
             <h1 class="woozup-title white text-center">Woozup</h1>
             <intlpn ng-model="data.number" placeholder="Téléphone" default-country="fr" box-header-class="bar-light" box-header-title="Pays" search-placeholder="France" country-iso-code="data.isocode" country-dial-code="data.dialcode"></intlpn>
-            <button class="button button-block button-light button-large button-outline" ng-click="check_number()">Suivant</button>
+            <button class="button button-block button-light button-large button-outline" ng-disabled="!data.number" ng-click="check_number()">Suivant</button>
         </div>
 <!-- verify number with validation code -->
         <div ng-if="!registered && newNumber && !validCode">
-            <h1 class="white text-center">Confirmation du numéro</h1>
-            <p class="note">Nous venons d'envoyer un code de vérification au {{data.number}}<br>Il devrait arriver dans quelques secondes</p>
+            <h1 class="white text-center">Confirmation de ton numéro</h1>
+            <p class="note">Nous venons d'envoyer le code de vérification au {{data.number}},<br>il devrait arriver dans quelques secondes !</p>
             <br>
             <label class="item item-input">
                 <input type="number" ng-model="data.code" placeholder="CODE">
             </label>
-            <button class="button button-block button-light button-large button-outline" ng-click="verif_code()">Valider</button>
+            <button class="button button-block button-light button-large button-outline" ng-disabled="!data.code" ng-click="verif_code()">Valider</button>
             <div class="downNote">
                 <p class="note">Code pas encore reçu ?<p>
                 <p class="note" ng-if="hideCodeButton">Tu pourras en demander un autre dans {{timer}}s</p>
-                <button ng-if="!hideCodeButton" class="text-center button button-light button-outline" ng-click="get_code()">Me renvoyer un code</button>
+                <button ng-if="!hideCodeButton" class="text-center button button-light button-outline button-block" ng-click="get_code()">Me renvoyer un code</button>
             </div>
         </div>
 <!-- register, choices -->
         <div ng-if="!registered && newNumber && validCode">
-            <h3 class="text-center white">Créer mon compte</h3>
+            <h1 class="text-center white">Connexion à Woozup</h1>
             <br>
-            <button class="button button-block button-positive disabled" ng-click="fbLogin()">
+            <button class="button button-block button-positive" ng-click="facebookSignIn()">
                 avec
                 <i class="icon ion-social-facebook"></i>
-                Facebook (bientot disponible)
+                Facebook
             </button>
-            <button class="button button-block button-assertive disabled" ng-click="glLogin()">
-                avec
-                <i class="icon ion-social-google"></i>
-                Google (bientot disponible)
-            </button>
-            <button class="button button-block button-light" ng-click="showPopup()">
-                juste avec un mot de passe
-            </button>
-            <br>
+            <div class="downNote">
+                <p class="note">Pas de compte Facebook ?<p>
+                <button class="button button-block button-light" ng-click="showPopup()">
+                    juste avec un mot de passe
+                </button>
+                <br>
+            </div>
         </div>
 <!-- login -->
         <div ng-if="registered && !wantResetPassword">
+            <h1 class="white text-center">Connexion à Woozup</h1>
+            <button class="button button-block button-positive" ng-click="facebookLogIn()">
+                avec
+                <i class="icon ion-social-facebook"></i>
+                Facebook
+            </button>
+            <label class="item item-input">
+                <span class="input-label">Mot de passe</span>
+                <input type="password" ng-model="data.password">
+            </label>
+            <button class="button button-block button-light button-large button-outline" ng-disabled="!data.password" ng-click="login()">OK</button>
+            <div class="downNote">
+                <p class="note" ng-click="forgetPwd()">J'ai oublié mon mot de passe</p>
+            </div>
+        </div>
+<!--        <div ng-if="registered && !wantResetPassword">
             <h1 class="white text-center">Mot de passe</h1>
             <label class="item item-input">
                 <span class="input-label">Mot de passe</span>
                 <input type="password" ng-model="data.password">
             </label>
-            <button class="button button-block button-light button-large button-outline" ng-click="login()">OK</button>
-            <div class="down">
+            <button class="button button-block button-light button-large button-outline" ng-disabled="!data.password" ng-click="login()">OK</button>
+            <div class="downNote">
                 <p class="note" ng-click="forgetPwd()">J'ai oublié mon mot de passe</p>
             </div>
-        </div>
+        </div>-->
 <!-- reset password -->
         <div ng-if="registered && wantResetPassword">
             <h1 class="white text-center">Définir un nouveau mot de passe</h1>
@@ -64,7 +78,7 @@
                 <input type="password" ng-model="data.password">
             </label>
             <button class="button button-block button-light button-large button-outline" ng-click="resetPassword()">Changer mon mot de passe</button>
-            <div class="down">
+            <div class="downNote">
                 <p class="note" ng-click="backToStart()">Annuler et revenir au début</p>
             </div>
         </div>

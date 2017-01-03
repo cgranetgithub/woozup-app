@@ -1,6 +1,6 @@
 angular.module('woozup.controllers')
 
-.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', '$timeout', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, $scope, $state, UserData, pushNotifReg, $ionicHistory, $timeout) {
+.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', 'ProfileService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', '$timeout', '$q', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, ProfileService, $scope, $state, UserData, pushNotifReg, $ionicHistory, $timeout, $q) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,
@@ -164,7 +164,7 @@ angular.module('woozup.controllers')
             var authData = {
                 'username': $scope.data.number,
                 'password': $scope.data.password,
-                'number': $scope.data.number,
+                'phone_number': $scope.data.number,
                 'code': $scope.data.code
             };
             AuthService.registerUser(authData, false)
@@ -197,28 +197,121 @@ angular.module('woozup.controllers')
             });
         })
     };
-    // Facebook connect method
-    $scope.fbLogin = function () {
-        facebookConnectPlugin.login([], function (obj) {
+    // ======== FACEBOOK ==========
+    
+    // This is the success callback from the login method
+    var fbLoginSuccessAndRegister = function(response) {
+        if (!response.authResponse){
+            fbLoginError("Cannot find the authResponse");
+            return;
+        }
+        var authResponse = response.authResponse;
+        facebookConnectPlugin.getAccessToken(function(token) {
             var authData = {
-                "provider": "facebook",
-                "access_token": obj.authResponse.accessToken
-            };
-            /* we have to call registerbyToken from service AuthService */
-            AuthService.loginUser(authData, "facebook")
-                .success(function () {
-                    $tastypie.setAuth(UserData.getUsername(), UserData.getApiKey());
-                    pushNotifReg(UserData.getNotifData());
-//                     findContacts(sortContacts);
+                'access_token': token,
+                'phone_number': $scope.data.number,
+                'code': $scope.data.code
+            };            
+            AuthService.registerUser(authData, 'facebook')
+            .then(function(success) {
+                getFacebookProfileInfo(authResponse).then(
+                function(profileInfo) {
+                    var file_field = {
+                    "name":"facebook",
+                    "url_image": "http://graph.facebook.com/" + authResponse.userID + "/picture?type=large"
+                    };
+                    ProfileService.setpicture(file_field).then(
+                        function (res) {$ionicLoading.hide();},
+                        function (err) {$ionicLoading.hide();}
+                    );
+        //                 authResponse: authResponse,
+        //                 userID: profileInfo.id,
+        //                 name: profileInfo.name,
+        //                 email: profileInfo.email,
+        //                 picture : "http://graph.facebook.com/" + authResponse.userID + "/picture?type=large"
+        //             });
+                    $ionicLoading.hide();
                     $state.go('tab.home');
-                }).error(function () {
-                    $ionicPopup.alert({
-                        title: "Problème lors de la création du compte",
-                        template: "Réessaie plus tard"
-                    });
+                }, function(fail) {
+                    // Fail get profile info
+                    console.log('profile info fail', fail);
                 });
-        }, function (obj) {
-            console.log(obj);
+            }, function(error){
+                console.log(error);
+            });
+        });
+    };
+    // This is the success callback from the login method
+    var fbLoginSuccess = function(response) {
+        if (!response.authResponse){
+            fbLoginError("Cannot find the authResponse");
+            return;
+        }
+        var authResponse = response.authResponse;
+        facebookConnectPlugin.getAccessToken(function(token) {
+            var authData = {
+                'access_token': token,
+            };            
+            AuthService.loginUser(authData, 'facebook')
+            .then(function(success) {
+                    $ionicLoading.hide();
+                    $state.go('tab.home');
+                }, function(fail) {
+                    // Fail get profile info
+                    console.log('FB login failed', fail);
+                });
+        }, function(error){
+            console.log(error);
+        });
+    };
+    
+    // This is the fail callback from the login method
+    var fbLoginError = function(error){
+        console.log('fbLoginError', error);
+        $ionicLoading.hide();
+    };
+    
+    // This method is to get the user profile info from the facebook api
+    var getFacebookProfileInfo = function (authResponse) {
+        var info = $q.defer();
+        facebookConnectPlugin.api('/me?fields=name&access_token=' + authResponse.accessToken, null,
+            function (response) {
+                info.resolve(response);
+            },
+            function (response) {
+                console.log(response);
+                info.reject(response);
+            }
+        );
+        return info.promise;
+    };
+    
+    //This method is executed when the user press the "Login with facebook" button
+    $scope.facebookSignIn = function() {
+        facebookConnectPlugin.getLoginStatus(
+        function(success) {
+            $ionicLoading.show({template: 'Connexion'});
+            if (success.status === 'connected') {
+                // The user is logged in and has authenticated your app,
+                // response.authResponse supplies the user's ID, a valid access token, a signed request, and the time the access token and signed request each expire
+                fbLoginSuccessAndRegister(success);
+            } else {
+                // If (success.status === 'not_authorized') the user is logged in to Facebook, but has not authenticated your app
+                // Else the person is not logged into Facebook, so we're not sure if they are logged into this app or not.
+                // Ask the permissions you need. You can learn more about FB permissions here: https://developers.facebook.com/docs/facebook-login/permissions/v2.4
+                facebookConnectPlugin.login(['user_friends', 'public_profile'], fbLoginSuccessAndRegister, fbLoginError);
+            }
+        });
+    };
+    $scope.facebookLogIn = function() {
+        facebookConnectPlugin.getLoginStatus(
+        function(success) {
+            $ionicLoading.show({template: 'Connexion'});
+            if (success.status === 'connected') {
+                fbLoginSuccess(success);
+            } else {
+                facebookConnectPlugin.login(['user_friends', 'public_profile'], fbLoginSuccess, fbLoginError);
+            }
         });
     };
 }])

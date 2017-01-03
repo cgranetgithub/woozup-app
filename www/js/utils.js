@@ -105,18 +105,25 @@ angular.module('woozup.services')
                     console.log("skip contact with no number");
                     return;
                 }
-                stuff.push({
-                    'name': entry.name.formatted,
-                    'numbers': helper(entry.phoneNumbers).join(', '),
-                    'photo': helper(entry.photos).join(', '),
-                });
+                try {
+                    stuff.push({
+                        'name': entry.name.formatted,
+                        'numbers': helper(entry.phoneNumbers).join(', '),
+                        'photo': helper(entry.photos).join(', '),
+                    });
+                } catch(e) {
+                    console.log(e);
+                }
             });
             // send to server by chunk
             var i, j, temparray, chunk = 30;
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
             for (i=0, j=stuff.length; i<j; i+=chunk) {
                 temparray = stuff.slice(i,i+chunk);
-                $http.post(apiUrl + 'contact/sort/', temparray);
+                $http.post(apiUrl + 'contact/sort/', temparray)
+                .then(function(success){}, function(error){
+                    console.log(error);
+                });
             }
         };
         

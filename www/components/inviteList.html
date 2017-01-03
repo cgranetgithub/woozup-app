@@ -1,10 +1,12 @@
+<!-- Refresher must be immediate child of ion-content or ion-scroll -->
+<ion-refresher pulling-text="Mise à jour" on-refresh="$ctrl.onSearchChange($ctrl.search)"></ion-refresher>
+
 <label class="item item-input">
     <i class="icon ion-search placeholder-icon"></i>
     <input type="search" placeholder="Recherche" ng-model="$ctrl.search"
             ng-change="$ctrl.onSearchChange($ctrl.search)">
 </label>
 
-<ion-refresher pulling-text="Mise à jour" on-refresh="$ctrl.onSearchChange($ctrl.search)"></ion-refresher>
 <ion-list>
 
     <ion-item ng-if="!$ctrl.invites" class="text-center">

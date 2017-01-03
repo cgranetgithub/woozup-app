@@ -76,7 +76,7 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Nécessaire pour te localiser et filtrer les évènements proches" />
     </plugin>
     <plugin name="cordova-plugin-contacts" spec="~2.2.0">
-        <variable name="CONTACTS_USAGE_DESCRIPTION" value="Nécessaire pour retrouver test amis" />
+        <variable name="CONTACTS_USAGE_DESCRIPTION" value="Nécessaire pour retrouver tes amis" />
     </plugin>
     <plugin name="cordova-plugin-dialogs" spec="~1.3.0" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.0" />
@@ -89,5 +89,9 @@
     <engine name="browser" spec="~4.1.0" />
     <plugin name="phonegap-plugin-push" spec="~1.9.1">
         <variable name="SENDER_ID" value="496829276290" />
+    </plugin>
+    <plugin name="cordova-plugin-facebook4" spec="https://github.com/jeduan/cordova-plugin-facebook4">
+        <variable name="APP_ID" value="1603328073296761" />
+        <variable name="APP_NAME" value="Woozup" />
     </plugin>
 </widget>
