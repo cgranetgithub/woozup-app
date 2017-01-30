@@ -1,6 +1,6 @@
 <ion-view view-title={{event.event_type.name}}>
     <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click="goBackAction()">
+        <button class="button" ng-click="goBackAction()">
             <i class="icon ion-ios-arrow-thin-left"></i>
         </button>
     </ion-nav-buttons>
@@ -26,7 +26,7 @@
             AVEC ({{event.participants.length}})
         </div>
         <p ng-if="event.participants.length==0">Personne pour l'instant</p>
-        <user-list ng-if="event.participants.length!=0" small="true" users="event.participants" display-button=false></user-list>
+        <participant-list ng-if="event.participants.length!=0" users="event.participants"></participant-list>
         <div class="item item-divider separator">
             DISCUSSION
         </div>

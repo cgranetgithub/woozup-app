@@ -1,31 +1,44 @@
 <ion-view view-title="Lancer une invitation">
-  <ion-content class="padding">
-    <div class="row no-padding-margin">
-        <div class="col col-20 no-padding-margin">
-            <button class="button category-button" ng-click="whatModal.show()" ng-model="what" style={{what.style}}>
-                <img ng-src="{{what.icon}}"></img>
-            </button>
-        </div>
-        <div class="col col-center no-padding-margin">
-            <label class="item item-input">
-                <input type="text" placeholder="{{what.name}}"
-                       ng-model="title" ng-change="titleUpdate(title)">
-            </label>
-        </div>
-    </div>
-    <button class="button button-block" ng-click="whenModal.show()" ng-model="when">
-        Le {{when | date:'EEEE d MMMM à HH:mm'}}
-    </button>
-    <button class="button button-block" ng-click="whereModal.show()" ng-model="where">
-        {{where.address}}
-    </button>
-    <button class="button button-block" ng-click="whoModal.show()">
-        <span ng-if="invitees.length<2">{{invitees.length}} invité</span>
-        <span ng-if="invitees.length>1">{{invitees.length}} invités</span>
-        <span ng-if="invitees.length==friends.length"> (Tous)</span>
-    </button>
-    <button class="button button-block button-positive button-outline" ng-click="create()">
-        C'est parti !
-    </button>
-  </ion-content>
+    <ion-content class="padding">
+        <button ng-if="!what" ng-click="whatModal.show()"
+                class="button button-block button-large button-stable icon-left ion-ios-help-outline">
+            Quoi
+        </button>    
+        <button ng-if="what"  ng-click="whatModal.show()" ng-model="what"
+                class="button button-block button-large category-grid-item"
+                ng-style="{{what.style}}" style="margin-left:0;">
+            <img ng-if="what.icon" ng-src="{{what.icon}}">
+            <span>{{what.short_name}}</span><span ng-if="title"> ({{title}})</span>
+        </button>
+        
+        <button ng-if="!when" ng-click="whenModal.show()"
+                class="button button-block button-large button-stable icon-left ion-ios-clock-outline">
+            Quand
+        </button>
+        <button ng-if="when"  ng-click="whenModal.show()" ng-model="when"
+                class="button button-block button-large button-positive">
+            Le {{when | date:'EEEE d MMMM à HH:mm'}}
+        </button>
+        
+        <button ng-if="!where"  ng-click="whereModal.show()"
+                class="button button-block button-large button-stable icon-left ion-ios-location-outline">
+            Où
+        </button>
+        <button ng-if="where"  ng-click="whereModal.show()" ng-model="where"
+                class="button button-block button-large button-energized">
+            {{where.address}}
+        </button>
+        
+        <button ng-if="!who" ng-click="showWho()"
+                class="button button-block button-large button-stable icon-left ion-ios-people-outline">Qui</button>
+        <button ng-if="who"  ng-click="showWho()"
+                class="button button-block button-large button-balanced">
+            <span ng-if="who<2">{{who}} invité</span>
+            <span ng-if="who>1">{{who}} invités</span>
+        </button>
+        
+        <button class="button button-large button-royal" ng-click="create()" ng-disabled="(!what || !who || !when || !what)">
+            C'est parti !
+        </button>
+    </ion-content>
 </ion-view>

@@ -7,9 +7,9 @@ angular.module('woozup.controllers')
     today.setHours(today.getUTCHours()-2);
     today.setMinutes(0);
     $scope.eventsResource = new $tastypieResource('events/all', {order_by: 'start', start__gte: today, 'canceled': false});
-    $scope.findMoreFriends = function() {
-        $state.go('tab.people');
-    };
+//     $scope.findMoreFriends = function() {
+//         $state.go('tab.people');
+//     };
     $scope.createEvent = function() {
         $state.go('tab.new');
     };

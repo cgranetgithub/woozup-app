@@ -15,18 +15,18 @@ angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngRe
 
 .controller('TabCtrl', ['AuthService', '$scope', '$tastypieResource', function (AuthService, $scope, $tastypieResource) {
     "use strict";
-    var newFriends, pendingFriends;
-    newFriends = new $tastypieResource('friends/new');
-    pendingFriends = new $tastypieResource('friends/pending');
-    $scope.notif = 0;
-    newFriends.objects.$find().then(
-        function (result) {
-            $scope.notif = result.meta.total_count;
-        });
-    pendingFriends.objects.$find().then(
-        function (result) {
-            $scope.notif = result.meta.total_count;
-        });
+//     var newFriends, pendingFriends;
+//     newFriends = new $tastypieResource('friends/new');
+//     pendingFriends = new $tastypieResource('friends/pending');
+//     $scope.notif = 0;
+//     newFriends.objects.$find().then(
+//         function (result) {
+//             $scope.notif = result.meta.total_count;
+//         });
+//     pendingFriends.objects.$find().then(
+//         function (result) {
+//             $scope.notif = result.meta.total_count;
+//         });
 }]);
 
 //     .controller('EventsCtrl', ['$tastypieResource', '$cordovaGeolocation',

@@ -1,0 +1,8 @@
+<ion-list>
+    <span class="mini-avatar" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
+        <img ng-if="user.profile.image" ng-src="{{user.profile.image}}" >
+        <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
+        {{user.first_name}} {{user.last_name}}
+    </span>
+
+</ion-list>

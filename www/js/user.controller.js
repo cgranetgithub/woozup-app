@@ -11,7 +11,7 @@ angular.module('woozup.controllers')
         if ($ionicHistory.viewHistory().backView) {
             $ionicHistory.goBack();
         } else {
-            $state.go('tab.home');
+            $state.go('tab.account');
         }
     };
     if (!$scope.userId) {

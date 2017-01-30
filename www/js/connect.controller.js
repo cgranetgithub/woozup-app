@@ -1,17 +1,28 @@
 angular.module('woozup.controllers')
 
-.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', 'ProfileService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', '$timeout', '$q', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, ProfileService, $scope, $state, UserData, pushNotifReg, $ionicHistory, $timeout, $q) {
+.controller('ConnectCtrl', ['$tastypie', '$ionicLoading', '$ionicPopup', 'AuthService', 'ProfileService', '$scope', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', '$timeout', '$q', '$localstorage', 'Contacts', function ($tastypie, $ionicLoading, $ionicPopup, AuthService, ProfileService, $scope, $state, UserData, pushNotifReg, $ionicHistory, $timeout, $q, $localstorage, Contacts) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,
         disableBack: true
     });
+    // restore states
+    $scope.data = {};
+    $scope.wantResetPassword = $localstorage.get('wantResetPassword');
+    $scope.registered = $localstorage.get('registered');
+    $scope.newNumber = $localstorage.get('newNumber');
+    $scope.validCode = $localstorage.get('validCode');
+    //
     $scope.backToStart = function() {
         $scope.data = {};
         $scope.wantResetPassword = false;
         $scope.registered = false;
         $scope.newNumber = false;
         $scope.validCode = false;
+        $localstorage.set('wantResetPassword', false);
+        $localstorage.set('registered', false);
+        $localstorage.set('newNumber', false);
+        $localstorage.set('validCode', false);
     };
     $scope.backToStart();
     // Timer (to avoid sending SMS too fast)
@@ -40,6 +51,7 @@ angular.module('woozup.controllers')
         AuthService.getCode({'phone_number': $scope.data.number}, false)
         .success(function () {
             $scope.newNumber = true;
+            $localstorage.set('newNumber', true);
             startTimer();
         }).error(function () {
             var alertPopup = $ionicPopup.alert({
@@ -54,6 +66,7 @@ angular.module('woozup.controllers')
         AuthService.isRegistered({'phone_number': $scope.data.number}, false)
             .success(function () {
                 $scope.registered = true;
+                $localstorage.set('registered', true);
                 $ionicLoading.hide();
             }).error(function () {
                 $scope.get_code();
@@ -66,6 +79,7 @@ angular.module('woozup.controllers')
         AuthService.verifCode({'phone_number': $scope.data.number, 'code': $scope.data.code}, false)
             .success(function () {
                 $scope.validCode = true;
+                $localstorage.set('validCode', true);
                 $ionicLoading.hide();
             }).error(function () {
                 $ionicLoading.hide();
@@ -88,7 +102,11 @@ angular.module('woozup.controllers')
                 $scope.registered = false;
                 $scope.newNumber = false;
                 $scope.validCode = false;
-                $state.go('tab.home');
+                $localstorage.set('registered', false);
+                $localstorage.set('newNumber', false);
+                $localstorage.set('validCode', false);
+                Contacts.retrieve();
+                $state.go('tab.new');
                 $ionicLoading.hide();
             }).error(function () {
                 $ionicLoading.hide();
@@ -111,6 +129,7 @@ angular.module('woozup.controllers')
                     type: 'button-positive',
                     onTap: function(e) {
                             $scope.wantResetPassword = true;
+                            $localstorage.set('wantResetPassword', true);
                             $scope.get_code();
                     }
                 }
@@ -231,7 +250,8 @@ angular.module('woozup.controllers')
         //                 picture : "http://graph.facebook.com/" + authResponse.userID + "/picture?type=large"
         //             });
                     $ionicLoading.hide();
-                    $state.go('tab.home');
+                    Contacts.retrieve();
+                    $state.go('tab.new');
                 }, function(fail) {
                     // Fail get profile info
                     console.log('profile info fail', fail);
@@ -255,7 +275,8 @@ angular.module('woozup.controllers')
             AuthService.loginUser(authData, 'facebook')
             .then(function(success) {
                     $ionicLoading.hide();
-                    $state.go('tab.home');
+                    Contacts.retrieve();
+                    $state.go('tab.new');
                 }, function(fail) {
                     // Fail get profile info
                     console.log('FB login failed', fail);
@@ -324,7 +345,7 @@ angular.module('woozup.controllers')
         $ionicLoading.hide();
 }])
 
-.controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', function ($tastypie, $ionicLoading, AuthService, $state, UserData, pushNotifReg, $ionicHistory) {
+.controller('CheckauthCtrl', ['$tastypie', '$ionicLoading', 'AuthService', '$state', 'UserData', 'pushNotifReg', '$ionicHistory', 'Contacts', function ($tastypie, $ionicLoading, AuthService, $state, UserData, pushNotifReg, $ionicHistory, Contacts) {
     "use strict";
     $ionicLoading.show({template: "Vérification de ton compte"});
     $ionicHistory.nextViewOptions({
@@ -339,7 +360,8 @@ angular.module('woozup.controllers')
 //             findContacts(sortContacts);
             var user = angular.fromJson(result['data']);
             if (user.first_name || user.last_name) {
-                $state.go('tab.home');
+                Contacts.retrieve();
+                $state.go('tab.new');
             } else {
                 $state.go('picture');
             }
@@ -356,7 +378,7 @@ angular.module('woozup.controllers')
         });
 }])
 
-.controller('NetworkCtrl', ['$ionicLoading', 'AuthService', '$state', '$ionicHistory', '$scope', '$window', function ($ionicLoading, AuthService, $state, $ionicHistory, $scope, $window) {
+.controller('NetworkCtrl', ['$ionicLoading', 'AuthService', '$state', '$ionicHistory', '$scope', '$window', '$interval', function ($ionicLoading, AuthService, $state, $ionicHistory, $scope, $window, $interval) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,

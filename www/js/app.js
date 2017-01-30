@@ -160,7 +160,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
             url: '/tab',
             abstract: true,
             templateUrl: 'templates/tabs.html',
-            controller: 'TabCtrl'
+//             controller: 'TabCtrl'
         })
         .state('tab.new', {
             cache: false,
@@ -172,35 +172,35 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 }
             }
         })
-        .state('tab.home', {
-            cache: false,
-            url: '/home',
-            views: {
-                'home': {
-                    templateUrl: 'templates/home.html',
-                    controller: 'HomeCtrl'
-                }
-            }
-        })
-        .state('tab.journal', {
-            cache: false,
-            url: '/journal',
-            views: {
-                'journal': {
-                    templateUrl: "templates/journal.html",
-                    controller: 'JournalCtrl'
-                }
-            }
-        })
-        .state('tab.people', {
-            cache: false,
-            url: '/people',
-            views: {
-                'people': {
-                    templateUrl: "templates/people.html",
-                }
-            }
-        })
+//         .state('tab.home', {
+//             cache: false,
+//             url: '/home',
+//             views: {
+//                 'home': {
+//                     templateUrl: 'templates/home.html',
+//                     controller: 'HomeCtrl'
+//                 }
+//             }
+//         })
+//         .state('tab.journal', {
+//             cache: false,
+//             url: '/journal',
+//             views: {
+//                 'journal': {
+//                     templateUrl: "templates/journal.html",
+//                     controller: 'JournalCtrl'
+//                 }
+//             }
+//         })
+//         .state('tab.people', {
+//             cache: false,
+//             url: '/people',
+//             views: {
+//                 'people': {
+//                     templateUrl: "templates/people.html",
+//                 }
+//             }
+//         })
         .state('tab.account', {
             cache: false,
             url: '/account',
@@ -232,3 +232,5 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/checkauth');
 }]);
+
+angular.module('woozup.controllers', ['ionic', 'intlpnIonic', 'ngCordova', 'ngResourceTastypie', 'ui.bootstrap', 'ngMap', 'woozup.services']);

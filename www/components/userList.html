@@ -9,13 +9,11 @@
 
 
 <ion-list>
-
-    <!-- normal list item -->
-    <ion-item ng-if="!$ctrl.small && !$ctrl.users" class="text-center">
+    <ion-item ng-if="!$ctrl.users" class="text-center">
         <ion-spinner icon="ripple"></ion-spinner>
     </ion-item>
 
-    <ion-item ng-if="!$ctrl.small" class="item item-avatar item-button-right" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
+    <ion-item class="item item-avatar item-button-right item-remove-animate" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
         <img ng-if="user.profile.image" ng-src="{{user.profile.image}}">
         <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
         <div class="item-text-center">
@@ -31,15 +29,8 @@
             </button>
         </div>
     </ion-item>
-
-    <!-- small inline list item -->
-    <span ng-if="$ctrl.small" class="mini-avatar" ng-repeat="user in $ctrl.users track by $index"  ng-click="$ctrl.editUser(user)">
-        <img ng-if="user.profile.image" ng-src="{{user.profile.image}}" >
-        <img ng-if="!user.profile.image" ng-src="img/round58-grey.png">
-        {{user.first_name}} {{user.last_name}}
-    </span>
-
 </ion-list>
+
 <ion-infinite-scroll ng-if="$ctrl.moreInfinite" on-infinite="$ctrl.loadMore()"></ion-infinite-scroll>
 
 <button class="button button-clear button-positive button-block"

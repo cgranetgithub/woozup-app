@@ -1,5 +1,4 @@
-
-<div class="row text-center profile-header no-padding-margin">
+<div class="row profile-header no-padding-margin">
     <div class="col col-33">
         <img ng-if="$ctrl.user.profile.image" ng-src={{$ctrl.user.profile.image}}>
         <img ng-if="!$ctrl.user.profile.image" ng-src="img/round58-grey.png">
@@ -7,36 +6,20 @@
     <div class="col col-center">
         <div class="row no-padding-margin">
             <div class="col no-padding-margin">
+                <p>{{ $ctrl.user.first_name }}<p>
+                <p>{{ $ctrl.user.last_name }}<p>
+            </div>
+            <div class="col no-padding-margin">
                 <p ng-click="$ctrl.toogle2events()">
                     <strong ng-if="$ctrl.events>-1">{{ $ctrl.events }}</strong>
                     <ion-spinner ng-if="!($ctrl.events  > -1)" icon="ripple"></ion-spinner>
                 </p>
-                <p class="grey">évènements</p>
+                <p>invitations</p>
             </div>
-            <div class="col no-padding-margin">
-                <p ng-click="$ctrl.toogle2friends()">
-                    <strong ng-if="$ctrl.friends>-1">{{ $ctrl.friends }}</strong>
-                    <ion-spinner ng-if="!($ctrl.friends>-1)" icon="ripple"></ion-spinner>
-                </p>
-                <p class="grey">amis</p>
-            </div>
-<!--                    <div class="col no-padding-margin">
-                <p><strong>1</strong></p>
-                <p class="grey">followers</p>
-            </div>-->
         </div>
         <div class="row no-padding-margin">
             <invite-button ng-if="$ctrl.notMe" user-id="$ctrl.userId" style="width:100%;"></invite-button>
-            <button ng-if="!$ctrl.notMe" class="button button-small button-block button-positive button-outline" ng-click="$ctrl.buttonClicked()">Modifier mon profil</button>
-            <!--<button class="button button-small button-block button-positive button-outline" ng-if="$ctrl.showButton" ng-click="$ctrl.buttonAction($ctrl.userId)">{{$ctrl.buttonTitle}}</button>-->
+            <button ng-if="!$ctrl.notMe" class="button button-small button-block button-outline woozup-color" ng-click="$ctrl.buttonClicked()">Modifier mon profil</button>
         </div>
     </div>
-</div>
-<div ng-if="!$ctrl.notMe && $ctrl.showEvents">
-    <p class="item item-divider separator text-center">MES EVENEMENTS</p>
-    <event-list events-resource="$ctrl.eventsResource" userid="userid" more-manual="true"></event-list>
-</div>
-<div ng-if="!$ctrl.notMe && $ctrl.showFriends">
-    <p class="item item-divider separator text-center">MES AMIS</p>
-    <user-list display-button=false users-resource="$ctrl.friendsResource" more-manual="true"></user-list>
 </div>

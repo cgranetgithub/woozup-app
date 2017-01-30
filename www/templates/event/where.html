@@ -1,11 +1,11 @@
 <ion-modal-view>
     <ion-content>
         <input class="map-input" places-auto-complete ng-model="place" on-place-changed="placeChanged()" ng-focus="disableTap($event)"/> <br/>
-        <ng-map class="map" zoom="17" center="[{{where.lat}}, {{where.lng}}]" on-click="onClick(event)" data-tap-disabled="true" disable-default-u-i="true">
-            <marker position="[{{where.lat}}, {{where.lng}}]" title="marker" animation="Animation.DROP"></marker>
+        <ng-map class="map" zoom="17" center="[{{location.lat}}, {{location.lng}}]" on-click="onClick(event)" data-tap-disabled="true" disable-default-u-i="true">
+            <marker position="[{{location.lat}}, {{location.lng}}]" title="marker" animation="Animation.DROP"></marker>
         </ng-map>    
-        <button class="button button-balanced button-down" ng-click="setWhere()" ng-model="where">
-            {{where.address}}
+        <button class="button button-balanced button-down" ng-click="setWhere()" ng-model="location">
+            {{location.address}}
         </button>
     </ion-content>
 </ion-modal-view>

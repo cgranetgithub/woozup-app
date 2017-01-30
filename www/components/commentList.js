@@ -2,19 +2,12 @@ function CommentListController($tastypieResource, GenericResourceList) {
     "use strict";
     var commentResource, ctrl, newComment, canLoadMore;
     ctrl = this;
-    commentResource = new $tastypieResource('comments');
-    canLoadMore = function() {
-        if (commentResource.page.meta && commentResource.page.meta.next) {
-            ctrl.showButton = true;
-        } else {
-            ctrl.showButton = false;
-        }
-    };
     ctrl.load = function () {
-        GenericResourceList.search(commentResource, {'event': ctrl.event.id})
+        commentResource = new $tastypieResource('comments', {'event': ctrl.event.id});
+        GenericResourceList.search(commentResource)
         .then(function(list) {
             ctrl.comments=list;
-            canLoadMore();
+            ctrl.showButton = GenericResourceList.canLoadMore(commentResource);
         })
         .finally(function() {ctrl.$broadcast('scroll.refreshComplete');});
     };
@@ -22,7 +15,7 @@ function CommentListController($tastypieResource, GenericResourceList) {
         GenericResourceList.loadMore(commentResource, ctrl.comments)
         .then(function(list) {
             ctrl.comments=list;
-            canLoadMore();
+            ctrl.showButton = GenericResourceList.canLoadMore(commentResource);
         })
         .finally(function() {ctrl.$broadcast('scroll.infiniteScrollComplete');});
     };

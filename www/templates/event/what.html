@@ -1,11 +1,15 @@
 <ion-modal-view>
     <ion-content class="text-center">
+        <label class="item item-input">
+            <input type="text" placeholder="Titre (optionnel)"
+                ng-model="title" ng-change="titleUpdate(title)">
+        </label>
 <!--         <ion-list class="text-center"> -->
             <button class="button category-grid-item"
                     ng-repeat="type in types.page.objects"
                     ng-click="setWhat(type)"
-                    item-width="33%" item-height="200px"
-                    style={{type.style}}>
+                    item-width="48%" item-height="200px"
+                    ng-style={{type.style}}>
                 <img ng-if="type.icon" ng-src="{{type.icon}}">
                 <span>{{type.short_name}}</span>
             </button>

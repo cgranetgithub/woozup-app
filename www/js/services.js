@@ -234,7 +234,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 userName = $localstorage.get('username'),
                 apiKey   = $localstorage.get('apikey');
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
-            $http.post(apiUrl + 'events/friends/join/' + eventId + '/')
+            $http.post(apiUrl + 'event/join/' + eventId + '/')
                 .then(function () {
                     deferred.resolve('succeeded');
                 }, function (error) {
@@ -257,7 +257,7 @@ angular.module('woozup.services', ['ngResourceTastypie'])
                 userName = $localstorage.get('username'),
                 apiKey   = $localstorage.get('apikey');
             $http.defaults.headers.common.Authorization = 'ApiKey '.concat(userName, ':', apiKey);
-            $http.post(apiUrl + 'events/friends/leave/' + eventId + '/')
+            $http.post(apiUrl + 'event/leave/' + eventId + '/')
                 .then(function () {
                     deferred.resolve('succeeded');
                 }, function (error) {

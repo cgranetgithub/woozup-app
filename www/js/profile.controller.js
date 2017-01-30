@@ -7,6 +7,12 @@ angular.module('woozup.controllers')
     "use strict";
     $scope.userId = UserData.getUserId();
     var newname, newimage;
+    // events
+    var today = new Date();
+    today.setHours(today.getUTCHours()-2);
+    today.setMinutes(0);
+    $scope.eventsResource = new $tastypieResource('event', {order_by: 'start', start__gte: today});
+    //
     $scope.loadProfile = function() {
         $scope.userresource = new $tastypieResource('user');
         $scope.userresource.objects.$get({id: $scope.userId}).then(
@@ -72,7 +78,7 @@ angular.module('woozup.controllers')
     };
 }])
 
-.controller('PictureCtrl', ['$tastypieResource', 'CameraService', '$ionicLoading', '$scope', '$state', 'AuthService', 'UserData', 'ProfileService', '$ionicModal', '$ionicPopup', '$ionicPlatform', '$ionicHistory', function ($tastypieResource, CameraService, $ionicLoading, $scope, $state, AuthService, UserData, ProfileService, $ionicModal, $ionicPopup, $ionicPlatform, $ionicHistory) {
+.controller('PictureCtrl', ['$tastypieResource', 'CameraService', '$ionicLoading', '$scope', '$state', 'AuthService', 'UserData', 'ProfileService', '$ionicModal', '$ionicPopup', '$ionicPlatform', '$ionicHistory', 'Contacts', function ($tastypieResource, CameraService, $ionicLoading, $scope, $state, AuthService, UserData, ProfileService, $ionicModal, $ionicPopup, $ionicPlatform, $ionicHistory, Contacts) {
     "use strict";
     $ionicHistory.nextViewOptions({
         disableAnimate: true,
@@ -192,7 +198,8 @@ angular.module('woozup.controllers')
                 function (err) {$ionicLoading.hide();}
             );
         };
-        $state.go('tab.home');
+        Contacts.retrieve();
+        $state.go('tab.new');
 
         // enable back button again
         deregister();

@@ -3,23 +3,48 @@
         <button class="button button-stable button-outline" ng-click="whoModal.hide()">
             <i class="icon ion-close-circled"></i>
         </button>
-        <button class="button button-positive button-outline" ng-click="setWho()">
+        <button class="button woozup-color button-outline" ng-click="setWho()">
             <i class="icon ion-checkmark-circled"></i>
         </button>
     </ion-header-bar>
     <ion-content>
+        <ion-refresher pulling-text="Mise à jour" on-refresh="reload()"></ion-refresher>
+        <p ng-if="!friends.length && !contacts.length">Tire vers le bas pour rafraichir la liste</p>
+<!--        <ion-checkbox ng-model="all.checked" ng-change="allChanged()">
+            Tous / aucun
+        </ion-checkbox>-->
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="search" placeholder="Recherche" ng-model="search.name">
+        </label>
         <ion-list>
-            <ion-checkbox ng-model="all.checked" ng-change="allChanged()">
-                Tous / aucun
-            </ion-checkbox>
-            <ion-checkbox class="item item-avatar item-checkbox-right" ng-change="itemChanged()" ng-repeat="friend in friends track by $index" ng-model=friend.checked ng-checked="friend.checked">
+            <div class="item item-divider">
+                SUGGESTIONS
+            </div>
+            <ion-checkbox class="item item-avatar item-checkbox-right item-remove-animate" ng-change="itemChanged()" ng-repeat="friend in friends | filter:search track by $index" ng-model=friend.checked ng-checked="friend.checked">
                 <img ng-if="friend.profile.image" ng-src="{{friend.profile.image}}">
                 <img ng-if="!friend.profile.image" ng-src="img/round58-grey.png">
                 <div class="item-text-center">
-                    <p>{{friend.first_name}} {{friend.last_name}}</p>
+                    <p>{{friend.name}}</p>
                 </div>
             </ion-checkbox>
+            <div class="item item-divider">
+                CONTACTS
+            </div>
+            <ion-checkbox class="item item-avatar item-checkbox-right item-remove-animate" ng-change="itemChanged()" ng-repeat="contact in contacts | filter:search track by $index" ng-model=contact.checked ng-checked="contact.checked">
+<!--                <img ng-if="contact.profile.image" ng-src="{{contact.profile.image}}">
+                <img ng-if="!contact.profile.image" ng-src="img/round58-grey.png">-->
+                <div class="item-text-center">
+                    <p>{{contact.name}}</p>
+                </div>
+            </ion-checkbox>
+<!--            <button ng-if="!progressValue && showGetContacts" class="button button-positive button-outline center-message" ng-click="getContacts()">
+                <i class="icon ion-android-person-add"></i>
+                <br>
+                Récupérer les contacts de mon répertoire
+            </button>
+            <progress ng-if="progressValue" max="{{progressMax}}" value="{{progressValue}}"></progress>-->
         </ion-list>
-        <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll>
+<!--         <ion-infinite-scroll on-infinite="loadMore()"></ion-infinite-scroll> -->
     </ion-content>
 </ion-modal-view>

@@ -6,10 +6,6 @@
 .wooup-font {
     font-family: "woozup";
 }
-.bar .title {
-/*    font-size: 40px;
-    font-family: "woozup";*/
-}
 .woozup-title {
     font-size: 100px;
     font-family: "woozup";
@@ -23,6 +19,7 @@
 }
 .white {
     color: white;
+    border-color: white;
 }
 .grey {
     color: grey;
@@ -30,28 +27,37 @@
 h1, h2, h3, h4, p, a {
     color: dimgrey;
 }
+.woozup-color {
+    color: hsl(14, 100%, 50%) !important;
+    border-color: hsl(14, 100%, 50%) !important;
+}
+.woozup-bg-color {
+    background-color: hsla(14, 100%, 50%, 0.66);
+    color: white;
+}
 /* ==================================== */
 /* ======= REGISTRATION SCREENS ======= */
 /* ==================================== */
 .registration {
     padding: 30px;
+    background-color: hsla(14, 100%, 50%, 0.66);
 }
 .registration h1, .registration h2, .registration h3 {
     margin: 60px 0;
 }
 .registration .item.item-input, .registration .item.intlpn-container {
     border: none !important;
-    background-color: rgba(255,255,255,0.2) !important;
+    background-color: rgba(255,255,255,0.7) !important;
 }
 .registration .input-label, .registration .item-input input, .registration .intlpn-container input {
-    color: white !important;
+    color: hsl(14, 100%, 50%) !important;
 }
 .registration ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color: white !important;
+    color: hsl(14, 100%, 50%) !important;
     opacity:  .9;
 }
 .registration ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: white !important;
+    color: hsl(14, 100%, 50%) !important;
     opacity:  .9;
 }
 .downNote {
@@ -76,17 +82,17 @@ h1, h2, h3, h4, p, a {
 /*.item-button-right .buttons {
     right: 5px;
 }*/
-.item-button-right {
+/*.item-button-right {
     padding-right: 0 !important;
-}
+}*/
 /* ========================================= */
 /* Rework item a little bit (make it smaller */
 /* ========================================= */
-.item {
+/*.item {
     padding-top: 6px;
     padding-bottom: 6px;
     padding-right: 1px;
-}
+}*/
 .item-content {
     padding: 14px 1px 6px;
 }
@@ -113,6 +119,7 @@ h1, h2, h3, h4, p, a {
 }
 /* ========================================= */
 .category-grid-item {
+    width: 48%;
     line-height: 0;
     padding: 5px 10px;
     margin: 5px 0 0 5px;
@@ -135,9 +142,9 @@ h1, h2, h3, h4, p, a {
     line-height: 0;
     border-radius: 5px;
     padding: 5px;
-    width: 40px;
-    right: 5px;
-    bottom: 5px;
+    width: 38px;
+    right: 19px;
+    bottom: 8px;
     position: absolute;
     opacity: 0.8;
 }
@@ -270,12 +277,13 @@ input[type="text"].controls {
     height: 100%;
 }
 .bgim {
-    background: url('../img/blurred_colors.png') no-repeat center center fixed;
+/*    background: url('../img/blurred_colors.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
+    background-size: cover;*/
 /*     background: linear-gradient(to bottom right, darkblue, lightblue); */
+    background: linear-gradient(to top, #387ef5, #86b1f8);
 }
 .withBg {
     background-repeat: no-repeat;
@@ -290,15 +298,14 @@ input[type="text"].controls {
     margin: 0;
 }
 .profile-header img {
-    border-radius: 50%;
+/*     border-radius: 50%; */
     width: 90%;
 }
 input.ng-invalid-pattern {
     color: red;
 }
-.icon {
-    width: 30%;
-    margin: auto;
+.no-line-height:before {
+    line-height: 0 !important;
 }
 .profilePicture {
     margin: 10px auto;
@@ -334,4 +341,27 @@ input.ng-invalid-pattern {
 /* iOS fix */
 .platform-ios.platform-cordova:not(.fullscreen) .iosfix>.tabs {
     top: 0 !important;
+}
+
+
+/* make keyframes that tell the start state and the end state of our object */
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:.9; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:.9; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:.9; } }
+
+.bubble {
+    position:absolute;
+    border-radius: 50%;
+    opacity:0;  /* make things invisible upon start */
+    -webkit-animation:fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+    -moz-animation:fadeIn ease-in 1;
+    animation:fadeIn ease-in 1;
+
+    -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+    -moz-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+
+    -webkit-animation-duration:1s;
+    -moz-animation-duration:1s;
+    animation-duration:1s;
 }

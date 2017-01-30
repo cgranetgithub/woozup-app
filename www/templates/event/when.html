@@ -1,12 +1,12 @@
 <ion-modal-view>
     <ion-content>
         <div class="dtpickbox">
-            <div uib-datepicker ng-model="when" class="well well-sm" datepicker-options="options"></div>
+            <div uib-datepicker ng-model="now" class="well well-sm" datepicker-options="options"></div>
         </div>
-        <div uib-timepicker ng-model="when" minute-step="15" show-meridian="false"></div>
+        <div uib-timepicker ng-model="now" minute-step="15" show-meridian="false"></div>
         <button class="button button-balanced button-down"
-                ng-click="setWhen(when)" name="next-button">
-            Le {{when | date:'EEEE d MMMM à HH:mm'}}
+                ng-click="setWhen(now)" name="next-button">
+            Le {{now | date:'EEEE d MMMM à HH:mm'}}
         </button>
     </ion-content>
 </ion-modal-view>

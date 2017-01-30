@@ -15,13 +15,13 @@ function EventListController($tastypieResource, $state, InviteService, GenericRe
             for (i = 0; i < result.objects.length; i += 1) {
                 event = result.objects[i];
                 event.ownership = false;
-                if (event.owner.id == ctrl.userid) {
+                if (event.owner.id == ctrl.userId) {
                     event.ownership = true;
                 }
                 j = 0;
                 event.participate = false;
                 while (event.participants[j]) {
-                    if (event.participants[j].id == ctrl.userid) {
+                    if (event.participants[j].id == ctrl.userId) {
                         event.participate = true;
                         break;
                     }
@@ -37,7 +37,7 @@ function EventListController($tastypieResource, $state, InviteService, GenericRe
 //     ctrl.eventsResource = new $tastypieResource('events/all',
 //                         {order_by: 'start', start__gte: today, 'canceled': false});
     ctrl.load = function () {
-        GenericResourceList.search(ctrl.eventsResource, null, nextPages)
+        GenericResourceList.search(ctrl.eventsResource, nextPages)
         .then(function(list) {
             ctrl.events=list;
             canLoadMore();
@@ -78,7 +78,7 @@ angular.module('woozup').component('eventList', {
   templateUrl: 'components/eventList.html',
   controller: EventListController,
   bindings: {
-    userid: '<',
+    userId: '<',
     refresher: '<',
     moreManual: '<',
     moreInfinite: '<',

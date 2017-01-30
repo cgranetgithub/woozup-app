@@ -14,12 +14,14 @@ angular.module('woozup.services')
 .service('GenericResourceList', ['$q', 'AuthService', '$state', function ($q, AuthService, $state) {
     "use strict";
     return {
-        search: function (resource, params, nextPages) {
+        search: function (resource, nextPages) {
+//         search: function (resource, params, nextPages) {
             nextPages = nextPages || resultToList
-            params = params || {}
+//             params = params || {}
             var deferred = $q.defer(),
                 promise  = deferred.promise;
-            resource.objects.$find(params).then(
+//             resource.objects.$find(params).then(
+            resource.objects.$find().then(
                 function (result) {
                     var list = [];
                     list = nextPages(list, result);
@@ -70,6 +72,13 @@ angular.module('woozup.services')
                 return promise;
             };
             return promise;
+        },
+        canLoadMore: function(resource) {
+            if (resource.page.meta && resource.page.meta.next) {
+                return true;
+            } else {
+                return false;
+            }
         }
     };
 }]);
@@ -87,64 +96,89 @@ function helper(tab, k) {
 };
 
 angular.module('woozup.services')
-.factory('sortContacts', ['$http', 'apiUrl', 'UserData', function ($http, apiUrl, UserData) {
+.service('Contacts', ['$http', 'apiUrl', 'UserData', '$q', function ($http, apiUrl, UserData, $q) {
     "use strict";
-    return function () {
-        if (!navigator.contacts) { return; }
-        
-        // contacts founds (by "navigator.contacts.find")
-        function onSuccess(contacts) {
-            console.log('Found ' + contacts.length + ' contacts.');
-            if (contacts === null) {
-                console.log("No contact retrieved");
-                return;
-            }
-            var stuff = [];
-            contacts.forEach(function (entry) {
-                if (!entry.phoneNumbers || !entry.phoneNumbers.length) {
-                    console.log("skip contact with no number");
-                    return;
+    return {
+        retrieve: function () {
+            console.log('start');
+            var deferred = $q.defer(),
+                promise  = deferred.promise;
+            // contacts founds (by "navigator.contacts.find")
+            function onSuccess(contacts) {
+                console.log('Found ' + contacts.length + ' contacts.');
+                if (contacts === null) {
+                    console.log("No contact retrieved");
+                    deferred.reject(0);
+                    return 0;
                 }
-                try {
-                    stuff.push({
-                        'name': entry.name.formatted,
-                        'numbers': helper(entry.phoneNumbers).join(', '),
-                        'photo': helper(entry.photos).join(', '),
-                    });
-                } catch(e) {
-                    console.log(e);
-                }
-            });
-            // send to server by chunk
-            var i, j, temparray, chunk = 30;
-            $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
-            for (i=0, j=stuff.length; i<j; i+=chunk) {
-                temparray = stuff.slice(i,i+chunk);
-                $http.post(apiUrl + 'contact/sort/', temparray)
-                .then(function(success){}, function(error){
-                    console.log(error);
+                var stuff = [];
+                contacts.forEach(function (entry) {
+                    if (!entry.phoneNumbers || !entry.phoneNumbers.length) {
+                        console.log("skip contact with no number");
+                        return;
+                    }
+                    try {
+                        stuff.push({
+                            'name': entry.name.formatted,
+                            'numbers': helper(entry.phoneNumbers).join(', '),
+                            'photo': helper(entry.photos).join(', '),
+                        });
+                    } catch(e) {
+                        console.log(e);
+                    }
                 });
-            }
-        };
-        
-        // error while finding contacts (by "navigator.contacts.find")
-        function onError(contactError) {
-            console.log(contactError);
-        };
+                // send to server by chunk
+                var i, j, temparray, chunk = 30;
+                $http.defaults.headers.common.Authorization = 'ApiKey '.concat(UserData.getUsername(), ':', UserData.getApiKey());
+                for (i=0, j=stuff.length; i<j; i+=chunk) {
+                    temparray = stuff.slice(i,i+chunk);
+                    $http.post(apiUrl + 'contact/sort/', temparray)
+                    .then(function(success){
+                        console.log('post');
+                    }, function(error){
+                        console.log(error);
+                    });
+                }
+                console.log('end');
+                deferred.resolve(stuff.length);
+                return stuff.length;
+            };
+            
+            // error while finding contacts (by "navigator.contacts.find")
+            function onError(contactError) {
+                console.log(contactError);
+                deferred.reject(-1);
+                return -1;
+            };
 
-        // find all contacts using cordova contacts
-        var options      = new ContactFindOptions();
-        options.filter   = "";
-        options.multiple = true;
-        options.desiredFields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers, navigator.contacts.fieldType.photos];
-        options.hasPhoneNumber = true;
-        var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-        navigator.contacts.find(fields, onSuccess, onError, options);
+            if (navigator.contacts) {
+                console.log('cordova contact available');
+                // find all contacts using cordova contacts
+                var options      = new ContactFindOptions();
+                options.filter   = "";
+                options.multiple = true;
+                options.desiredFields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers, navigator.contacts.fieldType.photos];
+                options.hasPhoneNumber = true;
+                var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+                navigator.contacts.find(fields, onSuccess, onError, options);
+            } else {
+                console.log('cordova contact not available');
+                deferred.reject(-1);
+            }
+                
+            promise.success = function (fn) {
+                promise.then(fn);
+                return promise;
+            };
+            promise.error = function (fn) {
+                promise.then(null, fn);
+                return promise;
+            };
+            console.log('end');
+            return promise;
+        }
     };
 }]);
-
-
-
 
 /* DEBUG STUFF : */
 // function fb_init() {
