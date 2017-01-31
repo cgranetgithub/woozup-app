@@ -1,0 +1,33 @@
+==== ANDROID BUILD =======
+
+# Install Java
+$ sudo apt-get install default-jdk
+
+
+# Install Android command line tools (for instance in ~/android/tools/)
+# Set ANDROID_HOME = ~/android
+
+
+# Generate platform specific stuff
+$ ionic platform remove android && ionic platform add android
+
+
+# build resources + add push notif icon android
+ionic resources
+cp -r resources/android/ic_notification/* platforms/android/res/
+
+
+add the following at the end of the <application> tag:
+   <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
+-------------------------------------------------------
+
+# push notification plugin
+ionic plugin add https://github.com/phonegap-build/PushPlugin.git
+!!! ANDROID build !!! need to install from the SDK:
+-  Extras > Android Support Library version 23 or greater
+-  Extras > Android Support Repository version 20 or greater
+-  Extras > Google Play Services version 27 or greater
+-  Extras > Google Repository version 22 or greater
+$ android update sdk --no-ui -t extra-google-m2repository,extra-android-m2repository
+

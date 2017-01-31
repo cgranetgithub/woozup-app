@@ -21,22 +21,17 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "^1.5.9",
-    "angular-bootstrap": "^2.3.0",
-    "angular-i18n": "^1.5.9",
+    "angular": "1.5.3",
+    "angular-animate": "1.5.3",
+    "angular-bootstrap": "^2.5.0",
+    "angular-i18n": "1.5.3",
     "angular-resource-tastypie": "^1.0.4",
-    "angular-ui-router": "^0.3.2",
-    "angular-sanitize": "^1.5.9",
+    "angular-sanitize": "1.5.3",
+    "angular-ui-router": "0.2.13",
     "ngmap": "^1.17.8",
     "ngCordova": "^0.1.27-alpha",
-    "angular-resource": "^1.5.9",
+    "angular-resource": "1.5.3",
     "bootstrap": "^3.3.7",
-    "intlpnIonic": "^0.1.8"
-  },
-  "resolutions": {
-    "angular-animate": "^1.5.9",
-    "angular": "^1.0.8",
-    "angular-ui-router": "^0.3.2",
-    "angular-sanitize": "^1.5.9"
+    "intlpnIonic": "^0.1.9"
   }
 }

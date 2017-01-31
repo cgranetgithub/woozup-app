@@ -26,7 +26,7 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
         if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
             var alertDismissed, onOffline, onOnline, onResume, options;
             options = {
-                "android": {"senderID": "496829276290", "forceShow":true, "sound":true, "vibrate":true, "icon": "ic_stat_android_hand_white", "iconColor": "#387ef5"},
+                "android": {"senderID": "496829276290", "forceShow":true, "sound":true, "vibrate":true, "icon": "ic_stat_1", "iconColor": "#f77d5a"},
                 "ios": {"alert": "true", "badge": "true", "sound": "true"},
                 "windows": {}
             };
