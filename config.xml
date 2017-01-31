@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="101060" id="com.varioware.woozup" version="1.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="101070" id="com.varioware.woozup" version="1.1.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Woozup</name>
   <description>
         Le meilleur moyen de voir tes amis !
@@ -66,7 +66,7 @@
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
-  <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <icon src="resources/ios/icon/icon-small@3x.png"/>
   <plugin name="cordova-plugin-device" spec="~1.1.3"/>
   <plugin name="cordova-plugin-console" spec="~1.0.4"/>
   <plugin name="cordova-plugin-whitelist" spec="~1.3.0"/>
