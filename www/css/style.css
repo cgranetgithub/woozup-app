@@ -93,6 +93,10 @@ h1, h2, h3, h4, p, a {
     padding-bottom: 6px;
     padding-right: 1px;
 }*/
+.fixed-height {
+    min-height: 70px;
+    height: 70px;
+}
 .item-content {
     padding: 14px 1px 6px;
 }

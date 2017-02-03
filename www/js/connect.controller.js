@@ -271,6 +271,7 @@ angular.module('woozup.controllers')
         facebookConnectPlugin.getAccessToken(function(token) {
             var authData = {
                 'access_token': token,
+                'phone_number': $scope.data.number,
             };            
             AuthService.loginUser(authData, 'facebook')
             .then(function(success) {
