@@ -41,7 +41,7 @@ function UserDetailController(UserService, $scope, GenericResourceList, $tastypi
 //         .then(function(list) {ctrl.resourceList=list;})
 //         .finally(function() {$scope.$broadcast('scroll.infiniteScrollComplete');});
 //     };
-    ctrl.eventsResource = new $tastypieResource('events/mine', {order_by:"-start"});
+    ctrl.eventsResource = new $tastypieResource('event', {order_by:"-start"});
 }
 
 angular.module('woozup').component('userDetail', {

@@ -50,30 +50,6 @@ angular.module('woozup.controllers')
             }
         return list;
     };
-    $scope.progressValue = 0;
-//     $scope.showGetContacts = false;
-//     $scope.getContacts = function() {
-//         Contacts.retrieve().then(
-//             function(success) {console.log(success);},
-//             function(error) {console.log(error);}
-//             ).finally(function() {
-//                 function sleep(ms) {
-//                     return new Promise(resolve => setTimeout(resolve, ms));
-//                 }
-//                 $scope.progressMax = 100;
-//                 var id = setInterval(progress, 100);
-//                 function progress() {
-//                     if ($scope.progressValue >= $scope.progressMax) {
-//                         clearInterval(id);
-//                         loadContacts();
-//                         $scope.progressValue = 0;
-//                     } else {
-//                         $scope.progressValue++;
-//                     }
-//                     $scope.$apply();
-//                 }                
-//             });
-//     };
     // registered users
     $scope.friends = [];
     var friendsResource = new $tastypieResource('suggestions', {order_by: 'first_name'});
@@ -98,7 +74,7 @@ angular.module('woozup.controllers')
     loadFriends();
     // contacts
     $scope.contacts = [];
-    var contactsResource = new $tastypieResource('contact', {order_by: 'name'});
+    var contactsResource = new $tastypieResource('contact', {order_by: 'name', status__in: 'NEW,PEN,ACC'});
     var loadMoreContacts = function () {
         GenericResourceList.loadMore(contactsResource, $scope.contacts, nextPages)
         .then(function(list) {
@@ -241,7 +217,7 @@ angular.module('woozup.controllers')
 // Event creation
     $scope.create = function() {
         $ionicLoading.show({template: "Création du rendez-vous"});
-        var event = new $tastypieResource('events/mine');
+        var event = new $tastypieResource('event');
         var eventName = $scope.what.description;
         if ($scope.title) {
             eventName = $scope.title;
@@ -331,7 +307,7 @@ angular.module('woozup.controllers')
                     if (my_id === result.owner.id) {
                         $scope.buttonTitle = "J'annule";
                         $scope.buttonAction = function (eventId) {
-                            var myevent = new $tastypieResource('events/mine');
+                            var myevent = new $tastypieResource('event');
                             myevent.objects.$delete({id: eventId});
                             $state.go('tab.account', {}, { reload: true });
                         };

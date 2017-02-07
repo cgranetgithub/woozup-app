@@ -3,7 +3,7 @@ function CommentListController($tastypieResource, GenericResourceList) {
     var commentResource, ctrl, newComment, canLoadMore;
     ctrl = this;
     ctrl.load = function () {
-        commentResource = new $tastypieResource('comments', {'event': ctrl.event.id});
+        commentResource = new $tastypieResource('comment', {'event': ctrl.event.id});
         GenericResourceList.search(commentResource)
         .then(function(list) {
             ctrl.comments=list;
@@ -22,17 +22,17 @@ function CommentListController($tastypieResource, GenericResourceList) {
     ctrl.sendComment = function(newComment) {
         if (newComment) {
             commentResource.objects.$create({
-                event: 'api/v1/events/all/' + ctrl.event.id + '/',
+                event: 'api/v1/event/' + ctrl.event.id + '/',
                 text: newComment
             }).$save().then(
                 function(result){
-                    ctrl.comments.push(result);
+//                     ctrl.comments.push(result);
                     ctrl.newComment = '';
                     
                 }, function(error){
                     console.log(error);
                 }
-            );
+            ).finally(function(){ctrl.load()});
         }
     };
     ctrl.$onChanges = function (changesObj) {

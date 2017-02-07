@@ -250,6 +250,7 @@ angular.module('woozup.controllers')
         //                 picture : "http://graph.facebook.com/" + authResponse.userID + "/picture?type=large"
         //             });
                     $ionicLoading.hide();
+                    pushNotifReg(UserData.getNotifData());
                     Contacts.retrieve();
                     $state.go('tab.new');
                 }, function(fail) {
@@ -276,6 +277,7 @@ angular.module('woozup.controllers')
             AuthService.loginUser(authData, 'facebook')
             .then(function(success) {
                     $ionicLoading.hide();
+                    pushNotifReg(UserData.getNotifData());
                     Contacts.retrieve();
                     $state.go('tab.new');
                 }, function(fail) {
@@ -361,6 +363,7 @@ angular.module('woozup.controllers')
 //             findContacts(sortContacts);
             var user = angular.fromJson(result['data']);
             if (user.first_name || user.last_name) {
+                pushNotifReg(UserData.getNotifData());
                 Contacts.retrieve();
                 $state.go('tab.new');
             } else {

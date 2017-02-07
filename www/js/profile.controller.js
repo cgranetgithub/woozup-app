@@ -19,6 +19,7 @@ angular.module('woozup.controllers')
             function (result) {
                 $scope.user = result;
                 $scope.firstname = result.first_name;
+                $scope.lastname = result.last_name;
                 $scope.image = result.profile.image;
             },
             function (error) {
@@ -50,7 +51,7 @@ angular.module('woozup.controllers')
     $scope.save = function() {
         if (newname) {
             $ionicLoading.show({template: "Mise à jour"});
-            ProfileService.setprofile({'first_name': newname})
+            ProfileService.setprofile({'first_name': $scope.firstname, 'last_name': $scope.lastname})
                 .then(function (res) {}, function (err) {console.log(err);})
                 .finally(function() {
                     $scope.loadProfile();
@@ -69,9 +70,10 @@ angular.module('woozup.controllers')
         };
         $scope.closeModal();
     };
-    $scope.nameUpdate = function(firstName) {
-        newname = firstName;
+    $scope.nameUpdate = function(firstName, lastName) {
+        newname = true;
         $scope.firstname = firstName;
+        $scope.lastname = lastName;
     };
     $scope.imageUpdate = function(image) {
         newimage = image;

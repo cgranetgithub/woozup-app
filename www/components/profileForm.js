@@ -75,6 +75,7 @@ angular.module('woozup').component('profileForm', {
   bindings: {
     image: '=',
     firstName: '=',
+    lastName: '=',
     nameUpdate: '&',
     imageUpdate: '&'
   }

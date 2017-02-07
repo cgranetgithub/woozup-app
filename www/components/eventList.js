@@ -34,7 +34,7 @@ function EventListController($tastypieResource, $state, InviteService, GenericRe
     };
 //     today.setHours(today.getUTCHours()-2);
 //     today.setMinutes(0);
-//     ctrl.eventsResource = new $tastypieResource('events/all',
+//     ctrl.eventsResource = new $tastypieResource('event',
 //                         {order_by: 'start', start__gte: today, 'canceled': false});
     ctrl.load = function () {
         GenericResourceList.search(ctrl.eventsResource, nextPages)
@@ -55,22 +55,17 @@ function EventListController($tastypieResource, $state, InviteService, GenericRe
     };
     
     ctrl.cancelEvent = function (event) {
-        var myevent = new $tastypieResource('events/mine');
-        myevent.objects.$delete({id: event.id});
-        ctrl.load();
+        var myevent = new $tastypieResource('event');
+        myevent.objects.$delete({id: event.id}).finally(function(){ctrl.load();});
     };
     ctrl.editEvent = function (event) {
         $state.go("event", {"eventId":event.id});
     };
-//     ctrl.commentEvent = function (event) {
-//     };
     ctrl.joinEvent = function (event) {
-        InviteService.join(event.id);
-        ctrl.load();
+        InviteService.join(event.id).finally(function(){ctrl.load();});
     };
     ctrl.leaveEvent = function (event) {
-        InviteService.leave(event.id);
-        ctrl.load();
+        InviteService.leave(event.id).finally(function(){ctrl.load();});
     };
 }
 

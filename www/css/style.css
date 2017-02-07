@@ -124,7 +124,7 @@ h1, h2, h3, h4, p, a {
 /* ========================================= */
 .category-grid-item {
     width: 48%;
-    line-height: 0;
+/*     line-height: 0; */
     padding: 5px 10px;
     margin: 5px 0 0 5px;
 }

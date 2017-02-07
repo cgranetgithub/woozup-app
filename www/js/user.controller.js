@@ -35,17 +35,17 @@ angular.module('woozup.controllers')
         }
     ).finally(function() {$ionicLoading.hide();});
     $scope.events = [];
-    var eventsResource = new $tastypieResource('events/mine');
+    var eventsResource = new $tastypieResource('event');
     eventsResource.objects.$find().then(
         function (result) {
             $scope.events = result.objects;
         }
     );
-    $scope.friends = [];
-    var friendsResource = new $tastypieResource('friends/mine');
-    friendsResource.objects.$find().then(
-        function (result) {
-            $scope.friends = result.objects;
-        }
-    );
+//     $scope.friends = [];
+//     var friendsResource = new $tastypieResource('friends/mine');
+//     friendsResource.objects.$find().then(
+//         function (result) {
+//             $scope.friends = result.objects;
+//         }
+//     );
 }]);
