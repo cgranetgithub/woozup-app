@@ -327,6 +327,33 @@ angular.module('woozup.services', ['ngResourceTastypie'])
         }
     };
 }])
+.service('CalendarService', [function () {
+    "use strict";
+    var cal_success = function(success){console.log(JSON.stringify(success));};
+    var cal_error = function(error){console.log(JSON.stringify(error));};
+    return {
+        createEvent: function (title, eventLocation, notes, startDate) {
+            if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
+                console.log(startDate);
+                var start = moment.utc(startDate);
+                console.log(start.format());
+                var end = start;
+                end.add(1, 'hours');
+                console.log(end.format());
+                window.plugins.calendar.createEvent(title, eventLocation, notes, start.toDate(), end.toDate(), cal_success, cal_error);
+            }
+        },
+        deleteEvent: function (title, eventLocation, notes, startDate) {
+            if (!ionic.Platform.is('linux') && !ionic.Platform.is('macintel')) {
+                var moment = require('moment');
+                var start = moment.utc(startDate);
+                var end = start;
+                end.add(1, 'hours');
+                window.plugins.calendar.deleteEvent(title, eventLocation, null, start.toDate(), end.toDate(), cal_success, cal_error);
+            }
+        },
+    }
+}])
 .service('CameraService', ['$q', '$cordovaCamera', function ($q, $cordovaCamera) {
     "use strict";
     return {
@@ -466,7 +493,6 @@ angular.module('woozup.services', ['ngResourceTastypie'])
             }
             $http.post(command, authData
             ).then(function (response) {
-                console.log(response);
                 $tastypie.setProviderAuth('woozup', response.data.username, response.data.api_key)
                 $localstorage.set('userid', response.data.userid);
                 $localstorage.set('username', response.data.username);

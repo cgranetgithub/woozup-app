@@ -39,12 +39,17 @@ angular.module('woozup', ['ionic', 'intlpnIonic', 'ngCordova', 'ui.bootstrap', '
                 // register to get registrationId
                 $cordovaPushV5.register().then(function(registrationId) {
                     // save `registrationId` somewhere;
-                    UserData.setNotifData(registrationId,
-                                        $cordovaDevice.getModel(),
-                                        $cordovaDevice.getUUID(),
-                                        ionic.Platform.platform()
-                                        );
-                    pushNotifReg(UserData.getNotifData()); // !!! important
+                    if (registrationId) {
+                        UserData.setNotifData(registrationId,
+                                            $cordovaDevice.getModel(),
+                                            $cordovaDevice.getUUID(),
+                                            ionic.Platform.platform()
+                                            );
+                        pushNotifReg(UserData.getNotifData()); // !!! important
+                        console.log("registrationId OK: "+registrationId);
+                    } else {
+                        console.log("no registrationId: "+registrationId);
+                    }
                 })
             });
             // triggered every time notification received

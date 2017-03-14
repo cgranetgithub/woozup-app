@@ -3,7 +3,7 @@
 
 angular.module('woozup.controllers')
 
-.controller('NewEventCtrl', ['$tastypieResource', '$ionicLoading', '$ionicModal', 'AuthService', '$scope', '$state', 'UserData', 'NgMap', 'GenericResourceList', function ($tastypieResource, $ionicLoading, $ionicModal, AuthService, $scope, $state, UserData, NgMap, GenericResourceList) {
+.controller('NewEventCtrl', ['$tastypieResource', '$ionicLoading', '$ionicModal', 'AuthService', '$scope', '$state', 'UserData', 'NgMap', 'GenericResourceList', 'CalendarService', function ($tastypieResource, $ionicLoading, $ionicModal, AuthService, $scope, $state, UserData, NgMap, GenericResourceList, CalendarService) {
     "use strict";
     // WHEN ------------------------
     $scope.now = new Date();
@@ -224,7 +224,7 @@ angular.module('woozup.controllers')
         };
         event.objects.$create({
             name: eventName,
-            start: $scope.when,
+            start: moment.utc($scope.when),
             event_type: $scope.what.resource_uri,
             location_name: $scope.where.name,
             location_address: $scope.where.address,
@@ -234,6 +234,7 @@ angular.module('woozup.controllers')
             contacts: invitedContacts
         }).$save().then(
             function () {
+                CalendarService.createEvent(eventName, $scope.where.address, $scope.what.description + " | " + $scope.where.name, $scope.when);
                 $ionicLoading.hide();
                 $state.go('tab.account');
             },
@@ -283,7 +284,7 @@ angular.module('woozup.controllers')
     });
 }])
 
-.controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams', '$tastypieResource', 'InviteService', 'UserData', 'AuthService', '$ionicHistory', '$ionicLoading', function ($window, $state, $scope, $stateParams, $tastypieResource, InviteService, UserData, AuthService, $ionicHistory, $ionicLoading) {
+.controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams', '$tastypieResource', 'InviteService', 'UserData', 'AuthService', '$ionicHistory', '$ionicLoading', 'CalendarService', function ($window, $state, $scope, $stateParams, $tastypieResource, InviteService, UserData, AuthService, $ionicHistory, $ionicLoading, CalendarService) {
     "use strict";
     var eventResource, commentResource, loadEvent, leaveAndReload, joinAndReload;
     $scope.goBackAction = function() {
@@ -309,6 +310,7 @@ angular.module('woozup.controllers')
                         $scope.buttonAction = function (eventId) {
                             var myevent = new $tastypieResource('event');
                             myevent.objects.$delete({id: eventId});
+                            CalendarService.deleteEvent(result.name, result.location_address, result.description + " | " + result.location_name, result.start);
                             $state.go('tab.account', {}, { reload: true });
                         };
                     } else {

@@ -32,6 +32,7 @@
     "ngCordova": "^0.1.27-alpha",
     "angular-resource": "1.5.3",
     "bootstrap": "^3.3.7",
-    "intlpnIonic": "^0.1.9"
+    "intlpnIonic": "^0.1.9",
+    "moment": "^2.17.1"
   }
 }
