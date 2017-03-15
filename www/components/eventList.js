@@ -54,19 +54,22 @@ function EventListController($tastypieResource, $state, InviteService, GenericRe
         .finally(function() {$scope.$broadcast('scroll.infiniteScrollComplete');});
     };
     
-    ctrl.cancelEvent = function (event) {
-        var myevent = new $tastypieResource('event');
-        myevent.objects.$delete({id: event.id}).finally(function(){ctrl.load();});
-    };
+//     ctrl.cancelEvent = function (event) {
+//     // don't forget calendar sync if reactivate this code
+//         var myevent = new $tastypieResource('event');
+//         myevent.objects.$delete({id: event.id}).finally(function(){ctrl.load();});
+//     };
     ctrl.editEvent = function (event) {
         $state.go("event", {"eventId":event.id});
     };
-    ctrl.joinEvent = function (event) {
-        InviteService.join(event.id).finally(function(){ctrl.load();});
-    };
-    ctrl.leaveEvent = function (event) {
-        InviteService.leave(event.id).finally(function(){ctrl.load();});
-    };
+//     ctrl.joinEvent = function (event) {
+//     // don't forget calendar sync if reactivate this code
+//         InviteService.join(event.id).finally(function(){ctrl.load();});
+//     };
+//     ctrl.leaveEvent = function (event) {
+//     // don't forget calendar sync if reactivate this code
+//         InviteService.leave(event.id).finally(function(){ctrl.load();});
+//     };
 }
 
 angular.module('woozup').component('eventList', {

@@ -5,7 +5,7 @@
             <marker position="[{{location.lat}}, {{location.lng}}]" title="marker" animation="Animation.DROP"></marker>
         </ng-map>    
         <button class="button button-balanced button-down" ng-click="setWhere()" ng-model="location">
-            {{location.address}}
+            {{location.name}} <span ng-if="location.name">-</span> {{location.address}}
         </button>
     </ion-content>
 </ion-modal-view>

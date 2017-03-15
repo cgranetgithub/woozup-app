@@ -26,7 +26,7 @@
         </button>
         <button ng-if="where"  ng-click="whereModal.show()" ng-model="where"
                 class="button button-block button-large button-energized">
-            {{where.address}}
+            {{where.name}} <span ng-if="where.name">-</span> {{where.address}}
         </button>
         
         <button ng-if="!who" ng-click="showWho()"

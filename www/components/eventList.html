@@ -18,9 +18,9 @@
         </p>
         <p><b ng-if="event.canceled" class="canceled-message">(annulé) </b>{{ event.start | date : 'EEEE d MMMM à H:mm'}}</p>
 <!--         <div class="category-icon-right" ng-if="!event.canceled"> -->
-        <button ng-if="!event.canceled && event.ownership" class="button button-outline button-assertive icon ion-android-cancel no-line-height" ng-click="$ctrl.cancelEvent(event); $event.stopPropagation();" stop-event="click"></button>
-        <button ng-if="!event.canceled && !event.ownership && event.participate" class="button button-outline woozup-font woozup-color" ng-click="$ctrl.leaveEvent(event); $event.stopPropagation();" stop-event="click">-1</button>
-        <button ng-if="!event.canceled && !event.ownership && !event.participate" class="button button-outline woozup-font woozup-color" ng-click="$ctrl.joinEvent(event); $event.stopPropagation();" stop-event="click">+1</button>
+<!--        <button ng-if="!event.canceled && event.ownership" class="button button-outline button-assertive icon ion-android-cancel no-line-height" ng-click="$ctrl.cancelEvent(event); $event.stopPropagation();" stop-event="click"></button>-->
+<!--        <button ng-if="!event.canceled && !event.ownership && event.participate" class="button button-outline woozup-font woozup-color" ng-click="$ctrl.leaveEvent(event); $event.stopPropagation();" stop-event="click">-1</button>
+        <button ng-if="!event.canceled && !event.ownership && !event.participate" class="button button-outline woozup-font woozup-color" ng-click="$ctrl.joinEvent(event); $event.stopPropagation();" stop-event="click">+1</button>-->
 <!--            <button class="button button-clear button-stable icon ion-chatbubbles"></button>-->
         <!--     <button class="button button-clear button-stable icon ion-forward"></button> -->
 <!--         </div> -->

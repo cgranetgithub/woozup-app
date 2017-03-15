@@ -150,9 +150,10 @@ angular.module('woozup.controllers')
         map.setOptions({styles: styles});
         $scope.map = map;
     });
-    $scope.coordChanged = function(latLng, addr) {
+    $scope.coordChanged = function(latLng, addr, name) {
         $scope.location.lat = latLng.lat().toString();
         $scope.location.lng = latLng.lng().toString();
+        $scope.location.name = name;
         if (addr) {
             $scope.location.address = addr;
         } else {
@@ -178,10 +179,10 @@ angular.module('woozup.controllers')
     // show marker and set address in button
     $scope.place = null;
     $scope.placeChanged = function() {
-        $scope.place = this.getPlace();;
+        $scope.place = this.getPlace();
         if ($scope.place && $scope.place.geometry) {
             $scope.map.setCenter($scope.place.geometry.location);
-            $scope.coordChanged($scope.place.geometry.location, $scope.place.formatted_address);
+            $scope.coordChanged($scope.place.geometry.location, $scope.place.formatted_address, $scope.place.name);
         }
     };
     $scope.disableTap = function(event) {
@@ -207,7 +208,7 @@ angular.module('woozup.controllers')
     };
     // on click event, show marker and set address in button
     $scope.onClick= function(event) {
-        $scope.coordChanged(event.latLng, null);
+        $scope.coordChanged(event.latLng, null, null);
     };
     $scope.setWhere = function () {
         $scope.where = $scope.location;
@@ -222,9 +223,12 @@ angular.module('woozup.controllers')
         if ($scope.title) {
             eventName = $scope.title;
         };
+        var start = moment.utc($scope.when.toISOString()); // !! to UTC !!
+        var end = start.clone().add(1, 'hours');
         event.objects.$create({
             name: eventName,
-            start: moment.utc($scope.when),
+            start: start.format(),
+            end: end.format(),
             event_type: $scope.what.resource_uri,
             location_name: $scope.where.name,
             location_address: $scope.where.address,
@@ -234,7 +238,7 @@ angular.module('woozup.controllers')
             contacts: invitedContacts
         }).$save().then(
             function () {
-                CalendarService.createEvent(eventName, $scope.where.address, $scope.what.description + " | " + $scope.where.name, $scope.when);
+                CalendarService.createEvent(eventName, $scope.where.address, $scope.what.description + " | " + $scope.where.name, start.toDate(), end.toDate());
                 $ionicLoading.hide();
                 $state.go('tab.account');
             },
@@ -286,7 +290,7 @@ angular.module('woozup.controllers')
 
 .controller('EventCtrl', ['$window', '$state', '$scope', '$stateParams', '$tastypieResource', 'InviteService', 'UserData', 'AuthService', '$ionicHistory', '$ionicLoading', 'CalendarService', function ($window, $state, $scope, $stateParams, $tastypieResource, InviteService, UserData, AuthService, $ionicHistory, $ionicLoading, CalendarService) {
     "use strict";
-    var eventResource, commentResource, loadEvent, leaveAndReload, joinAndReload;
+    var eventResource, loadEvent, leaveAndReload, joinAndReload;
     $scope.goBackAction = function() {
         if ($ionicHistory.viewHistory().backView) {
             $ionicHistory.goBack();
@@ -310,7 +314,7 @@ angular.module('woozup.controllers')
                         $scope.buttonAction = function (eventId) {
                             var myevent = new $tastypieResource('event');
                             myevent.objects.$delete({id: eventId});
-                            CalendarService.deleteEvent(result.name, result.location_address, result.description + " | " + result.location_name, result.start);
+                            CalendarService.deleteEvent(result.name, result.location_address, result.description + " | " + result.location_name, result.start, result.end);
                             $state.go('tab.account', {}, { reload: true });
                         };
                     } else {
@@ -322,12 +326,14 @@ angular.module('woozup.controllers')
                         if (found) {
                             $scope.buttonTitle = "J'annule";
                             $scope.buttonAction = function (eventId) {
+                                CalendarService.deleteEvent(result.name, result.location_address, result.description + " | " + result.location_name, result.start, result.end);
                                 leaveAndReload(eventId);
 //                                 $window.location.reload(true);
                             };
                         } else {
                             $scope.buttonTitle = "Je viens";
                             $scope.buttonAction = function (eventId) {
+                                CalendarService.createEvent(result.name, result.location_address, result.description + " | " + result.location_name, result.start, result.end);
                                 joinAndReload(eventId);
 //                                 $window.location.reload(true);
                             };
